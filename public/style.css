@@ -3702,3 +3702,346 @@ body.logged-in .logged-in-only {
 .expand-content button:hover {
   opacity: 0.9;
 }
+/* responsive */
+/* ========== RESPONSIVE OVERRIDES ========== */
+
+:root {
+  --page-gutter: clamp(1rem, 4vw, 5rem);
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+section,
+.navbar,
+.footer,
+.booking-container,
+.doctor-profile-content {
+  min-width: 0;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+  font: inherit;
+}
+
+.hero-content,
+.hero-image,
+.info-card,
+.event-card,
+.feature-card,
+.solution-card,
+.service-card,
+.footer-col,
+.contact-card {
+  min-width: 0;
+}
+
+.hero-content h1 {
+  font-size: clamp(2rem, 5vw, 4.375rem);
+}
+
+.hero-content h3 {
+  font-size: clamp(1.5rem, 3.5vw, 3.125rem);
+}
+
+.section-title h2,
+.solutions-header h2,
+.services-title,
+.doctor-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.hero,
+.info-section,
+.events-section,
+.why-choose-us,
+.solution,
+.services-section,
+.doctors-section,
+.footer {
+  padding-left: var(--page-gutter);
+  padding-right: var(--page-gutter);
+}
+
+.hero-image img {
+  width: min(100%, 36rem);
+}
+
+.hero-buttons > a {
+  display: inline-flex;
+}
+
+.btn-primary,
+.btn-secondary {
+  min-height: 48px;
+}
+
+/* AI diagnosis section */
+.diagnose-ai-section {
+  padding-inline: var(--page-gutter);
+}
+
+.ai-container {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.ai-profile-row {
+  grid-template-columns: minmax(0, 1fr) minmax(5rem, 0.55fr) minmax(0, 0.8fr);
+}
+
+.preset-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+.preset-pills button {
+  min-height: 42px;
+}
+
+/* Modals */
+.booking-overlay,
+.doctor-profile-overlay {
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.booking-container,
+.doctor-profile-content {
+  width: min(100%, 70rem);
+  max-height: none;
+}
+
+.booking-card {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.booking-field {
+  min-width: 0;
+}
+
+.panel-columns {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .navbar {
+    padding-inline: clamp(0.875rem, 3vw, 2rem);
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero {
+    align-items: center;
+  }
+
+  .hero-content,
+  .hero-image {
+    width: 100%;
+  }
+
+  .hero-image {
+    order: -1;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-image img {
+    margin-inline: auto;
+  }
+
+  .info-section,
+  .events-section {
+    gap: 2rem;
+  }
+
+  .ai-container,
+  .booking-card {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-result-box {
+    min-height: 20rem;
+  }
+}
+
+/* Mobile/tablet */
+@media (max-width: 768px) {
+  .navbar {
+    height: 4.75rem;
+  }
+
+  .menu {
+    top: 4.75rem;
+    height: calc(100dvh - 4.75rem);
+    width: min(100%, 30rem);
+    max-width: 100%;
+  }
+
+  .hero {
+    margin-top: 4.75rem;
+    min-height: calc(100dvh - 4.75rem);
+    padding-block: 2.5rem;
+  }
+
+  .left-section {
+    gap: 1rem;
+  }
+
+  .casto {
+    font-size: 2rem;
+  }
+
+  .healthcare {
+    font-size: 0.5rem;
+    letter-spacing: 0.16rem;
+  }
+
+  .search-container.active .search-input {
+    max-width: min(45vw, 15rem);
+  }
+
+  .para {
+    font-size: 1rem;
+  }
+
+  .features,
+  .features-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .hero-buttons > a,
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .info-section,
+  .events-section,
+  .quote-section,
+  .promo-inner,
+  .footer-top,
+  .footer-bottom {
+    flex-direction: column;
+  }
+
+  .info-card,
+  .event-card {
+    width: 100%;
+  }
+
+  .emergency-links {
+    flex-wrap: wrap;
+  }
+
+  .solutions-header {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .doctor-card {
+    flex-basis: calc(100vw - 110px);
+  }
+
+  .slider-wrapper {
+    overflow: hidden;
+  }
+
+  .contact-card {
+    padding: clamp(1.25rem, 5vw, 2rem);
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  :root {
+    --page-gutter: 1rem;
+  }
+
+  .hamburger span {
+    width: 1.5rem;
+  }
+
+  .casto {
+    font-size: 1.6rem;
+  }
+
+  .healthcare {
+    display: none;
+  }
+
+  .search-container.active .search-input {
+    max-width: 8.5rem;
+    padding-left: 0.75rem;
+  }
+
+  .hero-content h1 {
+    line-height: 1.15;
+  }
+
+  .features,
+  .features-grid,
+  .contact-info-grid,
+  .ai-profile-row {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    padding: 1.25rem;
+  }
+
+  .accordion {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .doctor-card {
+    flex-basis: calc(100vw - 90px);
+  }
+
+  .slider-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .booking-overlay,
+  .doctor-profile-overlay {
+    padding: 0.5rem;
+  }
+
+  .booking-container,
+  .doctor-profile-content {
+    border-radius: 0.75rem;
+  }
+
+  .profile-card {
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
