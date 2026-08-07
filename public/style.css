@@ -4045,3 +4045,38 @@ button {
     animation-duration: 0.01ms !important;
   }
 }
+/* Fix doctor slider on phones */
+@media (max-width: 768px) {
+  .slider-container {
+    position: relative;
+    display: block;
+    padding-inline: 3.5rem;
+  }
+
+  .slider-wrapper {
+    width: 100%;
+    max-width: none;
+  }
+
+  .doctor-card {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translateY(-50%);
+  }
+
+  .slider-btn:first-child {
+    left: 0;
+  }
+
+  .slider-btn:last-child {
+    right: 0;
+  }
+}

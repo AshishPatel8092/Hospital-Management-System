@@ -367,29 +367,47 @@ const totalCards = doctorCards.length;
 let currentIndex = 0;
 
 // Returns how many cards fit, and the px step (card width + gap)
-function getSliderMetrics() {
-  const wrapper = document.querySelector(".slider-wrapper");
-  const gap = 30; // matches CSS gap on .doctor-track
+// function getSliderMetrics() {
+//   const wrapper = document.querySelector(".slider-wrapper");
+//   const gap = 30; // matches CSS gap on .doctor-track
 
-  let cardWidth;
-  if (window.innerWidth <= 576) {
-    cardWidth = window.innerWidth - 90; // matches .doctor-card flex-basis at this breakpoint
-  } else if (window.innerWidth <= 768) {
-    cardWidth = window.innerWidth - 110;
-  } else if (window.innerWidth <= 992) {
-    cardWidth = 300;
-  } else {
-    cardWidth = 340;
-  }
+//   let cardWidth;
+//   if (window.innerWidth <= 576) {
+//     cardWidth = window.innerWidth - 90; // matches .doctor-card flex-basis at this breakpoint
+//   } else if (window.innerWidth <= 768) {
+//     cardWidth = window.innerWidth - 110;
+//   } else if (window.innerWidth <= 992) {
+//     cardWidth = 300;
+//   } else {
+//     cardWidth = 340;
+//   }
 
-  const wrapperWidth = wrapper ? wrapper.clientWidth : window.innerWidth;
-  const visibleCards = Math.max(
-    1,
-    Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
-  );
+//   const wrapperWidth = wrapper ? wrapper.clientWidth : window.innerWidth;
+//   const visibleCards = Math.max(
+//     1,
+//     Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
+//   );
 
-  return { step: cardWidth + gap, visibleCards };
+//   return { step: cardWidth + gap, visibleCards };
+// }function getSliderMetrics() {
+const wrapper = document.querySelector(".slider-wrapper");
+const firstCard = doctorCards[0];
+
+if (!wrapper || !firstCard) {
+  return { step: 0, visibleCards: 1 };
 }
+
+const trackStyles = window.getComputedStyle(doctorTrack);
+const gap = parseFloat(trackStyles.gap) || 0;
+const cardWidth = firstCard.getBoundingClientRect().width;
+const wrapperWidth = wrapper.clientWidth;
+
+const visibleCards = Math.max(
+  1,
+  Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
+);
+
+return { step: cardWidth + gap, visibleCards };
 
 function applySliderPosition() {
   const { step } = getSliderMetrics();
