@@ -389,26 +389,27 @@ let currentIndex = 0;
 //   );
 
 //   return { step: cardWidth + gap, visibleCards };
-// }function getSliderMetrics() {
-const wrapper = document.querySelector(".slider-wrapper");
-const firstCard = doctorCards[0];
+// }
+function getSliderMetrics() {
+  const wrapper = document.querySelector(".slider-wrapper");
+  const firstCard = doctorCards[0];
 
-if (!wrapper || !firstCard) {
-  return { step: 0, visibleCards: 1 };
+  if (!wrapper || !firstCard) {
+    return { step: 0, visibleCards: 1 };
+  }
+
+  const trackStyles = window.getComputedStyle(doctorTrack);
+  const gap = parseFloat(trackStyles.gap) || 0;
+  const cardWidth = firstCard.getBoundingClientRect().width;
+  const wrapperWidth = wrapper.clientWidth;
+
+  const visibleCards = Math.max(
+    1,
+    Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
+  );
+
+  return { step: cardWidth + gap, visibleCards };
 }
-
-const trackStyles = window.getComputedStyle(doctorTrack);
-const gap = parseFloat(trackStyles.gap) || 0;
-const cardWidth = firstCard.getBoundingClientRect().width;
-const wrapperWidth = wrapper.clientWidth;
-
-const visibleCards = Math.max(
-  1,
-  Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
-);
-
-return { step: cardWidth + gap, visibleCards };
-
 function applySliderPosition() {
   const { step } = getSliderMetrics();
   doctorTrack.style.transform = `translateX(-${currentIndex * step}px)`;
