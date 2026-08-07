@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login page</title>
+    <style>
+      /* =========================
+   SIGN IN PAGE
+========================= */
+
+      /* =========================
+   SIGN IN PAGE
+========================= */
+
+      .page-view {
+        padding: 60px 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .page-header h1 {
+        font-size: 2.2rem;
+        color: #0f172a;
+        margin-bottom: 8px;
+      }
+
+      .page-header p {
+        color: #64748b;
+        font-size: 15px;
+      }
+
+      /* CARD */
+
+      .signin-card {
+        width: 100%;
+        max-width: 500px;
+        background: #fff;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+      }
+
+      /* FIELDS */
+
+      .signin-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .field label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #334155;
+      }
+
+      .req {
+        color: #e11d48;
+      }
+
+      .field input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        transition: 0.3s;
+      }
+
+      .field input:focus {
+        border-color: #0f766e;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+      }
+
+      .err-msg {
+        display: none;
+        color: #e11d48;
+        font-size: 12px;
+      }
+
+      /* PASSWORD */
+
+      .pw-wrap {
+        position: relative;
+      }
+
+      .pw-wrap input {
+        padding-right: 45px;
+      }
+
+      .pw-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #94a3b8;
+      }
+
+      /* FORGOT PASSWORD */
+
+      .forgot-row {
+        text-align: right;
+        margin: 15px 0 25px;
+      }
+
+      .forgot-row a {
+        color: #0f766e;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+      }
+
+      .forgot-row a:hover {
+        text-decoration: underline;
+      }
+
+      /* BUTTONS */
+
+      .btn {
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      .btn-primary {
+        background: #0f766e;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #0d5c56;
+      }
+
+      .btn-full {
+        width: 100%;
+        padding: 14px;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid #0f766e;
+        color: #0f766e;
+      }
+
+      /* DIVIDER */
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 25px 0;
+        color: #94a3b8;
+        font-size: 14px;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e2e8f0;
+      }
+
+      /* SOCIAL BUTTONS */
+
+      .social-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .btn-social {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #cbd5e1;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-social:hover {
+        border-color: #0f766e;
+        background: #f0fdfa;
+      }
+
+      .btn-social svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* REGISTER */
+
+      .register-prompt {
+        margin-top: 25px;
+        text-align: center;
+        color: #64748b;
+        font-size: 14px;
+      }
+
+      .register-prompt a {
+        color: #0f766e;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      /* SUCCESS */
+
+      .signin-success {
+        text-align: center;
+      }
+
+      .signin-success h2 {
+        margin: 20px 0 10px;
+        color: #0f172a;
+      }
+
+      .signin-success p {
+        color: #64748b;
+      }
+
+      /* MODAL */
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal {
+        background: white;
+        width: 90%;
+        max-width: 420px;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal h3 {
+        margin-bottom: 10px;
+      }
+
+      .modal p {
+        color: #64748b;
+        margin-bottom: 20px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .modal-actions .btn {
+        flex: 1;
+      }
+
+      /* MOBILE */
+
+      @media (max-width: 600px) {
+        .signin-card {
+          padding: 25px;
+        }
+
+        .page-header h1 {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SIGN IN PAGE VIEW -->
+    <div class="page-view" id="view-signin">
+      <div class="page-header">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your MediCare account</p>
+      </div>
+
+      <div class="signin-card">
+        <!-- Sign-in form -->
+        <div id="signin-form-wrap">
+          <div class="signin-fields">
+            <div class="field">
+              <label>Email Address <span class="req">*</span></label>
+              <input
+                type="email"
+                id="si-email"
+                placeholder="patient@example.com"
+              />
+              <span class="err-msg">Please enter a valid email</span>
+            </div>
+            <div class="field">
+              <label>Password <span class="req">*</span></label>
+              <div class="pw-wrap">
+                <input
+                  type="password"
+                  id="si-password"
+                  placeholder="Enter your password"
+                />
+                <button
+                  class="pw-toggle"
+                  onclick="togglePw()"
+                  type="button"
+                  id="pw-toggle-btn"
+                >
+                  <svg
+                    id="eye-icon"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+              <span class="err-msg" id="si-pw-err">Password is required</span>
+            </div>
+          </div>
+
+          <div class="forgot-row">
+            <a onclick="openForgot()">Forgot password?</a>
+          </div>
+
+          <button class="btn btn-primary btn-full" onclick="doSignIn()">
+            Sign In
+          </button>
+
+          <div class="divider">or continue with</div>
+
+          <div class="social-btns">
+            <button class="btn-social">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  fill="#4285F4"
+                />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  fill="#34A853"
+                />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  fill="#EA4335"
+                />
+              </svg>
+              Continue with Google
+            </button>
+            <button class="btn-social">
+              <svg viewBox="0 0 24 24" fill="#0078D4">
+                <path
+                  d="M21.579 6.855c.14.42.21.865.21 1.33C21.789 13.67 17.566 18 12 18a9.86 9.86 0 01-5.032-1.378A7.03 7.03 0 0012 15.13a3.514 3.514 0 01-3.28-2.437c.214.04.434.063.66.063.32 0 .63-.043.924-.124A3.513 3.513 0 016.87 9.28v-.044c.446.248.956.397 1.498.414a3.51 3.51 0 01-1.085-4.686 9.963 9.963 0 007.23 3.665 3.956 3.956 0 01-.089-.8A3.511 3.511 0 0117.935 4.5a3.5 3.5 0 012.56 1.107 7.03 7.03 0 002.228-.852 3.525 3.525 0 01-1.543 1.942 7.01 7.01 0 002.018-.548 7.13 7.13 0 01-1.619 1.706z"
+                />
+              </svg>
+              Continue with Microsoft
+            </button>
+          </div>
+
+          <div class="register-prompt">
+            Don't have an account?
+            <a onclick="showPage('register')">Register here</a>
+          </div>
+        </div>
+
+        <!-- Sign-in success -->
+        <div class="signin-success" id="signin-success" style="display: none">
+          <div
+            class="success-icon"
+            style="
+              width: 72px;
+              height: 72px;
+              background: var(--teal-lt);
+              border-radius: 50%;
+              display: grid;
+              place-items: center;
+            "
+          >
+            <svg
+              width="36"
+              height="36"
+              fill="none"
+              stroke="var(--teal)"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+          <h2>Welcome Back!</h2>
+          <p>
+            You've signed in successfully.<br />Redirecting to your dashboard…
+          </p>
+          <button
+            class="btn btn-outline btn-full"
+            style="margin-top: 24px"
+            onclick="showPage('register')"
+          >
+            ← Go to Registration
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div class="modal-overlay" id="forgot-modal">
+      <div class="modal">
+        <h3>Reset Password</h3>
+        <p>Enter your registered email and we'll send you a reset link.</p>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input
+            type="email"
+            id="forgot-email"
+            placeholder="patient@example.com"
+          />
+          <span class="err-msg" id="forgot-err"
+            >Please enter a valid email</span
+          >
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" onclick="closeForgot()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" onclick="sendReset()">
+            Send Reset Link
+          </button>
+        </div>
+      </div>
+    </div>
+  <script src="api.js"></script>
+  <script>
+    async function doSignIn() {
+      const email = document.getElementById('si-email').value;
+      const password = document.getElementById('si-password').value;
+      const errEl = document.getElementById('si-pw-err');
+
+      try {
+        const result = await login(email, password);
+        document.getElementById('signin-form-wrap').style.display = 'none';
+        document.getElementById('signin-success').style.display = 'block';
+        setTimeout(() => {
+          const role = result.data.role;
+          if (role === 'PATIENT') window.location.href = 'register-p.html';
+          else if (role === 'DOCTOR') window.location.href = 'register.html';
+          else window.location.href = 'index.html';
+        }, 900);
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.style.display = 'block';
+      }
+    }
+  </script>
+  </body>
+</html>

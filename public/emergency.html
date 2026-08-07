@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emergency Assistance</title>
+
+    <link rel="stylesheet" href="emergency.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: #f7f8fa;
+      }
+
+      .hero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 60px;
+        padding: 80px 8%;
+      }
+
+      .hero-text {
+        flex: 1;
+      }
+
+      .tag {
+        color: #ff6b00;
+        font-weight: 600;
+      }
+
+      .hero-text h1 {
+        font-size: 60px;
+        color: #0d2257;
+        margin: 20px 0;
+      }
+
+      .hero-text p {
+        line-height: 1.8;
+        color: #555;
+      }
+
+      .hero-btn {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 14px 30px;
+        background: #ff6b00;
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+      }
+
+      .hero-image {
+        flex: 1;
+      }
+
+      .hero-image img {
+        width: 100%;
+        border-radius: 25px;
+      }
+
+      .emergency-section {
+        padding: 50px 8%;
+      }
+
+      .emergency-card {
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        margin-bottom: 100px;
+      }
+
+      .reverse {
+        flex-direction: row-reverse;
+      }
+
+      .emergency-image {
+        flex: 1;
+      }
+
+      .emergency-image img {
+        width: 100%;
+        border-radius: 25px;
+      }
+
+      .emergency-content {
+        flex: 1;
+      }
+
+      .small-title {
+        color: #ff6b00;
+        font-weight: 600;
+      }
+
+      .emergency-content h2 {
+        font-size: 50px;
+        margin: 15px 0;
+        color: #0d2257;
+      }
+
+      .emergency-content p {
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+
+      .emergency-content ul {
+        margin-left: 20px;
+        margin-bottom: 20px;
+      }
+
+      .emergency-content li {
+        margin-bottom: 10px;
+      }
+
+      .video-btn {
+        display: inline-block;
+        padding: 12px 25px;
+        background: #0d2257;
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+      }
+
+      .contact-emergency {
+        padding: 80px 8%;
+        text-align: center;
+        background: white;
+      }
+
+      .contact-emergency h2 {
+        font-size: 45px;
+        margin-bottom: 50px;
+      }
+
+      .numbers {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 30px;
+      }
+
+      .number-card {
+        background: #f3f5f8;
+        padding: 40px;
+        border-radius: 20px;
+      }
+
+      .number-card h3 {
+        margin-top: 15px;
+        font-size: 30px;
+        color: #0d2257;
+      }
+
+      @media (max-width: 992px) {
+        .hero {
+          flex-direction: column;
+        }
+
+        .hero-text h1 {
+          font-size: 40px;
+        }
+
+        .emergency-card,
+        .reverse {
+          flex-direction: column;
+        }
+
+        .emergency-content h2 {
+          font-size: 35px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="hero">
+      <div class="hero-text">
+        <span class="tag">// EMERGENCY ASSISTANCE //</span>
+
+        <h1>Know What To Do During A Medical Emergency</h1>
+
+        <p>
+          Quick guidance can save lives. Learn the immediate steps to take
+          during common medical emergencies and access professional help
+          quickly.
+        </p>
+
+        <a href="#guides" class="hero-btn"> Emergency Guides → </a>
+      </div>
+
+      <div class="hero-image">
+        <img src="Image/emergency img.webp" alt="Emergency" />
+      </div>
+    </section>
+
+    <section id="guides" class="emergency-section">
+      <div class="emergency-card">
+        <div class="emergency-image">
+          <img src="Image/heart atack img.webp" alt="Heart attack" />
+        </div>
+
+        <div class="emergency-content">
+          <span class="small-title"> // HEART ATTACK // </span>
+
+          <h2>Heart Attack Emergency</h2>
+
+          <p>
+            Symptoms include chest pain, breathing difficulty, sweating and pain
+            in the left arm.
+          </p>
+
+          <ul>
+            <li>Call Ambulance Immediately</li>
+            <li>Keep Patient Calm</li>
+            <li>Loosen Tight Clothing</li>
+            <li>Give Aspirin If Recommended</li>
+          </ul>
+
+          <a
+            href="https://www.youtube.com/results?search_query=heart+attack+first+aid"
+            target="_blank"
+            class="video-btn"
+          >
+            ▶ Watch Video
+          </a>
+        </div>
+      </div>
+
+      <div class="emergency-card reverse">
+        <div class="emergency-image">
+          <img src="Image/stroke img.jpg" alt="Stroke" />
+        </div>
+
+        <div class="emergency-content">
+          <span class="small-title"> // STROKE // </span>
+
+          <h2>Stroke Emergency</h2>
+
+          <p>
+            Recognize FAST: Face drooping, Arm weakness, Speech difficulty, Time
+            to call help.
+          </p>
+
+          <ul>
+            <li>Call Emergency Services</li>
+            <li>Note Symptom Start Time</li>
+            <li>Keep Patient Comfortable</li>
+            <li>Do Not Give Food</li>
+          </ul>
+
+          <a
+            href="https://www.youtube.com/results?search_query=stroke+first+aid"
+            target="_blank"
+            class="video-btn"
+          >
+            ▶ Watch Video
+          </a>
+        </div>
+      </div>
+
+      <div class="emergency-card">
+        <div class="emergency-image">
+          <img src="Image/burn img.webp" alt="Burn" />
+        </div>
+
+        <div class="emergency-content">
+          <span class="small-title"> // BURNS // </span>
+
+          <h2>Burn Injury</h2>
+
+          <p>Immediate care reduces damage and complications.</p>
+
+          <ul>
+            <li>Cool Burn With Water</li>
+            <li>Do Not Apply Ice</li>
+            <li>Cover With Clean Cloth</li>
+            <li>Seek Medical Help</li>
+          </ul>
+
+          <a
+            href="https://www.youtube.com/results?search_query=burn+first+aid"
+            target="_blank"
+            class="video-btn"
+          >
+            ▶ Watch Video
+          </a>
+        </div>
+      </div>
+
+      <div class="emergency-card reverse">
+        <div class="emergency-image">
+          <img src="Image/bleeding img.webp" alt="" />
+        </div>
+
+        <div class="emergency-content">
+          <span class="small-title"> // BLEEDING // </span>
+
+          <h2>Severe Bleeding</h2>
+
+          <p>Heavy bleeding can become life threatening quickly.</p>
+
+          <ul>
+            <li>Apply Firm Pressure</li>
+            <li>Elevate Wound If Possible</li>
+            <li>Use Clean Bandage</li>
+            <li>Call Ambulance</li>
+          </ul>
+
+          <a
+            href="https://www.youtube.com/results?search_query=bleeding+first+aid"
+            target="_blank"
+            class="video-btn"
+          >
+            ▶ Watch Video
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-emergency">
+      <h2>Emergency Contact Numbers</h2>
+
+      <div class="numbers">
+        <div class="number-card">
+          🚑 Ambulance
+          <h3>108</h3>
+        </div>
+
+        <div class="number-card">
+          👮 Police
+          <h3>100</h3>
+        </div>
+
+        <div class="number-card">
+          🔥 Fire Service
+          <h3>101</h3>
+        </div>
+
+        <div class="number-card">
+          🏥 Hospital
+          <h3>+91 9876543210</h3>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

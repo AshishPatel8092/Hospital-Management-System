@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request a Demo</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        background:
+          radial-gradient(
+            circle at left,
+            rgba(190, 255, 180, 0.35),
+            transparent 35%
+          ),
+          radial-gradient(
+            circle at right,
+            rgba(180, 200, 255, 0.35),
+            transparent 35%
+          ),
+          #f5f7fa;
+      }
+
+      .demo-wrapper {
+        width: 100%;
+        max-width: 1300px;
+      }
+
+      .demo-container {
+        background: #fff;
+        border-radius: 30px;
+        padding: 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      /* LEFT SIDE */
+
+      .demo-left h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+        color: #111;
+      }
+
+      .demo-left p {
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 30px;
+      }
+
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .benefit-card {
+        border: 1px solid #e8e8e8;
+        border-radius: 18px;
+        padding: 25px;
+        transition: 0.3s;
+      }
+
+      .benefit-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      }
+
+      .icon-box {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        font-size: 20px;
+      }
+
+      .blue {
+        background: #eef4ff;
+        color: #4d7cff;
+      }
+
+      .green {
+        background: #eafaf3;
+        color: #27ae60;
+      }
+
+      .orange {
+        background: #fff3e7;
+        color: #ff8b47;
+      }
+
+      .purple {
+        background: #f3ebff;
+        color: #9b59b6;
+      }
+
+      .benefit-card h3 {
+        margin-bottom: 10px;
+      }
+
+      .benefit-card p {
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+
+      /* RIGHT SIDE */
+
+      .demo-form {
+        background: #fafafa;
+        border-radius: 20px;
+        padding: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        outline: none;
+        font-size: 15px;
+      }
+
+      .form-control:focus {
+        border-color: #0d6a7d;
+      }
+
+      textarea.form-control {
+        resize: none;
+        height: 120px;
+      }
+
+      .demo-btn {
+        width: 100%;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        background: #0d6a7d;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .demo-btn:hover {
+        background: #084d5c;
+      }
+
+      /* Responsive */
+
+      @media (max-width: 992px) {
+        .demo-container {
+          grid-template-columns: 1fr;
+        }
+
+        .demo-left h1 {
+          font-size: 38px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .demo-container {
+          padding: 25px;
+        }
+
+        .benefits-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .demo-left h1 {
+          font-size: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-wrapper">
+      <div class="demo-container">
+        <!-- LEFT -->
+
+        <div class="demo-left">
+          <h1>Request a Demo</h1>
+
+          <p>
+            See how Casto Healthcare can simplify patient management,
+            appointment scheduling, medical records, and hospital operations.
+            Book a personalized demonstration with our experts.
+          </p>
+
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="icon-box blue">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <h3>Smart Appointments</h3>
+              <p>Efficient appointment booking and management.</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="icon-box green">
+                <i class="fa-solid fa-user-doctor"></i>
+              </div>
+              <h3>Doctor Management</h3>
+              <p>Manage doctors, schedules, and patient visits.</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="icon-box orange">
+                <i class="fa-solid fa-file-medical"></i>
+              </div>
+              <h3>Digital Records</h3>
+              <p>Secure patient records and medical history.</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="icon-box purple">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <h3>Hospital Analytics</h3>
+              <p>Track performance and healthcare operations.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="demo-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter your name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Hospital / Clinic Name</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter hospital name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter phone number"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>What would you like to see?</label>
+            <textarea
+              class="form-control"
+              placeholder="Tell us your requirements"
+            ></textarea>
+          </div>
+
+          <button class="demo-btn">Request Demo</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

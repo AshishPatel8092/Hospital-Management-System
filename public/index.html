@@ -1,0 +1,1362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Casto Healthcare</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <!-- Left Side -->
+      <div class="left-section">
+        <div class="hamburger" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="logo">
+          <span class="casto">Casto</span>
+          <span class="healthcare">HEALTHCARE</span>
+        </div>
+      </div>
+
+      <!-- Center Menu -->
+      <ul class="nav-links">
+        <li><a href="#benefits">Benefits</a></li>
+        <li><a href="#solutions">Solutions</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#doctors">Doctors</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <!-- <li><a href="#contact">Contact</a></li> -->
+      </ul>
+      <!-- Search -->
+      <div class="search-container" id="searchContainer">
+        <input type="text" class="search-input" placeholder="Search..." />
+
+        <button class="search-btn" onclick="toggleSearch()">🔍</button>
+      </div>
+    </nav>
+
+    <!-- Side Menu -->
+    <!-- Overlay -->
+
+    <div id="menu" class="menu">
+      <!-- Logged In Area -->
+      <div id="userSection">
+        <div class="logged-in-only">
+          <div class="menu-header">
+            <div class="profile-card">
+              <img src="images/user.jpg" alt="Profile" class="profile-img" />
+
+              <h3>Dr. John Smith</h3>
+              <p>Premium Member</p>
+
+              <div class="profile-stats">
+                <div>
+                  <strong>4.9</strong>
+                  Rating
+                </div>
+
+                <div>
+                  <strong>126</strong>
+                  Visits
+                </div>
+
+                <div>
+                  <strong>8</strong>
+                  Years
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-content">
+          <!-- Logged in menu -->
+
+          <div class="logged-in-only menu-group">
+            <a href="#" class="menu-item">
+              <span class="material-symbols-outlined icon-blue">home</span>
+              Home
+            </a>
+
+            <a href="#" class="menu-item">
+              <span class="material-symbols-outlined icon-orange"
+                >notifications</span
+              >
+              Notifications
+            </a>
+
+            <a href="#" class="menu-item">
+              <span class="material-symbols-outlined icon-purple">history</span>
+              History
+            </a>
+
+            <a href="#" class="menu-item">
+              <span class="material-symbols-outlined icon-gray">settings</span>
+              Settings
+            </a>
+
+            <a href="#" class="menu-item logout-item">
+              <span class="material-symbols-outlined icon-red">logout</span>
+              Logout
+            </a>
+          </div>
+        </div>
+
+        <!-- PUBLIC SECTION -->
+
+        <div class="menu-group">
+          <div class="menu-group-title">Healthcare Services</div>
+
+          <!-- DOCTORS -->
+
+          <div class="expand-card">
+            <div class="menu-item expandable" onclick="toggleCard(this)">
+              <span class="material-symbols-outlined icon-blue">
+                medical_services
+              </span>
+              Doctors
+            </div>
+
+            <div class="expand-content">
+              <a href="register.html" target="_blank">
+                <button>Admin</button>
+              </a>
+            </div>
+            <!-- <a href="register.html" target="_blank"
+          ><button class="info-btn">Admin</button></a
+        > -->
+          </div>
+
+          <!-- PATIENTS -->
+
+          <div class="expand-card">
+            <div class="menu-item expandable" onclick="toggleCard(this)">
+              <span class="material-symbols-outlined icon-green"> groups </span>
+              Patients
+            </div>
+
+            <div class="expand-content">
+              <a href="register-p.html" target="_blank">
+                <button>Patient</button>
+              </a>
+            </div>
+          </div>
+
+          <!-- APPOINTMENTS -->
+
+          <div class="expand-card">
+            <div class="menu-item expandable" onclick="toggleCard(this)">
+              <span class="material-symbols-outlined icon-orange">
+                calendar_month
+              </span>
+              Appointments
+            </div>
+
+            <div class="expand-content">
+              <p>Are you registered?</p>
+
+              <a href="appointment.html" target="_blank">
+                <button>Yes</button>
+              </a>
+
+              <a href="register-p.html" target="_blank">
+                <button>No</button>
+              </a>
+            </div>
+          </div>
+
+          <!-- FIND DOCTOR -->
+
+          <a href="#doctors" class="menu-item">
+            <span class="material-symbols-outlined icon-purple"> search </span>
+            Find a Doctor
+          </a>
+
+          <!-- MEDICAL SERVICES -->
+
+          <a href="#services" class="menu-item">
+            <span class="material-symbols-outlined icon-teal">
+              local_hospital
+            </span>
+            Medical Services
+          </a>
+
+          <a href="#" class="menu-item">
+            <span class="material-symbols-outlined icon-blue">
+              health_and_safety
+            </span>
+            Insurance
+          </a>
+
+          <a href="#" class="menu-item">
+            <span class="material-symbols-outlined icon-green">
+              receipt_long
+            </span>
+            Billing
+          </a>
+
+          <a href="#" class="menu-item">
+            <span class="material-symbols-outlined icon-orange">
+              checklist
+            </span>
+            First Visit Checklist
+          </a>
+
+          <a href="#" class="menu-item">
+            <span class="material-symbols-outlined icon-purple"> help </span>
+            FAQ
+          </a>
+        </div>
+      </div>
+    </div>
+    <section class="hero">
+      <div class="hero-content">
+        <h3>THE</h3>
+
+        <h1>
+          HOSPITAL OF THE<br />
+          FUTURE, TODAY.
+        </h1>
+        <div class="para">
+          <p>
+            Casto Health care supports providers, payers, and public health
+            organizations with a secure, comprehensive suite of cloud-based
+            solutions. Built on enterprise-grade infrastructure, our unified
+            solutions help safeguard patient data, streamline operations,
+            alleviate administrative burden, and deliver near real-time insights
+            for connected, efficient care. AI is embedded into every layer of
+            our technology—from our data platforms to our cloud
+            applications—providing actionable insights that help you deliver
+            efficient, enhanced care. And it all runs on our secure, scalable AI
+            infrastructure built for the demands of healthcare.
+          </p>
+        </div>
+
+        <div class="features">
+          <span>• 100% Expert Doctors</span>
+          <span>• Medicine & Instrument</span>
+          <span>• Scientific Treatment</span>
+          <span>• Instant Operation</span>
+        </div>
+
+        <div class="hero-buttons">
+          <!-- <a href="#contact" class="btn-primary">Contact Us</a> -->
+          <a href="contact.html" target="_blank" class="btn-primary">
+            Contact Us
+          </a>
+          <!-- <button class="btn-secondary">Request a demo</button> -->
+          <a href="request-demo.html" target="_blank">
+            <button class="btn-secondary">Request a Demo</button>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <!-- <div class="image-logo">
+          <span class="casto">Casto</span>
+          <span class="healthcare">HEALTHCARE</span>
+        </div> -->
+        <img src="Image/doc.png" alt="Doctors" />
+      </div>
+    </section>
+
+    <section class="info-section">
+      <!-- Left Card -->
+
+      <div class="info-card">
+        <h2>Register for Casto Healthcare Summit 2026.</h2>
+
+        <p>September 22-24, 2026 | Bokaro, Jharkhand</p>
+
+        <!-- <button class="info-btn">Register Now</button> -->
+        <a href="register.html" target="_blank"
+          ><button class="info-btn">Register Now</button></a
+        >
+      </div>
+
+      <!-- Right Card -->
+
+      <div class="info-card">
+        <h2>Emergency Support Available 24/7</h2>
+
+        <div class="emergency-links">
+          <a href="tel:108">
+            <span class="material-symbols-outlined"> emergency </span>
+            Call 108
+          </a>
+
+          <a href="tel:1800111565">
+            <span class="material-symbols-outlined"> call </span>
+            1800 11 1565
+          </a>
+
+          <a
+            href="https://maps.google.com/?q=Bokaro+General+Hospital+Sector+4+Bokaro+Steel+City+Jharkhand+827004"
+            target="_blank"
+          >
+            <span class="material-symbols-outlined"> location_on </span>
+
+            Directions
+          </a>
+        </div>
+
+        <!-- <button class="info-btn">In Emergency</button> -->
+        <a href="emergency.html" target="_blank">
+          <button class="info-btn">Emergency</button>
+        </a>
+      </div>
+    </section>
+    <!-- Diagnose AI -->
+     <section class="diagnose-ai-section" id="diagnose-ai">
+      <div class="section-title reveal">
+        <h2>Diagnose <span>AI</span></h2>
+        <p>Enter your symptoms and feelings below for instant AI clinical triage, recommended medications, and doctor specialties.</p>
+      </div>
+
+      <div class="ai-container">
+        <div class="ai-input-box">
+          <h3>How are you feeling today?</h3>
+          <p class="ai-subtitle">Describe your symptoms in your own words or choose a preset.</p>
+          
+          <div class="preset-pills">
+            <button type="button" onclick="setPreset('Chest tightness and shortness of breath')">Chest Tightness</button>
+            <button type="button" onclick="setPreset('Severe headache with light sensitivity')">Severe Headache</button>
+            <button type="button" onclick="setPreset('Persistent dry cough and fever')">Cough & Fever</button>
+          </div>
+
+          <textarea id="aiSymptomInput" placeholder="e.g. I have a throbbing headache, sensitivity to light, and slight nausea since this morning..."></textarea>
+          
+          <div class="ai-profile-row">
+            <input type="text" id="aiPatientName" placeholder="Patient Name" value="John Doe" />
+            <input type="number" id="aiPatientAge" placeholder="Age" value="32" />
+            <select id="aiPatientGender">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <button class="ai-submit-btn" onclick="runAiDiagnosis()">Run AI Triage & Diagnosis</button>
+        </div>
+
+        <div class="ai-result-box" id="aiResultBox">
+          <div class="ai-result-placeholder">
+            <span class="material-symbols-outlined" style="font-size: 48px; color: #1a7a8a;">smart_toy</span>
+            <h4>AI Clinical Intelligence Awaiting Input</h4>
+            <p>Fill in your symptoms on the left and click run to see recommended medicines and doctor specialties.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+   
+    <section class="why-choose-us" id="benefits">
+      <div class="section-title reveal">
+        <h2>Why Choose <span>Us</span></h2>
+        <p>
+          Providing world-class healthcare with trust, technology and expertise.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">medical_services</span>
+          <h3>Expert Doctors</h3>
+          <p>Highly qualified specialists delivering advanced treatments.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">emergency</span>
+          <h3>24/7 Emergency</h3>
+          <p>Immediate emergency care available around the clock.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">monitor_heart</span>
+          <h3>Advanced Equipment</h3>
+          <p>Modern medical technology for accurate diagnosis.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">verified</span>
+          <h3>Trusted Care</h3>
+          <p>Patient-centered healthcare with proven excellence.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">vaccines</span>
+          <h3>Quality Treatment</h3>
+          <p>Evidence-based treatment plans for better outcomes.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">payments</span>
+          <h3>Affordable Cost</h3>
+          <p>Transparent pricing with accessible healthcare services.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">health_and_safety</span>
+          <h3>Patient Safety</h3>
+          <p>Strict safety standards ensuring quality healthcare.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <span class="material-symbols-outlined icon">bolt</span>
+          <h3>Fast Service</h3>
+          <p>Reduced waiting times and efficient patient management.</p>
+        </div>
+      </div>
+    </section>
+    <!-- solution section -->
+    <section class="solution">
+      <h3>Solutions to solve complex healthcare challenges</h3>
+      <p>
+        Modern healthcare demands integrated solutions. We connect patients,
+        providers, payers, and public health organizations with AI-powered,
+        interoperable solutions that help streamline data exchange, surface
+        actionable insights, and drive operational efficiencies across the care
+        continuum.we are always with you in need.we know how to take care.
+      </p>
+    </section>
+    <section class="solutions-section" id="solutions">
+      <div class="solutions-header">
+        <h2>Casto Healthcare Solutions</h2>
+        <a href="#">Explore All Services</a>
+      </div>
+
+      <div class="solutions-grid">
+        <!-- Card 1 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">medical_services</span>
+            Clinical Applications
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+           <button class="panel-close" aria-label="Close">&times;</button>
+
+    <div class="panel-columns">
+      <div class="panel-item">
+        <h4>Clinical suite</h4>
+        <p>Leverage AI-driven solutions that help simplify workflows, alleviate administrative burden, and support patient safety. Transform your EHR from a cumbersome administrative tool into an intelligent, collaborative assistant with embedded advanced automation.</p>
+        <a href="#">Explore clinical suite</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Continuum of care</h4>
+        <p>Coordinate, manage, and deliver high-quality patient care across settings — from rehabilitation and home health to long-term care and behavioral health.</p>
+        <a href="#">Explore continuum of care</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Interoperability</h4>
+        <p>Centralize data exchange capabilities with our easy-to-use interoperability management console for provider clinical exchange, payment and operations, public health, labs and diagnostics, and benefits administration.</p>
+        <a href="#">Explore interoperability</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Service lines and departments</h4>
+        <p>Empower clinicians to deliver coordinated, knowledge-driven care by organizing care around conditions. Unite service lines and departments to help enhance care, streamline workflows, and drive efficiencies.</p>
+        <a href="#">Explore service lines and departments</a>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- Card 2 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">local_hospital</span>
+            Clinical & Financial Operations
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+            <button class="panel-close" aria-label="Close">&times;</button>
+
+    <div class="panel-columns">
+      <div class="panel-item">
+        <h4>Clinical suite</h4>
+        <p>Leverage AI-driven solutions that help simplify workflows, alleviate administrative burden, and support patient safety. Transform your EHR from a cumbersome administrative tool into an intelligent, collaborative assistant with embedded advanced automation.</p>
+        <a href="#">Explore clinical suite</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Continuum of care</h4>
+        <p>Coordinate, manage, and deliver high-quality patient care across settings — from rehabilitation and home health to long-term care and behavioral health.</p>
+        <a href="#">Explore continuum of care</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Interoperability</h4>
+        <p>Centralize data exchange capabilities with our easy-to-use interoperability management console for provider clinical exchange, payment and operations, public health, labs and diagnostics, and benefits administration.</p>
+        <a href="#">Explore interoperability</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Service lines and departments</h4>
+        <p>Empower clinicians to deliver coordinated, knowledge-driven care by organizing care around conditions. Unite service lines and departments to help enhance care, streamline workflows, and drive efficiencies.</p>
+        <a href="#">Explore service lines and departments</a>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- Card 3 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">person</span>
+            Patient Experience
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+           <button class="panel-close" aria-label="Close">&times;</button>
+
+    <div class="panel-columns">
+      <div class="panel-item">
+        <h4>Clinical suite</h4>
+        <p>Leverage AI-driven solutions that help simplify workflows, alleviate administrative burden, and support patient safety. Transform your EHR from a cumbersome administrative tool into an intelligent, collaborative assistant with embedded advanced automation.</p>
+        <a href="#">Explore clinical suite</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Continuum of care</h4>
+        <p>Coordinate, manage, and deliver high-quality patient care across settings — from rehabilitation and home health to long-term care and behavioral health.</p>
+        <a href="#">Explore continuum of care</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Interoperability</h4>
+        <p>Centralize data exchange capabilities with our easy-to-use interoperability management console for provider clinical exchange, payment and operations, public health, labs and diagnostics, and benefits administration.</p>
+        <a href="#">Explore interoperability</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Service lines and departments</h4>
+        <p>Empower clinicians to deliver coordinated, knowledge-driven care by organizing care around conditions. Unite service lines and departments to help enhance care, streamline workflows, and drive efficiencies.</p>
+        <a href="#">Explore service lines and departments</a>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- Card 4 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">payments</span>
+            Billing & Insurance
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+            <button class="panel-close" aria-label="Close">&times;</button>
+
+    <div class="panel-columns">
+      <div class="panel-item">
+        <h4>Clinical suite</h4>
+        <p>Leverage AI-driven solutions that help simplify workflows, alleviate administrative burden, and support patient safety. Transform your EHR from a cumbersome administrative tool into an intelligent, collaborative assistant with embedded advanced automation.</p>
+        <a href="#">Explore clinical suite</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Continuum of care</h4>
+        <p>Coordinate, manage, and deliver high-quality patient care across settings — from rehabilitation and home health to long-term care and behavioral health.</p>
+        <a href="#">Explore continuum of care</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Interoperability</h4>
+        <p>Centralize data exchange capabilities with our easy-to-use interoperability management console for provider clinical exchange, payment and operations, public health, labs and diagnostics, and benefits administration.</p>
+        <a href="#">Explore interoperability</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Service lines and departments</h4>
+        <p>Empower clinicians to deliver coordinated, knowledge-driven care by organizing care around conditions. Unite service lines and departments to help enhance care, streamline workflows, and drive efficiencies.</p>
+        <a href="#">Explore service lines and departments</a>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- Card 5 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">groups</span>
+            Population Health
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+            <button class="panel-close" aria-label="Close">&times;</button>
+
+    <div class="panel-columns">
+      <div class="panel-item">
+        <h4>Clinical suite</h4>
+        <p>Leverage AI-driven solutions that help simplify workflows, alleviate administrative burden, and support patient safety. Transform your EHR from a cumbersome administrative tool into an intelligent, collaborative assistant with embedded advanced automation.</p>
+        <a href="#">Explore clinical suite</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Continuum of care</h4>
+        <p>Coordinate, manage, and deliver high-quality patient care across settings — from rehabilitation and home health to long-term care and behavioral health.</p>
+        <a href="#">Explore continuum of care</a>
+      </div>
+
+    
+    </div>
+  </div>
+</div>
+        <!-- Card 6 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">security</span>
+            Security
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+            <button class="panel-close" aria-label="Close">&times;</button>
+
+    <div class="panel-columns">
+      <div class="panel-item">
+        <h4>Clinical suite</h4>
+        <p>Leverage AI-driven solutions that help simplify workflows, alleviate administrative burden, and support patient safety. Transform your EHR from a cumbersome administrative tool into an intelligent, collaborative assistant with embedded advanced automation.</p>
+        <a href="#">Explore clinical suite</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Continuum of care</h4>
+        <p>Coordinate, manage, and deliver high-quality patient care across settings — from rehabilitation and home health to long-term care and behavioral health.</p>
+        <a href="#">Explore continuum of care</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Interoperability</h4>
+        <p>Centralize data exchange capabilities with our easy-to-use interoperability management console for provider clinical exchange, payment and operations, public health, labs and diagnostics, and benefits administration.</p>
+        <a href="#">Explore interoperability</a>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+        <!-- Card 7 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">support_agent</span>
+            Services & Support
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+            <button class="panel-close" aria-label="Close">&times;</button>
+
+    <div class="panel-columns">
+      <div class="panel-item">
+        <h4>Clinical suite</h4>
+        <p>Leverage AI-driven solutions that help simplify workflows, alleviate administrative burden, and support patient safety. Transform your EHR from a cumbersome administrative tool into an intelligent, collaborative assistant with embedded advanced automation.</p>
+        <a href="#">Explore clinical suite</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Continuum of care</h4>
+        <p>Coordinate, manage, and deliver high-quality patient care across settings — from rehabilitation and home health to long-term care and behavioral health.</p>
+        <a href="#">Explore continuum of care</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Interoperability</h4>
+        <p>Centralize data exchange capabilities with our easy-to-use interoperability management console for provider clinical exchange, payment and operations, public health, labs and diagnostics, and benefits administration.</p>
+        <a href="#">Explore interoperability</a>
+      </div>
+
+      <div class="panel-item">
+        <h4>Service lines and departments</h4>
+        <p>Empower clinicians to deliver coordinated, knowledge-driven care by organizing care around conditions. Unite service lines and departments to help enhance care, streamline workflows, and drive efficiencies.</p>
+        <a href="#">Explore service lines and departments</a>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- Card 8 -->
+        <div class="solution-card">
+          <button class="accordion">
+            <span class="material-symbols-outlined">apartment</span>
+            Enterprise Solutions
+            <span class="material-symbols-outlined arrow"
+              >keyboard_arrow_down</span
+            >
+          </button>
+          <div class="panel">
+             <button class="panel-close" aria-label="Close">&times;</button>
+  <h3 class="panel-title">Security</h3>
+  <p>Maintain a strong security posture for your enterprise with data security solutions that help you manage clinical identity, regulatory compliance, and security auditing.</p>
+  <a href="#">Explore security</a>
+</div>
+    </section>
+    <!--services section-->
+    <section class="services-section" id="services">
+      <h2 class="services-title">Our Healthcare Services</h2>
+
+      <div class="services-grid">
+        <div class="service-card reveal2">
+          <img src="Image/full body.png" alt="Full Body Checkup" />
+          <h3>Full Body Checkup</h3>
+          <button>Book Now</button>
+        </div>
+
+        <div class="service-card reveal2">
+          <img src="Image/radiology.webp" alt="Imaging and Radiology" />
+          <h3>Imaging and Radiology</h3>
+          <button>Book Now</button>
+        </div>
+
+        <div class="service-card reveal2">
+          <img src="Image/heart checkup.jpg" alt="Heart Related" />
+          <h3>Heart Related</h3>
+          <button>Book Now</button>
+        </div>
+
+        <div class="service-card reveal2">
+          <img src="Image/brain.avif" alt="Brain Related" />
+          <h3>Brain Related</h3>
+          <button>Book Now</button>
+        </div>
+
+        <div class="service-card reveal2">
+          <img src="Image/stomach.jpg" alt="Stomach Related" />
+          <h3>Stomach Related</h3>
+          <button>Book Now</button>
+        </div>
+
+        <div class="service-card reveal2">
+          <img src="Image/surgery.webp" alt="Surgical Services" />
+          <h3>Surgical Services</h3>
+          <button>Book Now</button>
+        </div>
+
+        <div class="service-card reveal2">
+          <img src="Image/eyes.webp" alt="Eye Related" />
+          <h3>Eye Related</h3>
+          <button>Book Now</button>
+        </div>
+      </div>
+     <!-- Booking Modal -->
+<div class="booking-overlay" id="bookingOverlay">
+  <div class="booking-container">
+    <button class="booking-close" id="bookingClose" aria-label="Close">&times;</button>
+
+    <div class="booking-card">
+      <div class="booking-left">
+        <h2>Book Your</h2>
+        <h1 id="bookingServiceName">Full Body Checkup</h1>
+        <p class="booking-subtitle" id="bookingSubtitle">Comprehensive Health Screening Package</p>
+
+        <div class="booking-includes">
+          <h4>Includes:</h4>
+          <ul id="bookingIncludesList"></ul>
+        </div>
+      </div>
+
+      <div class="booking-right">
+        <h3>Book an Appointment</h3>
+
+        <form id="bookingForm">
+          <div class="booking-field">
+            <span class="material-symbols-outlined">person</span>
+            <input type="text" id="fieldName"  placeholder="Full Name" required />
+          </div>
+
+          <div class="booking-field">
+            <span class="material-symbols-outlined">call</span>
+            <input type="tel" id="fieldPhone"  placeholder="Phone Number" required />
+          </div>
+
+          <div class="booking-field">
+            <span class="material-symbols-outlined">mail</span>
+            <input type="email" id="fieldEmail"  placeholder="Email Address" required />
+          </div>
+          <div class="booking-field">
+  <span class="material-symbols-outlined">cake</span>
+  <input type="number" id="fieldAge" placeholder="Age" min="1" required />
+</div>
+
+<div class="booking-field">
+  <span class="material-symbols-outlined">wc</span>
+  <select id="fieldGender" required>
+    <option value="" disabled selected>Gender</option>
+    <option>Male</option>
+    <option>Female</option>
+    <option>Other</option>
+  </select>
+</div>
+
+          <div class="booking-field">
+            <span class="material-symbols-outlined">calendar_month</span>
+            <input type="date" id="fieldDate"  required />
+          </div>
+
+          <div class="booking-field">
+            <span class="material-symbols-outlined">schedule</span>
+            <select id="fieldTime"  required>
+              <option value="" disabled selected>Preferred Time</option>
+              <option>9:00 AM</option>
+              <option>11:00 AM</option>
+              <option>1:00 PM</option>
+              <option>3:00 PM</option>
+              <option>5:00 PM</option>
+            </select>
+          </div>
+
+          <div class="booking-field">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <select id="bookingPackageSelect" required>
+              <option value="" disabled selected>Select Package</option>
+            </select>
+          </div>
+
+          <button type="submit" class="booking-submit">Book Now</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="booking-footer">
+      <div class="booking-footer-item">
+        <span class="material-symbols-outlined">verified_user</span> Accurate Tests
+      </div>
+      <div class="booking-footer-item">
+        <span class="material-symbols-outlined">bolt</span> Quick Service
+      </div>
+      <div class="booking-footer-item">
+        <span class="material-symbols-outlined">favorite</span> Expert Care
+      </div>
+    </div>
+    <div class="booking-summary" id="bookingSummary">
+  <button class="booking-close" id="summaryClose" aria-label="Close">&times;</button>
+
+  <h2 id="summaryServiceName">Full Body Checkup</h2>
+
+  <div class="summary-block">
+    <h4><span class="material-symbols-outlined">description</span> About This Service</h4>
+    <p id="summaryAbout"></p>
+  </div>
+
+  <div class="summary-price" id="summaryPrice">₹ 0</div>
+
+  <h4 class="summary-heading">Pre-Test Instructions</h4>
+  <ul id="summaryInstructions"></ul>
+
+  <div class="summary-block">
+    <h4>Booking Summary</h4>
+    <p><strong>Name:</strong> <span id="sumName">Not filled</span></p>
+    <p><strong>Mobile:</strong> <span id="sumMobile">Not filled</span></p>
+    <p><strong>Age:</strong> <span id="sumAge">Not filled</span></p>
+    <p><strong>Gender:</strong> <span id="sumGender">Not filled</span></p>
+    <p><strong>Date:</strong> <span id="sumDate">Not filled</span></p>
+    <p><strong>Time:</strong> <span id="sumTime">Not selected</span></p>
+    <p><strong>Payment:</strong> Online</p>
+    <p><strong>Price:</strong> <span id="sumPriceText">₹0</span></p>
+  </div>
+
+  <button class="booking-edit" id="editDetailsBtn">Edit Details</button>
+  <button class="booking-submit" id="confirmBookingBtn">Confirm Booking</button>
+</div>
+  </div>
+</div>
+    </section>
+    <!--Doctors section-->
+    <section class="doctors-section" id="doctors">
+      <h2 class="doctor-title">Our Expert Doctors</h2>
+
+      <div class="slider-container">
+        <!-- Left Arrow -->
+        <button class="slider-btn prev-btn" onclick="moveLeft()">
+          &#10094;
+        </button>
+
+        <!-- Slider -->
+        <div class="slider-wrapper">
+          <div class="doctor-track" id="doctorTrack">
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                alt=""
+              />
+              <h3>Dr. Raj Sharma</h3>
+              <p class="speciality">General Physician</p>
+              <div class="experience">7 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/women/44.jpg"
+                alt=""
+              />
+              <h3>Dr. Priya Singh</h3>
+              <p class="speciality">Radiologist</p>
+              <div class="experience">10 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/men/45.jpg"
+                alt=""
+              />
+              <h3>Dr. Amit Kumar</h3>
+              <p class="speciality">Cardiologist</p>
+              <div class="experience">8 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/women/68.jpg"
+                alt=""
+              />
+              <h3>Dr. Neha Gupta</h3>
+              <p class="speciality">Neurologist</p>
+              <div class="experience">12 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/men/52.jpg"
+                alt=""
+              />
+              <h3>Dr. Vikram Patel</h3>
+              <p class="speciality">Gastroenterologist</p>
+              <div class="experience">6 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/men/65.jpg"
+                alt=""
+              />
+              <h3>Dr. Rahul Das</h3>
+              <p class="speciality">Surgeon</p>
+              <div class="experience">7 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/women/22.jpg"
+                alt=""
+              />
+              <h3>Dr. Sneha Roy</h3>
+              <p class="speciality">Ophthalmologist</p>
+              <div class="experience">9 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+
+            <div class="doctor-card">
+              <img
+                src="https://randomuser.me/api/portraits/men/76.jpg"
+                alt=""
+              />
+              <h3>Dr. Arjun Verma</h3>
+              <p class="speciality">Dermatologist</p>
+              <div class="experience">11 Years Experience</div>
+              <button class="book-btn">Book Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="slider-btn next-btn" onclick="moveRight()">
+          &#10095;
+        </button>
+      </div>
+      <!-- Doctor Profile / Appointment Page -->
+<div class="doctor-profile-overlay" id="doctorProfileOverlay">
+  <div class="doctor-profile-header">
+    <button class="back-btn" id="doctorBackBtn">&larr; Back</button>
+    <h2>Doctor Profile</h2>
+    <div class="rating-badge">
+      <span class="material-symbols-outlined">star</span> <span id="docRatingValue">5</span>
+    </div>
+  </div>
+
+  <div class="doctor-profile-content">
+    <div class="doctor-info-card">
+      <img id="docImage" src="" alt="" class="doctor-profile-img" />
+
+      <div class="doctor-info-main">
+        <h1 id="docName">Dr. Name</h1>
+        <span class="speciality-badge" id="docSpeciality">Speciality</span>
+
+        <div class="doctor-info-grid">
+          <div class="info-box">
+            <span class="material-symbols-outlined">school</span>
+            <div><strong>Qualifications</strong><p id="docQualifications">MBBS</p></div>
+          </div>
+          <div class="info-box">
+            <span class="material-symbols-outlined">location_on</span>
+            <div><strong>Location</strong><p id="docLocation">Clinic</p></div>
+          </div>
+          <div class="info-box">
+            <span class="material-symbols-outlined">payments</span>
+            <div><strong>Consultation Fee</strong><p class="fee-text" id="docFee">₹0</p></div>
+          </div>
+          <div class="info-box">
+            <span class="material-symbols-outlined">event_available</span>
+            <div><strong>Availability</strong><p id="docAvailability">Available</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doctor-stats-row">
+      <div class="stat-box">
+        <span class="material-symbols-outlined stat-icon success">favorite</span>
+        <h3 id="docSuccess">98%</h3><p>Success</p>
+      </div>
+      <div class="stat-box">
+        <span class="material-symbols-outlined stat-icon exp">military_tech</span>
+        <h3 id="docExperience">5 Years</h3><p>Experience</p>
+      </div>
+      <div class="stat-box">
+        <span class="material-symbols-outlined stat-icon patients">groups</span>
+        <h3 id="docPatients">2.6k</h3><p>Patients</p>
+      </div>
+    </div>
+
+    <div class="about-doctor-box">
+      <h4><span class="material-symbols-outlined">info</span> About Doctor</h4>
+      <p id="docAbout">About text goes here.</p>
+    </div>
+
+    <div class="appointment-box">
+      <h3><span class="material-symbols-outlined">event</span> Book Your Appointment</h3>
+
+      <div class="appointment-grid">
+        <div class="appointment-left">
+          <h4><span class="material-symbols-outlined">calendar_month</span> Select Date</h4>
+          <div class="date-pills" id="datePills"></div>
+
+          <div class="patient-details">
+            <h4>Patient Details</h4>
+            <div class="patient-form-row">
+              <input type="text" id="patName" placeholder="Full Name" />
+              <input type="number" id="patAge" placeholder="Age" min="1" />
+            </div>
+            <div class="patient-form-row">
+              <input type="tel" id="patMobile" placeholder="Mobile Number (10 digits)" maxlength="10" />
+              <select id="patGender">
+                <option value="" disabled selected>Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <input type="email" id="patEmail" placeholder="Email (optional - for receipts)" class="full-width-input" />
+          </div>
+        </div>
+
+        <div class="appointment-right">
+          <h4><span class="material-symbols-outlined">schedule</span> Available Time Slots</h4>
+          <p class="no-slots" id="timeSlotsMsg">No time slots for this date.</p>
+          <div class="time-slots" id="timeSlotsContainer"></div>
+
+          <div class="booking-summary-card">
+            <p><span>Selected Doctor:</span> <strong id="sumDoctorName">-</strong></p>
+            <p><span>Doctor Speciality:</span> <strong id="sumDoctorSpeciality">-</strong></p>
+            <p><span>Selected Date:</span> <strong id="sumSelectedDate">Not selected</strong></p>
+            <p><span>Selected Time:</span> <strong id="sumSelectedTime">Not selected</strong></p>
+            <p><span>Consultation Fee:</span> <strong id="sumFee" class="fee-text">₹0</strong></p>
+
+            <div class="payment-row">
+              <span>Payment:</span>
+              <button type="button" class="payment-btn active" id="payCashBtn">Cash</button>
+              <button type="button" class="payment-btn" id="payOnlineBtn">Online</button>
+            </div>
+
+            <button class="confirm-booking-btn" id="confirmDoctorBookingBtn">
+              <span class="material-symbols-outlined">call</span> Confirm Booking
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </section>
+    <!--Resources Quote section-->
+    <!-- SECTION 1: Quote / Testimonial -->
+    <section class="quote-section" id="resources">
+      <!-- Decorative blobs -->
+      <div class="blob-top-left"></div>
+      <div class="blob-bottom-right-teal"></div>
+      <div class="blob-bottom-right-amber"></div>
+
+      <!-- Video card -->
+      <div class="video-card">
+        <div class="video-thumbnail">
+          <!-- Replace src with your doctor image -->
+          <img
+            src="https://img.freepik.com/free-photo/doctor-with-his-arms-crossed-white-background_1368-5790.jpg"
+            alt="Doctor"
+          />
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div class="quote-content">
+        <p class="quote-text">
+          "We are absolutely committed to providing the best healthcare
+          experience, and we have a team of dedicated doctors who are just as
+          committed as we are."
+        </p>
+        <p class="quote-author-name">Dr. Rajesh Sharma,</p>
+        <p class="quote-author-role">Chief Medical Officer, MediCare</p>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Promo / CTA Banner -->
+    <section class="promo-section">
+      <div class="promo-inner">
+        <!-- Replace with your actual image -->
+        <div class="promo-image-placeholder">Your event / team photo here</div>
+
+        <div class="promo-content">
+          <h2 class="promo-title">
+            Transform healthcare with Casto Health Care Center of Excellence
+          </h2>
+          <p class="promo-desc">
+            Looking for the right doctors and expert guidance on your health
+            journey? MediCare's Center of Excellence provides a clear, trusted
+            path to better health outcomes for you and your family.
+          </p>
+          <a href="#services" class="promo-btn">Learn more about our services</a>
+        </div>
+      </div>
+    </section>
+    <!--Certificate section-->
+    <section class="awards-section">
+      <!-- Header -->
+      <h2 class="awards-title">Highly rated across the industry</h2>
+      <p class="awards-desc">
+        Our services have garnered many accolades, but we're most proud of
+        improving the lives of patients and doctors. We continue to develop
+        innovations that help make healthcare better for everyone.
+      </p>
+      <a href="#" class="awards-link">
+        View Awards
+        <span class="arrow-circle">
+          <svg viewBox="0 0 16 16"><polyline points="5,3 11,8 5,13" /></svg>
+        </span>
+      </a>
+
+      <!-- Scrolling badges -->
+      <div class="scroll-wrapper">
+        <div class="scroll-track" id="scrollTrack">
+          <!-- Badge 1 -->
+          <div class="badge-card">
+            <div class="badge badge-silver badge-circle">
+              <span class="badge-top">Most Trusted</span>
+              <span class="badge-main">Medicare</span>
+              <span class="badge-sub">in India</span>
+              <span class="badge-year">2025</span>
+            </div>
+          </div>
+
+          <!-- Badge 2 -->
+          <div class="badge-card">
+            <div class="badge badge-gold badge-circle">
+              <span class="badge-top">Relevant · Accurate</span>
+              <span class="badge-main">Best<br />Hospital</span>
+              <span class="badge-sub">Unbiased source</span>
+              <span class="badge-year">2025</span>
+            </div>
+          </div>
+
+          <!-- Badge 3 -->
+          <div class="badge-card">
+            <div class="badge badge-dark">
+              <span class="badge-top">India's</span>
+              <span class="badge-main">Best<br />Midsize<br />Clinic</span>
+              <span class="badge-sub">Powered by HealthRank</span>
+              <span class="badge-year">2025</span>
+            </div>
+          </div>
+
+          <!-- Badge 4 -->
+          <div class="badge-card">
+            <div class="badge badge-teal-circle badge-circle">
+              <span class="badge-top">Certified</span>
+              <span class="badge-main">ONC<br />Health</span>
+              <span class="badge-sub">Certified Provider</span>
+            </div>
+          </div>
+
+          <!-- Badge 5 -->
+          <div class="badge-card">
+            <div class="badge badge-shield">
+              <span class="badge-top">Best Software</span>
+              <span class="badge-main">Top<br />50</span>
+              <span class="badge-sub">Healthcare</span>
+              <span class="badge-year">2025</span>
+            </div>
+          </div>
+
+          <!-- Badge 6 -->
+          <div class="badge-card">
+            <div class="badge badge-gradient badge-circle">
+              <span class="badge-top">Best in</span>
+              <span class="badge-main">Patient<br />Care</span>
+              <span class="badge-sub">Behavioral Health</span>
+              <span class="badge-year">2025</span>
+            </div>
+          </div>
+
+          <!-- Badge 7 -->
+          <div class="badge-card">
+            <div class="badge badge-square">
+              <span class="badge-top">Excellence in</span>
+              <span class="badge-main">Digital<br />Health</span>
+              <span class="badge-sub">HealthTech Awards</span>
+              <span class="badge-year">2024</span>
+            </div>
+          </div>
+
+          <!-- Badge 8 -->
+          <div class="badge-card">
+            <div class="badge badge-gold badge-circle">
+              <span class="badge-top">Top Rated</span>
+              <span class="badge-main">Doctor<br />Portal</span>
+              <span class="badge-sub">Unbiased Source</span>
+              <span class="badge-year">2024</span>
+            </div>
+          </div>
+
+          <!-- Badge 9 -->
+          <div class="badge-card">
+            <div class="badge badge-light">
+              <span class="badge-top">Awarded</span>
+              <span class="badge-main">Best<br />UX</span>
+              <span class="badge-sub">MedPortal Awards</span>
+              <span class="badge-year">2025</span>
+            </div>
+          </div>
+
+          <!-- Badge 10 -->
+          <div class="badge-card">
+            <div class="badge badge-teal-circle badge-circle">
+              <span class="badge-top">Drummond</span>
+              <span class="badge-main">ISO<br />Cert</span>
+              <span class="badge-sub">Health IT</span>
+              <span class="badge-year">2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-top">
+        <div class="footer-col footer-brand">
+          <div class="logo">
+            <span class="casto footer-casto">Casto</span>
+            <span class="healthcare footer-healthcare">HEALTHCARE</span>
+          </div>
+          <p class="footer-about">
+            Casto Healthcare delivers secure, AI-powered solutions that connect
+            patients, providers and payers — built for the demands of modern
+            care.
+          </p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Facebook">
+              <span class="material-symbols-outlined">thumb_up</span>
+            </a>
+            <a href="#" aria-label="Twitter / X">
+              <span class="material-symbols-outlined">alternate_email</span>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <span class="material-symbols-outlined">photo_camera</span>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <span class="material-symbols-outlined">business_center</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <a href="#benefits">Benefits</a>
+          <a href="#solutions">Solutions</a>
+          <a href="#services">Services</a>
+          <a href="#doctors">Doctors</a>
+          <a href="#resources">Resources</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Our Services</h4>
+          <a href="#services">Full Body Checkup</a>
+          <a href="#services">Imaging & Radiology</a>
+          <a href="#services">Heart Related</a>
+          <a href="#services">Surgical Services</a>
+          <a href="#services">Eye Related</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact Us</h4>
+          <p class="footer-contact-item">
+            <span class="material-symbols-outlined">location_on</span>
+            Sector 4, Bokaro Steel City, Jharkhand 827004
+          </p>
+          <p class="footer-contact-item">
+            <span class="material-symbols-outlined">call</span>
+            1800 11 1565
+          </p>
+          <p class="footer-contact-item">
+            <span class="material-symbols-outlined">mail</span>
+            support@castohealthcare.com
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Casto Healthcare. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+
+      <!-- Back to top button -->
+      <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <span class="material-symbols-outlined">keyboard_arrow_up</span>
+      </button>
+    </footer>
+
+    <div class="overlay" id="overlay"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

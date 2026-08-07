@@ -1,0 +1,1460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare — Patient Registration</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@500;600&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --teal: #0f766e;
+        --teal-lt: #ccfbf1;
+        --teal-dk: #0d5c56;
+        --rose: #e11d48;
+        --slate-900: #0f172a;
+        --slate-700: #334155;
+        --slate-400: #94a3b8;
+        --slate-200: #e2e8f0;
+        --slate-50: #f8fafc;
+        --white: #ffffff;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #eef9f8 0%,
+          #f0f9ff 50%,
+          #fff7ed 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── NAV ── */
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 48px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--slate-200);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--teal);
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+      }
+      .logo-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+      }
+      .logo-text {
+        font-family: "Lora", serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--slate-900);
+      }
+      .nav-link {
+        font-size: 0.875rem;
+        color: var(--slate-700);
+      }
+      .nav-link a {
+        color: var(--teal);
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .nav-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── PAGE WRAPPER ── */
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 36px;
+      }
+      .page-header h1 {
+        font-family: "Lora", serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--slate-900);
+      }
+      .page-header p {
+        margin-top: 6px;
+        font-size: 0.95rem;
+        color: var(--slate-400);
+      }
+
+      /* ── STEPPER ── */
+      .stepper {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        margin-bottom: 40px;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--slate-400);
+        cursor: default;
+      }
+      .step.active {
+        color: var(--teal);
+      }
+      .step.complete {
+        color: var(--teal);
+      }
+
+      .step-num {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px solid var(--slate-200);
+        display: grid;
+        place-items: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        background: var(--white);
+        transition: all 0.3s;
+      }
+      .step.active .step-num {
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+      .step.complete .step-num {
+        border-color: var(--teal);
+        background: var(--teal);
+        color: white;
+      }
+
+      .step-line {
+        width: 80px;
+        height: 2px;
+        background: var(--slate-200);
+        margin: 0 4px;
+        transition: background 0.3s;
+      }
+      .step-line.done {
+        background: var(--teal);
+      }
+
+      /* ── CARD ── */
+      .card {
+        background: white;
+        border-radius: 20px;
+        box-shadow:
+          0 4px 24px rgba(15, 118, 110, 0.08),
+          0 1px 4px rgba(0, 0, 0, 0.04);
+        padding: 40px 48px;
+        width: 100%;
+        max-width: 780px;
+      }
+
+      /* ── FORM GRID ── */
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px 28px;
+      }
+      .col-span-2 {
+        grid-column: span 2;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .field label {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--slate-700);
+      }
+      .field label .req {
+        color: var(--rose);
+        margin-left: 2px;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid var(--slate-200);
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-family: inherit;
+        color: var(--slate-900);
+        background: var(--slate-50);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        appearance: none;
+      }
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: var(--teal);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+      }
+      .field input.error,
+      .field select.error {
+        border-color: var(--rose);
+      }
+      .field .err-msg {
+        font-size: 0.75rem;
+        color: var(--rose);
+        margin-top: 2px;
+        display: none;
+      }
+      .field.has-error .err-msg {
+        display: block;
+      }
+      .field.has-error input,
+      .field.has-error select {
+        border-color: var(--rose);
+      }
+
+      .field .input-wrap {
+        position: relative;
+      }
+      .field .input-wrap input {
+        padding-right: 40px;
+      }
+      .field .input-wrap .icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--slate-400);
+        pointer-events: none;
+      }
+
+      select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 36px;
+      }
+
+      /* ── SECTION LABEL ── */
+      .section-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--teal);
+        border-bottom: 1px solid var(--slate-200);
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+      }
+
+      /* ── RADIO & CHECKBOX ── */
+      .radio-group,
+      .check-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .radio-option,
+      .check-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.875rem;
+        color: var(--slate-700);
+        cursor: pointer;
+      }
+      .radio-option input[type="radio"],
+      .check-option input[type="checkbox"] {
+        display: none;
+      }
+      .radio-option .rb,
+      .check-option .cb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid var(--slate-200);
+        background: var(--slate-50);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        transition: all 0.2s;
+      }
+      .check-option .cb {
+        border-radius: 5px;
+      }
+      .radio-option input:checked ~ .rb {
+        border-color: var(--teal);
+      }
+      .radio-option input:checked ~ .rb::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--teal);
+      }
+      .check-option input:checked ~ .cb {
+        border-color: var(--teal);
+        background: var(--teal);
+      }
+      .check-option input:checked ~ .cb::after {
+        content: "";
+        width: 10px;
+        height: 7px;
+        border-left: 2px solid white;
+        border-bottom: 2px solid white;
+        transform: rotate(-45deg) translateY(-1px);
+      }
+
+      /* ── STEP PANELS ── */
+      .step-panel {
+        display: none;
+      }
+      .step-panel.active {
+        display: block;
+      }
+
+      /* ── PRICING CARD ── */
+      .pricing-box {
+        background: var(--slate-50);
+        border: 1.5px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 24px 28px;
+        margin-bottom: 28px;
+      }
+      .pricing-box h3 {
+        font-family: "Lora", serif;
+        font-size: 1.1rem;
+        color: var(--slate-900);
+        margin-bottom: 4px;
+      }
+      .pricing-box .sub {
+        font-size: 0.8rem;
+        color: var(--slate-400);
+        margin-bottom: 18px;
+      }
+      .pricing-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: var(--slate-700);
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--slate-200);
+      }
+      .pricing-row.total {
+        border-bottom: none;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--slate-900);
+        padding-top: 14px;
+      }
+      .pricing-row.total .price-val {
+        color: var(--teal);
+      }
+
+      /* ── SUBSCRIPTION ── */
+      .subscribe-wrap {
+        margin-bottom: 28px;
+      }
+      .subscribe-wrap p {
+        font-size: 0.875rem;
+        color: var(--slate-700);
+        margin-bottom: 10px;
+        font-weight: 500;
+      }
+      .subscribe-wrap .note {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        margin-top: 8px;
+        line-height: 1.5;
+      }
+
+      /* ── ACTIONS ── */
+      .actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 32px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 32px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: var(--teal);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--teal-dk);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--teal);
+        border: 1.5px solid var(--teal);
+      }
+      .btn-outline:hover {
+        background: var(--teal-lt);
+      }
+
+      /* ── SUCCESS ── */
+      #step-success {
+        text-align: center;
+        padding: 20px 0;
+      }
+      .success-icon {
+        width: 72px;
+        height: 72px;
+        background: var(--teal-lt);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 20px;
+      }
+      .success-icon svg {
+        width: 36px;
+        height: 36px;
+        stroke: var(--teal);
+      }
+      #step-success h2 {
+        font-family: "Lora", serif;
+        font-size: 1.6rem;
+        color: var(--slate-900);
+        margin-bottom: 8px;
+      }
+      #step-success p {
+        font-size: 0.9rem;
+        color: var(--slate-400);
+      }
+
+      /* ── PAGE VIEWS ── */
+      .page-view {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 16px 60px;
+        flex: 1;
+      }
+      .page-view.active {
+        display: flex;
+      }
+
+      /* ── SIGN IN CARD ── */
+      .signin-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow:
+          0 4px 24px rgba(15, 118, 110, 0.08),
+          0 1px 4px rgba(0, 0, 0, 0.04);
+        padding: 44px 48px;
+        width: 100%;
+        max-width: 460px;
+      }
+      .signin-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+      .signin-logo .logo-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+      }
+      .signin-logo .logo-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+      .signin-logo span {
+        font-family: "Lora", serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--slate-900);
+      }
+
+      .signin-title {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .signin-title h2 {
+        font-family: "Lora", serif;
+        font-size: 1.6rem;
+        color: var(--slate-900);
+        margin-bottom: 6px;
+      }
+      .signin-title p {
+        font-size: 0.875rem;
+        color: var(--slate-400);
+      }
+
+      .signin-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 10px;
+      }
+
+      .pw-wrap {
+        position: relative;
+      }
+      .pw-wrap input {
+        padding-right: 44px;
+      }
+      .pw-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--slate-400);
+        padding: 0;
+        display: grid;
+        place-items: center;
+      }
+      .pw-toggle:hover {
+        color: var(--teal);
+      }
+
+      .forgot-row {
+        text-align: right;
+        margin-bottom: 22px;
+      }
+      .forgot-row a {
+        font-size: 0.8125rem;
+        color: var(--teal);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .forgot-row a:hover {
+        text-decoration: underline;
+      }
+
+      .btn-full {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 20px;
+        font-size: 0.95rem;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 22px 0;
+        color: var(--slate-400);
+        font-size: 0.8rem;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--slate-200);
+      }
+
+      .social-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .btn-social {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 11px 20px;
+        border-radius: 10px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1.5px solid var(--slate-200);
+        background: white;
+        color: var(--slate-700);
+        transition: all 0.2s;
+      }
+      .btn-social:hover {
+        border-color: var(--teal);
+        background: var(--teal-lt);
+        color: var(--teal);
+      }
+      .btn-social svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+
+      .register-prompt {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 0.875rem;
+        color: var(--slate-400);
+      }
+      .register-prompt a {
+        color: var(--teal);
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .register-prompt a:hover {
+        text-decoration: underline;
+      }
+
+      /* forgot password modal */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 200;
+        place-items: center;
+      }
+      .modal-overlay.open {
+        display: grid;
+      }
+      .modal {
+        background: white;
+        border-radius: 18px;
+        padding: 36px 40px;
+        width: 100%;
+        max-width: 420px;
+        margin: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        animation: popIn 0.25s ease;
+      }
+      @keyframes popIn {
+        from {
+          transform: scale(0.92);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .modal h3 {
+        font-family: "Lora", serif;
+        font-size: 1.25rem;
+        color: var(--slate-900);
+        margin-bottom: 6px;
+      }
+      .modal p {
+        font-size: 0.875rem;
+        color: var(--slate-400);
+        margin-bottom: 22px;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .modal-actions .btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* sign-in success */
+      .signin-success {
+        text-align: center;
+        padding: 16px 0;
+      }
+      .signin-success .success-icon {
+        margin: 0 auto 20px;
+      }
+      .signin-success h2 {
+        font-family: "Lora", serif;
+        font-size: 1.5rem;
+        color: var(--slate-900);
+        margin-bottom: 8px;
+      }
+      .signin-success p {
+        font-size: 0.875rem;
+        color: var(--slate-400);
+      }
+
+      @media (max-width: 640px) {
+        nav {
+          padding: 14px 20px;
+        }
+        .card {
+          padding: 28px 20px;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .col-span-2 {
+          grid-column: span 1;
+        }
+        .step-line {
+          width: 40px;
+        }
+        .step-label {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a class="logo" href="#">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-5H9v-2h2V7h2v2h2v2h-2v5z"
+            />
+          </svg>
+        </div>
+        <span class="logo-text">Casto Health care</span>
+      </a>
+      <span class="nav-link"
+        >Already registered? <a onclick="showPage('signin')">Sign In</a></span
+      >
+    </nav>
+
+    <!-- SIGN IN PAGE VIEW -->
+    <div class="page-view" id="view-signin">
+      <div class="page-header">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your MediCare account</p>
+      </div>
+
+      <div class="signin-card">
+        <!-- Sign-in form -->
+        <div id="signin-form-wrap">
+          <div class="signin-fields">
+            <div class="field">
+              <label>Email Address <span class="req">*</span></label>
+              <input
+                type="email"
+                id="si-email"
+                placeholder="patient@example.com"
+              />
+              <span class="err-msg">Please enter a valid email</span>
+            </div>
+            <div class="field">
+              <label>Password <span class="req">*</span></label>
+              <div class="pw-wrap">
+                <input
+                  type="password"
+                  id="si-password"
+                  placeholder="Enter your password"
+                />
+                <button
+                  class="pw-toggle"
+                  onclick="togglePw()"
+                  type="button"
+                  id="pw-toggle-btn"
+                >
+                  <svg
+                    id="eye-icon"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+              <span class="err-msg" id="si-pw-err">Password is required</span>
+            </div>
+          </div>
+
+          <div class="forgot-row">
+            <a onclick="openForgot()">Forgot password?</a>
+          </div>
+
+          <button class="btn btn-primary btn-full" onclick="doSignIn()">
+            Sign In
+          </button>
+
+          <div class="divider">or continue with</div>
+
+          <div class="social-btns">
+            <button class="btn-social">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  fill="#4285F4"
+                />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  fill="#34A853"
+                />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  fill="#EA4335"
+                />
+              </svg>
+              Continue with Google
+            </button>
+            <button class="btn-social">
+              <svg viewBox="0 0 24 24" fill="#0078D4">
+                <path
+                  d="M21.579 6.855c.14.42.21.865.21 1.33C21.789 13.67 17.566 18 12 18a9.86 9.86 0 01-5.032-1.378A7.03 7.03 0 0012 15.13a3.514 3.514 0 01-3.28-2.437c.214.04.434.063.66.063.32 0 .63-.043.924-.124A3.513 3.513 0 016.87 9.28v-.044c.446.248.956.397 1.498.414a3.51 3.51 0 01-1.085-4.686 9.963 9.963 0 007.23 3.665 3.956 3.956 0 01-.089-.8A3.511 3.511 0 0117.935 4.5a3.5 3.5 0 012.56 1.107 7.03 7.03 0 002.228-.852 3.525 3.525 0 01-1.543 1.942 7.01 7.01 0 002.018-.548 7.13 7.13 0 01-1.619 1.706z"
+                />
+              </svg>
+              Continue with Microsoft
+            </button>
+          </div>
+
+          <div class="register-prompt">
+            Don't have an account?
+            <a onclick="showPage('register')">Register here</a>
+          </div>
+        </div>
+
+        <!-- Sign-in success -->
+        <div class="signin-success" id="signin-success" style="display: none">
+          <div
+            class="success-icon"
+            style="
+              width: 72px;
+              height: 72px;
+              background: var(--teal-lt);
+              border-radius: 50%;
+              display: grid;
+              place-items: center;
+            "
+          >
+            <svg
+              width="36"
+              height="36"
+              fill="none"
+              stroke="var(--teal)"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+          <h2>Welcome Back!</h2>
+          <p>
+            You've signed in successfully.<br />Redirecting to your dashboard…
+          </p>
+          <button
+            class="btn btn-outline btn-full"
+            style="margin-top: 24px"
+            onclick="showPage('register')"
+          >
+            ← Go to Registration
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div class="modal-overlay" id="forgot-modal">
+      <div class="modal">
+        <h3>Reset Password</h3>
+        <p>Enter your registered email and we'll send you a reset link.</p>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input
+            type="email"
+            id="forgot-email"
+            placeholder="patient@example.com"
+          />
+          <span class="err-msg" id="forgot-err"
+            >Please enter a valid email</span
+          >
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" onclick="closeForgot()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" onclick="sendReset()">
+            Send Reset Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTRATION PAGE VIEW -->
+    <main id="view-register" class="page-view active">
+      <div class="page-header">
+        <h1>Registration Form</h1>
+        <p>Complete the steps below to register with Health Care</p>
+      </div>
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <div class="step active" id="s1">
+          <div class="step-num">1</div>
+          <span class="step-label">Personal Details</span>
+        </div>
+        <div class="step-line" id="l1"></div>
+        <div class="step" id="s2">
+          <div class="step-num">2</div>
+          <span class="step-label">Medical Details</span>
+        </div>
+        <div class="step-line" id="l2"></div>
+        <div class="step" id="s3">
+          <div class="step-num">3</div>
+          <span class="step-label">Confirm &amp; Submit</span>
+        </div>
+      </div>
+
+      <!-- CARD -->
+      <div class="card">
+        <!-- ── STEP 1 ── -->
+        <div class="step-panel active" id="step-1">
+          <p class="section-label">Personal Information</p>
+          <div class="form-grid">
+            <div class="field">
+              <label>First Name <span class="req">*</span></label>
+              <input type="text" id="firstName" placeholder="e.g. Ananya" />
+              <span class="err-msg">First name is required</span>
+            </div>
+
+            <div class="field">
+              <label>Last Name</label>
+              <input type="text" id="lastName" placeholder="e.g. Sharma" />
+            </div>
+
+            <div class="field">
+              <label>Gender <span class="req">*</span></label>
+              <select id="gender">
+                <option value="">Select gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+                <option>Prefer not to say</option>
+              </select>
+              <span class="err-msg">Please select gender</span>
+            </div>
+
+            <div class="field">
+              <label>Date of Birth <span class="req">*</span></label>
+              <div class="input-wrap">
+                <input type="date" id="dob" />
+                <span class="icon">
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                </span>
+              </div>
+              <span class="err-msg">Please enter date of birth</span>
+            </div>
+
+            <div class="field">
+              <label>Guardian First Name <span class="req">*</span></label>
+              <input
+                type="text"
+                id="guardianFirst"
+                placeholder="Father / Mother"
+              />
+              <span class="err-msg">Guardian name is required</span>
+            </div>
+
+            <div class="field">
+              <label>Guardian Last Name</label>
+              <input type="text" id="guardianLast" placeholder="Last Name" />
+            </div>
+
+            <div class="field col-span-2">
+              <label>Email Address <span class="req">*</span></label>
+              <input
+                type="email"
+                id="email"
+                placeholder="patient@example.com"
+              />
+              <span class="err-msg">Please enter a valid email</span>
+            </div>
+
+            <div class="field">
+              <label>Pin Code <span class="req">*</span></label>
+              <input
+                type="text"
+                id="pinCode"
+                maxlength="6"
+                placeholder="6-digit pin"
+              />
+              <span class="err-msg">Enter a valid 6-digit pin</span>
+            </div>
+
+            <div class="field">
+              <label>Country <span class="req">*</span></label>
+              <select id="country">
+                <option value="">Select country</option>
+                <option>India</option>
+                <option>United States</option>
+                <option>United Kingdom</option>
+                <option>Canada</option>
+                <option>Australia</option>
+                <option>Other</option>
+              </select>
+              <span class="err-msg">Please select a country</span>
+            </div>
+
+            <div class="field">
+              <label>Time Zone <span class="req">*</span></label>
+              <select id="timezone">
+                <option value="IST">
+                  IST — Indian Standard Time (GMT +5:30)
+                </option>
+                <option value="UTC">UTC — Coordinated Universal Time</option>
+                <option value="EST">
+                  EST — Eastern Standard Time (GMT −5)
+                </option>
+                <option value="PST">
+                  PST — Pacific Standard Time (GMT −8)
+                </option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label
+                >Phone Number (with country code)
+                <span class="req">*</span></label
+              >
+              <input type="tel" id="phone" placeholder="+91 98765 43210" />
+              <span class="err-msg">Phone number is required</span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="goToStep(2)">
+              Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- ── STEP 2 ── -->
+        <div class="step-panel" id="step-2">
+          <p class="section-label">Medical Information</p>
+          <div class="form-grid">
+            <div class="field">
+              <label>Department <span class="req">*</span></label>
+              <select id="department">
+                <option value="">Select department</option>
+                <option>General Medicine</option>
+                <option>Cardiology</option>
+                <option>Orthopaedics</option>
+                <option>Paediatrics</option>
+                <option>Neurology</option>
+                <option>Gynaecology</option>
+                <option>Dermatology</option>
+                <option>ENT</option>
+              </select>
+              <span class="err-msg">Please select a department</span>
+            </div>
+
+            <div class="field">
+              <label>Appointment Date <span class="req">*</span></label>
+              <div class="input-wrap">
+                <input type="date" id="apptDate" />
+                <span class="icon"
+                  ><svg
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" /></svg
+                ></span>
+              </div>
+              <span class="err-msg">Please select a date</span>
+            </div>
+
+            <div class="field col-span-2">
+              <label>Preferred Time Slot <span class="req">*</span></label>
+              <div class="radio-group" id="timeSlot">
+                <label class="radio-option"
+                  ><input type="radio" name="slot" value="09:00 AM" />
+                  <div class="rb"></div>
+                  9:00 AM</label
+                >
+                <label class="radio-option"
+                  ><input type="radio" name="slot" value="11:00 AM" />
+                  <div class="rb"></div>
+                  11:00 AM</label
+                >
+                <label class="radio-option"
+                  ><input type="radio" name="slot" value="01:00 PM" checked />
+                  <div class="rb"></div>
+                  1:00 PM</label
+                >
+                <label class="radio-option"
+                  ><input type="radio" name="slot" value="03:00 PM" />
+                  <div class="rb"></div>
+                  3:00 PM</label
+                >
+                <label class="radio-option"
+                  ><input type="radio" name="slot" value="05:00 PM" />
+                  <div class="rb"></div>
+                  5:00 PM</label
+                >
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Blood Group</label>
+              <select id="bloodGroup">
+                <option value="">Select</option>
+                <option>A+</option>
+                <option>A−</option>
+                <option>B+</option>
+                <option>B−</option>
+                <option>AB+</option>
+                <option>AB−</option>
+                <option>O+</option>
+                <option>O−</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Insurance Provider</label>
+              <input
+                type="text"
+                id="insurance"
+                placeholder="e.g. Star Health"
+              />
+            </div>
+
+            <div class="field col-span-2">
+              <label>Known Allergies / Current Medications</label>
+              <textarea
+                id="notes"
+                rows="3"
+                placeholder="List any allergies or ongoing medications…"
+                style="resize: vertical"
+              ></textarea>
+            </div>
+
+            <div class="field col-span-2">
+              <label>Preferences</label>
+              <div class="check-group">
+                <label class="check-option"
+                  ><input type="checkbox" id="chkSms" checked />
+                  <div class="cb"></div>
+                  Receive SMS reminders</label
+                >
+                <label class="check-option"
+                  ><input type="checkbox" id="chkEmail" />
+                  <div class="cb"></div>
+                  Receive email updates</label
+                >
+                <label class="check-option"
+                  ><input type="checkbox" id="chkReport" checked />
+                  <div class="cb"></div>
+                  Share reports with doctor</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-outline" onclick="goToStep(1)">
+              ← Back
+            </button>
+            <button class="btn btn-primary" onclick="goToStep(3)">
+              Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- ── STEP 3 ── -->
+        <div class="step-panel" id="step-3">
+          <p class="section-label">Confirm &amp; Submit</p>
+
+          <div class="pricing-box">
+            <h3>Appointment Summary</h3>
+            <p class="sub">Your fee breakdown is shown below</p>
+            <div class="pricing-row">
+              <span>Consultation Fee</span><span>₹800</span>
+            </div>
+            <div class="pricing-row">
+              <span>Registration Charges</span><span>₹200</span>
+            </div>
+            <div class="pricing-row total">
+              <span>Total</span><span class="price-val">₹1,000</span>
+            </div>
+          </div>
+
+          <div class="subscribe-wrap">
+            <p>I wish to subscribe to MediCare health updates</p>
+            <div class="radio-group">
+              <label class="radio-option"
+                ><input type="radio" name="subscribe" value="yes" checked />
+                <div class="rb"></div>
+                Yes</label
+              >
+              <label class="radio-option"
+                ><input type="radio" name="subscribe" value="no" />
+                <div class="rb"></div>
+                No</label
+              >
+            </div>
+            <p class="note">
+              * By selecting 'Yes' you allow MediCare to send appointment
+              reminders, health tips, and updates via WhatsApp and email.
+            </p>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-outline" onclick="goToStep(2)">
+              ← Back
+            </button>
+            <button class="btn btn-primary" onclick="submitForm()">
+              Submit Registration
+            </button>
+          </div>
+        </div>
+
+        <!-- ── SUCCESS ── -->
+        <div class="step-panel" id="step-success">
+          <div class="success-icon">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+          <h2>Registration Successful!</h2>
+          <p>
+            Your patient ID and appointment details have been sent to your
+            email.<br />We look forward to seeing you at MediCare.
+          </p>
+          <div class="actions" style="margin-top: 24px">
+            <button class="btn btn-primary" onclick="resetForm()">
+              Register Another Patient
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- /card -->
+    </main>
+    <!-- /view-register -->
+
+    <script>
+      let currentStep = 1;
+
+      /* ── PAGE SWITCHING ── */
+      function showPage(page) {
+        document.getElementById("view-register").classList.remove("active");
+        document.getElementById("view-signin").classList.remove("active");
+        if (page === "signin") {
+          document.getElementById("view-signin").classList.add("active");
+        } else {
+          document.getElementById("view-register").classList.add("active");
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      /* ── SIGN IN ── */
+      function doSignIn() {
+        const email = document.getElementById("si-email");
+        const pw = document.getElementById("si-password");
+        const emailField = email.closest(".field");
+        const pwField = pw.closest(".field");
+        let ok = true;
+
+        const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+        emailField.classList.toggle("has-error", !validEmail);
+        if (!validEmail) ok = false;
+
+        if (!pw.value.trim()) {
+          pwField.classList.add("has-error");
+          ok = false;
+        } else {
+          pwField.classList.remove("has-error");
+        }
+
+        if (!ok) return;
+
+        document.getElementById("signin-form-wrap").style.display = "none";
+        document.getElementById("signin-success").style.display = "block";
+      }
+
+      function togglePw() {
+        const inp = document.getElementById("si-password");
+        const isText = inp.type === "text";
+        inp.type = isText ? "password" : "text";
+        document.getElementById("eye-icon").innerHTML = isText
+          ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+          : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+      }
+
+      function openForgot() {
+        document.getElementById("forgot-modal").classList.add("open");
+      }
+      function closeForgot() {
+        document.getElementById("forgot-modal").classList.remove("open");
+      }
+      function sendReset() {
+        const el = document.getElementById("forgot-email");
+        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value);
+        el.closest(".field").classList.toggle("has-error", !valid);
+        if (!valid) return;
+        closeForgot();
+        alert("✅ A password reset link has been sent to " + el.value);
+        el.value = "";
+      }
+
+      // close modal on overlay click
+      document
+        .getElementById("forgot-modal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeForgot();
+        });
+
+      function goToStep(next) {
+        if (next > currentStep && !validateStep(currentStep)) return;
+        document
+          .getElementById("step-" + currentStep)
+          .classList.remove("active");
+        currentStep = next;
+        document.getElementById("step-" + currentStep).classList.add("active");
+        updateStepper();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function updateStepper() {
+        for (let i = 1; i <= 3; i++) {
+          const s = document.getElementById("s" + i);
+          s.classList.remove("active", "complete");
+          if (i < currentStep) s.classList.add("complete");
+          else if (i === currentStep) s.classList.add("active");
+        }
+        for (let i = 1; i <= 2; i++) {
+          const l = document.getElementById("l" + i);
+          l.classList.toggle("done", i < currentStep);
+        }
+      }
+
+      function validateStep(step) {
+        let ok = true;
+
+        function req(id, test) {
+          const el = document.getElementById(id);
+          const field = el.closest(".field");
+          const fail = test ? !test(el.value) : !el.value.trim();
+          field.classList.toggle("has-error", fail);
+          if (fail) ok = false;
+        }
+
+        if (step === 1) {
+          req("firstName");
+          req("gender");
+          req("dob");
+          req("guardianFirst");
+          req("email", (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+          req("pinCode", (v) => /^\d{6}$/.test(v.trim()));
+          req("country");
+          req("phone");
+        }
+        if (step === 2) {
+          req("department");
+          req("apptDate");
+        }
+        return ok;
+      }
+
+      function submitForm() {
+        const panels = document.querySelectorAll(".step-panel");
+        panels.forEach((p) => p.classList.remove("active"));
+        document.getElementById("step-success").classList.add("active");
+
+        // hide stepper
+        document.querySelector(".stepper").style.opacity = "0";
+      }
+
+      function resetForm() {
+        document.querySelector(".stepper").style.opacity = "1";
+        document
+          .querySelectorAll(".step-panel")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("step-1").classList.add("active");
+        document
+          .querySelectorAll(
+            "input:not([type=radio]):not([type=checkbox]), select, textarea",
+          )
+          .forEach((el) => (el.value = ""));
+        document
+          .querySelectorAll(".has-error")
+          .forEach((el) => el.classList.remove("has-error"));
+        currentStep = 1;
+        updateStepper();
+      }
+    </script>
+  </body>
+</html>
