@@ -4045,12 +4045,10 @@ button {
     animation-duration: 0.01ms !important;
   }
 }
-/* Fix doctor slider on phones */
+/* Doctor section: mobile fix without changing JavaScript */
 @media (max-width: 768px) {
   .slider-container {
     position: relative;
-    display: block;
-    padding-inline: 3.5rem;
   }
 
   .slider-wrapper {
@@ -4059,8 +4057,7 @@ button {
   }
 
   .doctor-card {
-    flex: 0 0 100%;
-    width: 100%;
+    flex-basis: calc(100vw - 110px);
   }
 
   .slider-btn {
@@ -4078,5 +4075,11 @@ button {
 
   .slider-btn:last-child {
     right: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .doctor-card {
+    flex-basis: calc(100vw - 90px);
   }
 }
