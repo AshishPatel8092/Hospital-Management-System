@@ -4083,3 +4083,57 @@ button {
     flex-basis: calc(100vw - 90px);
   }
 }
+/* Smooth doctor slider on mobile */
+@media (max-width: 768px) {
+  .slider-container {
+    position: relative;
+    display: block;
+    padding: 0 3.5rem;
+  }
+
+  .slider-wrapper {
+    width: 100%;
+    max-width: none;
+    overflow: hidden;
+  }
+
+  .doctor-track {
+    gap: 1.25rem;
+    will-change: transform;
+  }
+
+  .doctor-card {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translateY(-50%);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slider-btn.prev-btn {
+    left: 0;
+  }
+
+  .slider-btn.next-btn {
+    right: 0;
+  }
+
+  /* Keeps the arrow centered while pressing it — no downward jump */
+  .slider-btn:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-container {
+    padding: 0 3rem;
+  }
+}

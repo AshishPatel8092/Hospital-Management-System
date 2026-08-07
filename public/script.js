@@ -358,62 +358,121 @@ function closeBooking() {
 bookingClose.addEventListener("click", closeBooking);
 summaryClose.addEventListener("click", closeBooking);
 /* Doctors section — responsive slider */
+// const doctorTrack = document.getElementById("doctorTrack");
+// const doctorCards = doctorTrack
+//   ? doctorTrack.querySelectorAll(".doctor-card")
+//   : [];
+// const totalCards = doctorCards.length;
+
+// let currentIndex = 0;
+
+// // Returns how many cards fit, and the px step (card width + gap)
+// function getSliderMetrics() {
+//   const wrapper = document.querySelector(".slider-wrapper");
+//   const gap = 30; // matches CSS gap on .doctor-track
+
+//   let cardWidth;
+//   if (window.innerWidth <= 576) {
+//     cardWidth = window.innerWidth - 90; // matches .doctor-card flex-basis at this breakpoint
+//   } else if (window.innerWidth <= 768) {
+//     cardWidth = window.innerWidth - 110;
+//   } else if (window.innerWidth <= 992) {
+//     cardWidth = 300;
+//   } else {
+//     cardWidth = 340;
+//   }
+
+//   const wrapperWidth = wrapper ? wrapper.clientWidth : window.innerWidth;
+//   const visibleCards = Math.max(
+//     1,
+//     Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
+//   );
+
+//   return { step: cardWidth + gap, visibleCards };
+// }
+
+// function applySliderPosition() {
+//   const { step } = getSliderMetrics();
+//   doctorTrack.style.transform = `translateX(-${currentIndex * step}px)`;
+// }
+
+// function moveRight() {
+//   if (!doctorTrack) return;
+//   const { visibleCards } = getSliderMetrics();
+//   const maxIndex = Math.max(0, totalCards - visibleCards);
+
+//   if (currentIndex < maxIndex) {
+//     currentIndex++;
+//     applySliderPosition();
+//   }
+// }
+
+// function moveLeft() {
+//   if (!doctorTrack) return;
+//   if (currentIndex > 0) {
+//     currentIndex--;
+//     applySliderPosition();
+//   }
+// }
 const doctorTrack = document.getElementById("doctorTrack");
 const doctorCards = doctorTrack
   ? doctorTrack.querySelectorAll(".doctor-card")
   : [];
-const totalCards = doctorCards.length;
 
+const totalCards = doctorCards.length;
 let currentIndex = 0;
 
-// Returns how many cards fit, and the px step (card width + gap)
 function getSliderMetrics() {
   const wrapper = document.querySelector(".slider-wrapper");
-  const gap = 30; // matches CSS gap on .doctor-track
+  const firstCard = doctorCards[0];
 
-  let cardWidth;
-  if (window.innerWidth <= 576) {
-    cardWidth = window.innerWidth - 90; // matches .doctor-card flex-basis at this breakpoint
-  } else if (window.innerWidth <= 768) {
-    cardWidth = window.innerWidth - 110;
-  } else if (window.innerWidth <= 992) {
-    cardWidth = 300;
-  } else {
-    cardWidth = 340;
+  if (!wrapper || !firstCard) {
+    return { step: 0, visibleCards: 1 };
   }
 
-  const wrapperWidth = wrapper ? wrapper.clientWidth : window.innerWidth;
+  const gap = parseFloat(window.getComputedStyle(doctorTrack).gap) || 0;
+  const cardWidth = firstCard.getBoundingClientRect().width;
   const visibleCards = Math.max(
     1,
-    Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
+    Math.floor((wrapper.clientWidth + gap) / (cardWidth + gap)),
   );
 
-  return { step: cardWidth + gap, visibleCards };
+  return {
+    step: cardWidth + gap,
+    visibleCards,
+  };
 }
 
 function applySliderPosition() {
   const { step } = getSliderMetrics();
-  doctorTrack.style.transform = `translateX(-${currentIndex * step}px)`;
+  doctorTrack.style.transform = `translate3d(-${currentIndex * step}px, 0, 0)`;
 }
 
 function moveRight() {
   if (!doctorTrack) return;
+
   const { visibleCards } = getSliderMetrics();
   const maxIndex = Math.max(0, totalCards - visibleCards);
 
-  if (currentIndex < maxIndex) {
-    currentIndex++;
-    applySliderPosition();
-  }
+  currentIndex = Math.min(currentIndex + 1, maxIndex);
+  applySliderPosition();
 }
 
 function moveLeft() {
   if (!doctorTrack) return;
-  if (currentIndex > 0) {
-    currentIndex--;
-    applySliderPosition();
-  }
+
+  currentIndex = Math.max(currentIndex - 1, 0);
+  applySliderPosition();
 }
+
+window.addEventListener("resize", () => {
+  if (!doctorTrack) return;
+
+  const { visibleCards } = getSliderMetrics();
+  currentIndex = Math.min(currentIndex, Math.max(0, totalCards - visibleCards));
+
+  applySliderPosition();
+});
 
 // Re-clamp and reposition on resize so the slider never overflows
 window.addEventListener("resize", () => {
