@@ -4217,3 +4217,17 @@ button {
     font-size: 30px;
   }
 }
+/* mobile direction */
+.directions-mobile {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .directions-desktop {
+    display: none !important;
+  }
+
+  .directions-mobile {
+    display: flex !important;
+  }
+}

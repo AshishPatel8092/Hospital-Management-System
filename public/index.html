@@ -313,10 +313,21 @@
             1800 11 1565
           </a>
 
-        <a
-  href="https://www.google.com/maps/dir/?api=1&destination=Bokaro+General+Hospital%2C+Sector+4%2C+Bokaro+Steel+City%2C+Jharkhand+827004&travelmode=driving&dir_action=navigate"
-  class="directions-link"
-  id="directionsButton"
+        <!-- Desktop directions -->
+<a
+  class="directions-link directions-desktop"
+  href="https://www.google.com/maps/dir/?api=1&destination=Bokaro+General+Hospital%2C+Sector+4%2C+Bokaro+Steel+City%2C+Jharkhand+827004&travelmode=driving"
+  target="_blank"
+  rel="noopener"
+>
+  <span class="material-symbols-outlined">location_on</span>
+  Directions
+</a>
+
+<!-- Android mobile directions: opens installed Maps app -->
+<a
+  class="directions-link directions-mobile"
+  href="geo:0,0?q=Bokaro%20General%20Hospital%2C%20Sector%204%2C%20Bokaro%20Steel%20City%2C%20Jharkhand%20827004"
 >
   <span class="material-symbols-outlined">location_on</span>
   Directions
