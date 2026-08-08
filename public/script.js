@@ -29,6 +29,10 @@ document.addEventListener("DOMContentLoaded", updateMenuView);
 // Hamburger Menu
 
 function toggleMenu() {
+  function closeMenu() {
+    document.getElementById("menu").classList.remove("show");
+    document.getElementById("overlay").classList.remove("show");
+  }
   document.getElementById("menu").classList.toggle("show");
 
   document.getElementById("overlay").classList.toggle("show");

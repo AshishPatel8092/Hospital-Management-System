@@ -4168,3 +4168,52 @@ button {
     gap: 12px;
   }
 }
+/* Hamburger menu close button */
+.menu-close {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 46px;
+  margin: 12px 12px -58px auto;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #0d5c67;
+
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 1;
+
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.menu-close:hover {
+  background: #e9f8f8;
+  transform: rotate(90deg);
+}
+
+.menu-close:active {
+  transform: rotate(90deg) scale(0.92);
+}
+
+@media (max-width: 576px) {
+  .menu-close {
+    width: 42px;
+    height: 42px;
+    margin: 10px 10px -52px auto;
+    font-size: 30px;
+  }
+}
