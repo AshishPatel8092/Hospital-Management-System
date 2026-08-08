@@ -822,6 +822,7 @@ function runAiDiagnosis() {
           `;
   }, 700);
 }
+// hamburger cross button
 document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("menu");
   const overlay = document.getElementById("overlay");
