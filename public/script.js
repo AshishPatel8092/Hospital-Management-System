@@ -361,63 +361,6 @@ function closeBooking() {
 
 bookingClose.addEventListener("click", closeBooking);
 summaryClose.addEventListener("click", closeBooking);
-/* Doctors section — responsive slider */
-// const doctorTrack = document.getElementById("doctorTrack");
-// const doctorCards = doctorTrack
-//   ? doctorTrack.querySelectorAll(".doctor-card")
-//   : [];
-// const totalCards = doctorCards.length;
-
-// let currentIndex = 0;
-
-// // Returns how many cards fit, and the px step (card width + gap)
-// function getSliderMetrics() {
-//   const wrapper = document.querySelector(".slider-wrapper");
-//   const gap = 30; // matches CSS gap on .doctor-track
-
-//   let cardWidth;
-//   if (window.innerWidth <= 576) {
-//     cardWidth = window.innerWidth - 90; // matches .doctor-card flex-basis at this breakpoint
-//   } else if (window.innerWidth <= 768) {
-//     cardWidth = window.innerWidth - 110;
-//   } else if (window.innerWidth <= 992) {
-//     cardWidth = 300;
-//   } else {
-//     cardWidth = 340;
-//   }
-
-//   const wrapperWidth = wrapper ? wrapper.clientWidth : window.innerWidth;
-//   const visibleCards = Math.max(
-//     1,
-//     Math.floor((wrapperWidth + gap) / (cardWidth + gap)),
-//   );
-
-//   return { step: cardWidth + gap, visibleCards };
-// }
-
-// function applySliderPosition() {
-//   const { step } = getSliderMetrics();
-//   doctorTrack.style.transform = `translateX(-${currentIndex * step}px)`;
-// }
-
-// function moveRight() {
-//   if (!doctorTrack) return;
-//   const { visibleCards } = getSliderMetrics();
-//   const maxIndex = Math.max(0, totalCards - visibleCards);
-
-//   if (currentIndex < maxIndex) {
-//     currentIndex++;
-//     applySliderPosition();
-//   }
-// }
-
-// function moveLeft() {
-//   if (!doctorTrack) return;
-//   if (currentIndex > 0) {
-//     currentIndex--;
-//     applySliderPosition();
-//   }
-// }
 const doctorTrack = document.getElementById("doctorTrack");
 const doctorCards = doctorTrack
   ? doctorTrack.querySelectorAll(".doctor-card")
@@ -879,3 +822,24 @@ function runAiDiagnosis() {
           `;
   }, 700);
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const menu = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+  const closeButton = document.getElementById("menuCloseButton");
+
+  function closeHamburgerMenu() {
+    menu.classList.remove("show");
+    overlay.classList.remove("show");
+  }
+
+  if (closeButton) {
+    closeButton.addEventListener("click", closeHamburgerMenu);
+  }
+
+  // Optional: pressing Escape also closes the menu on desktop.
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeHamburgerMenu();
+    }
+  });
+});
