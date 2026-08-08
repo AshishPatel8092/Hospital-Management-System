@@ -844,3 +844,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+// direction navigation on smart phone
+document.addEventListener("DOMContentLoaded", () => {
+  const directionsButton = document.getElementById("directionsButton");
+
+  if (!directionsButton) return;
+
+  directionsButton.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const destination =
+      "Bokaro General Hospital, Sector 4, Bokaro Steel City, Jharkhand 827004";
+
+    const mapsWebUrl =
+      "https://www.google.com/maps/dir/?api=1" +
+      "&destination=" +
+      encodeURIComponent(destination) +
+      "&travelmode=driving" +
+      "&dir_action=navigate";
+
+    const isAndroid = /Android/i.test(navigator.userAgent);
+
+    if (isAndroid) {
+      const mapsAppIntent =
+        "intent://www.google.com/maps/dir/?api=1" +
+        "&destination=" +
+        encodeURIComponent(destination) +
+        "&travelmode=driving" +
+        "&dir_action=navigate" +
+        "#Intent;scheme=https;" +
+        "package=com.google.android.apps.maps;" +
+        "S.browser_fallback_url=" +
+        encodeURIComponent(mapsWebUrl) +
+        ";end";
+
+      window.location.href = mapsAppIntent;
+    } else {
+      window.location.href = mapsWebUrl;
+    }
+  });
+});
