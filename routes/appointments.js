@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../db');
 const { requireLogin } = require('../middleware/auth');
+const { createAppointmentBill } = require('../billingHelper');
 
 const router = express.Router();
 router.use(requireLogin);
@@ -53,7 +54,7 @@ router.get('/', async (req, res) => {
 // Body: { doctorId, appointmentDate, slotTime, visitType, reason, patientId (NURSE/ADMIN only) }
 router.post('/', async (req, res) => {
   const { role, userId, linkedId } = req.session.user;
-  const { doctorId, appointmentDate, slotTime, visitType, reason } = req.body;
+  const { doctorId, appointmentDate, slotTime, visitType, reason, paymentMethod } = req.body;
 
   if (!doctorId || !appointmentDate) {
     return res.status(400).json({ success: false, message: 'doctorId and appointmentDate are required.' });
@@ -77,7 +78,15 @@ router.post('/', async (req, res) => {
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [patientId, doctorId, appointmentDate, slotTime || null, visitType || 'In-person', reason || null, userId]
     );
-    res.status(201).json({ success: true, message: 'Appointment booked.', data: result.insertId });
+    const appointmentId = result.insertId;
+
+    const bill = await createAppointmentBill({ patientId, doctorId, appointmentId, paymentMethod });
+
+    res.status(201).json({
+      success: true,
+      message: 'Appointment booked.',
+      data: { appointmentId, bill },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Database error: ' + err.message });

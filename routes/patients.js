@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
         return res.status(403).json({ success: false, message: 'Only patients can use self=true.' });
       }
       const [rows] = await pool.execute(
-        `SELECT p.*, u.full_name, u.email FROM patients p
+        `SELECT p.*, u.full_name, u.email, u.phone FROM patients p
          JOIN users u ON u.user_id = p.user_id WHERE p.user_id = ?`,
         [userId]
       );
@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 
     if (req.query.id) {
       const [rows] = await pool.execute(
-        `SELECT p.*, u.full_name, u.email FROM patients p
+        `SELECT p.*, u.full_name, u.email, u.phone FROM patients p
          JOIN users u ON u.user_id = p.user_id WHERE p.patient_id = ?`,
         [req.query.id]
       );
@@ -59,7 +59,7 @@ router.get('/', async (req, res) => {
       return res.status(403).json({ success: false, message: 'Patients cannot list all records; use self=true.' });
     }
     const [rows] = await pool.execute(
-      `SELECT p.*, u.full_name, u.email FROM patients p
+      `SELECT p.*, u.full_name, u.email, u.phone FROM patients p
        JOIN users u ON u.user_id = p.user_id ORDER BY p.patient_id DESC`
     );
     const data = role === 'NURSE' ? rows.map(stripMedicalHistory) : rows;

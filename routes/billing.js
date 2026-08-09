@@ -68,20 +68,45 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/billing?id=5 - ADMIN only. Body: { paymentStatus }
+// PUT /api/billing?id=5 - update payment status.
+//   ADMIN can set any status on any bill.
+//   PATIENT can only mark their OWN bill as Paid (self-checkout, simulating
+//   an online payment) - they can't set arbitrary statuses or touch bills
+//   that aren't theirs.
 router.put('/', async (req, res) => {
-  if (req.session.user.role !== 'ADMIN') {
-    return res.status(403).json({ success: false, message: 'Only admin staff can update bills.' });
-  }
+  const { role, linkedId } = req.session.user;
+  const { paymentStatus, paymentMethod } = req.body;
+
   if (!req.query.id) return res.status(400).json({ success: false, message: 'id query parameter is required.' });
-  if (!req.body.paymentStatus) return res.status(400).json({ success: false, message: 'paymentStatus is required.' });
+  if (!paymentStatus) return res.status(400).json({ success: false, message: 'paymentStatus is required.' });
 
   try {
-    const [result] = await pool.execute(
-      'UPDATE billing SET payment_status = ? WHERE bill_id = ?',
-      [req.body.paymentStatus, req.query.id]
-    );
-    if (result.affectedRows === 0) return res.status(404).json({ success: false, message: 'Bill not found.' });
-    res.json({ success: true, message: 'Bill updated.' });
+    if (role === 'ADMIN') {
+      const [result] = await pool.execute(
+        'UPDATE billing SET payment_status = ? WHERE bill_id = ?',
+        [paymentStatus, req.query.id]
+      );
+      if (result.affectedRows === 0) return res.status(404).json({ success: false, message: 'Bill not found.' });
+      return res.json({ success: true, message: 'Bill updated.' });
+    }
+
+    if (role === 'PATIENT') {
+      if (paymentStatus !== 'Paid') {
+        return res.status(403).json({ success: false, message: 'Patients can only mark a bill as paid.' });
+      }
+      const [bills] = await pool.execute('SELECT patient_id FROM billing WHERE bill_id = ?', [req.query.id]);
+      if (!bills[0]) return res.status(404).json({ success: false, message: 'Bill not found.' });
+      if (bills[0].patient_id !== linkedId) {
+        return res.status(403).json({ success: false, message: 'Not your bill.' });
+      }
+      await pool.execute(
+        'UPDATE billing SET payment_status = ?, payment_method = ? WHERE bill_id = ?',
+        ['Paid', paymentMethod || 'Online', req.query.id]
+      );
+      return res.json({ success: true, message: 'Payment successful.' });
+    }
+
+    return res.status(403).json({ success: false, message: 'Only admin staff can update bills.' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Database error: ' + err.message });

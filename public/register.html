@@ -1695,6 +1695,16 @@
               <span class="err-msg">Please enter a valid email</span>
             </div>
 
+            <div class="field col-span-2">
+              <label>Password <span class="req">*</span></label>
+              <input
+                type="password"
+                id="regPassword"
+                placeholder="At least 8 characters"
+              />
+              <span class="err-msg">Password must be at least 8 characters</span>
+            </div>
+
             <div class="field">
               <label
                 >Practice Location PIN Code <span class="req">*</span></label
@@ -1772,6 +1782,15 @@
                 <option>ENT</option>
               </select>
               <span class="err-msg">Please select your primary specialty</span>
+            </div>
+
+            <div class="field">
+              <label>Specialization / Title</label>
+              <input
+                type="text"
+                id="specialization"
+                placeholder="e.g. Interventional Cardiologist"
+              />
             </div>
 
             <div class="field">
@@ -1871,6 +1890,16 @@
                 type="text"
                 id="insurance"
                 placeholder="e.g. City General Hospital"
+              />
+            </div>
+
+            <div class="field">
+              <label>Consultation Fee (₹)</label>
+              <input
+                type="number"
+                id="consultationFee"
+                min="0"
+                placeholder="e.g. 600"
               />
             </div>
 
@@ -2012,7 +2041,7 @@
             <a id="dbOpenChatNav"><span class="db-icon">💬</span>Chat</a>
             <a><span class="db-icon">📹</span>Video Consultation</a>
             <a><span class="db-icon">📊</span>Analytics</a>
-            <a onclick="showPage('signin')" style="margin-top: 20px"
+            <a id="dbLogoutBtn" style="margin-top: 20px"
               ><span class="db-icon">⏻</span>Log Out</a
             >
           </nav>
@@ -2024,9 +2053,10 @@
             <div class="db-profile">
               <img
                 src="https://randomuser.me/api/portraits/women/65.jpg"
-                alt="Dr. Anya Sharma"
+                alt="Doctor"
+                id="dbProfileImg"
               />
-              <span>Dr. Anya Sharma ▾</span>
+              <span id="dbProfileName">Dr. Anya Sharma ▾</span>
             </div>
           </header>
 
@@ -2039,11 +2069,11 @@
                 <div class="db-stats">
                   <div class="db-stat filled">
                     <h4>Today's Appointments</h4>
-                    <div class="db-num">8</div>
+                    <div class="db-num" id="dbStatToday">0</div>
                   </div>
                   <div class="db-stat tint">
                     <h4>Upcoming Appointments</h4>
-                    <div class="db-num">15</div>
+                    <div class="db-num" id="dbStatUpcoming">0</div>
                   </div>
                   <div class="db-stat plain">
                     <h4>Pending Reports</h4>
@@ -2052,6 +2082,20 @@
                   <div class="db-stat plain">
                     <h4>Notifications</h4>
                     <div class="db-num">2</div>
+                  </div>
+                </div>
+
+                <div class="db-panel">
+                  <h3>Upcoming Appointments</h3>
+                  <div id="dbAppointmentsList">
+                    <p style="color: var(--gray-500, #888)">Loading…</p>
+                  </div>
+                </div>
+
+                <div class="db-panel">
+                  <h3>Patients Attended</h3>
+                  <div id="dbPatientsList">
+                    <p style="color: var(--gray-500, #888)">Loading…</p>
                   </div>
                 </div>
 
@@ -2202,10 +2246,9 @@
                     <div class="db-tab" data-tab="reports">Reports</div>
                     <div class="db-tab" data-tab="surgeries">Surgeries</div>
                   </div>
-                  <div class="db-patient-select">
-                    <span class="db-avatar-sm">👤</span> Selected patient
-                    <span style="margin-left: auto">▾</span>
-                  </div>
+                  <select class="db-patient-select" id="dbPatientSelect">
+                    <option value="">Select a patient…</option>
+                  </select>
                   <div class="db-tab-content" id="dbRecordContent">
                     Select a patient to view their previous visits.
                   </div>
@@ -2214,14 +2257,14 @@
                 <div class="db-panel">
                   <h3>Digital Prescription</h3>
                   <div class="db-rx-row">
-                    <select>
-                      <option>Medicine</option>
+                    <select id="dbRxMedicine">
+                      <option value="">Medicine</option>
                       <option>Paracetamol</option>
                       <option>Amoxicillin</option>
                       <option>Atorvastatin</option>
                     </select>
-                    <input type="text" placeholder="Dosage" />
-                    <input type="text" placeholder="Duration" />
+                    <input type="text" id="dbRxDosage" placeholder="Dosage" />
+                    <input type="text" id="dbRxDuration" placeholder="Duration" />
                   </div>
                   <div class="db-rx-actions">
                     <button class="db-btn-outline" id="dbPrintBtn">
@@ -2351,6 +2394,7 @@
 
       <div class="dash-toast" id="dashToast">Saved successfully</div>
     </div>
+    <script src="api.js"></script>
     <script>
       let currentStep = 1;
 
@@ -2374,7 +2418,7 @@
       }
 
       /* ── SIGN IN ── */
-      function doSignIn() {
+      async function doSignIn() {
         const email = document.getElementById("si-email");
         const pw = document.getElementById("si-password");
         const emailField = email.closest(".field");
@@ -2394,10 +2438,26 @@
 
         if (!ok) return;
 
-        document.getElementById("signin-form-wrap").style.display = "none";
-        document.getElementById("signin-success").style.display = "block";
-
-        setTimeout(() => showPage("dashboard"), 1500);
+        try {
+          const result = await login(email.value, pw.value);
+          if (result.data.role !== "DOCTOR") {
+            alert(
+              "This account is registered as " +
+                result.data.role +
+                ". Please use the correct sign-in page for that role."
+            );
+            await logout();
+            return;
+          }
+          document.getElementById("signin-form-wrap").style.display = "none";
+          document.getElementById("signin-success").style.display = "block";
+          await loadDoctorDashboard(result.data);
+          setTimeout(() => showPage("dashboard"), 1500);
+        } catch (err) {
+          document.getElementById("si-pw-err").textContent = err.message;
+          document.getElementById("si-pw-err").style.display = "block";
+          pwField.classList.add("has-error");
+        }
       }
 
       function togglePw() {
@@ -2555,14 +2615,134 @@
         return ok;
       }
 
-      function submitForm() {
-        const panels = document.querySelectorAll(".step-panel");
-        panels.forEach((p) => p.classList.remove("active"));
-        document.getElementById("step-success").classList.add("active");
-        document.querySelector(".stepper").style.opacity = "0";
+      async function submitForm() {
+        const first = document.getElementById("firstName").value.trim() || "Doctor";
+        const last = document.getElementById("lastName").value.trim();
+        const fields = {
+          fullName: "Dr. " + first + (last ? " " + last : ""),
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("regPassword").value,
+          phone: document.getElementById("phone").value.trim(),
+          firstName: first,
+          lastName: last,
+          gender: document.getElementById("gender").value || null,
+          department: document.getElementById("department").value || null,
+          specialization: document.getElementById("specialization").value || null,
+          // These three reuse fields whose labels were already updated for a
+          // doctor form but whose element ids are leftovers from the
+          // original patient-form template ("apptDate", "bloodGroup",
+          // "insurance", "notes") - reading them by id still works fine.
+          experienceYears: document.getElementById("apptDate").value || null,
+          qualifications: document.getElementById("bloodGroup").value || null,
+          clinicLocation: document.getElementById("insurance").value.trim() || null,
+          bio: document.getElementById("notes").value.trim() || null,
+          consultationFee: document.getElementById("consultationFee").value || null,
+        };
 
-        setTimeout(() => showPage("dashboard"), 1800);
+        try {
+          await registerDoctor(fields);
+          const result = await login(fields.email, fields.password);
+
+          const panels = document.querySelectorAll(".step-panel");
+          panels.forEach((p) => p.classList.remove("active"));
+          document.getElementById("step-success").classList.add("active");
+          document.querySelector(".stepper").style.opacity = "0";
+
+          await loadDoctorDashboard(result.data);
+          setTimeout(() => showPage("dashboard"), 1800);
+        } catch (err) {
+          alert("Registration failed: " + err.message);
+        }
       }
+
+      /* ── DASHBOARD DATA ── */
+      async function loadDoctorDashboard(session) {
+        document.getElementById("dbProfileName").textContent = session.fullName + " ▾";
+
+        try {
+          const doctorResult = await apiRequest("/doctors?id=" + session.linkedId, "GET");
+          const d = doctorResult.data;
+          document.getElementById("dbProfileImg").alt = session.fullName;
+          document.querySelector(".db-page-title").textContent =
+            "Welcome, Dr. " + d.first_name + " — " + (d.department || "General Medicine");
+        } catch (err) {
+          console.error("Could not load doctor profile:", err.message);
+        }
+
+        try {
+          const apptResult = await listAppointments();
+          const appts = apptResult.data;
+          window._doctorAllAppointments = appts; // used by the patient-records tabs below
+          const todayStr = new Date().toISOString().slice(0, 10);
+          const todayCount = appts.filter((a) => a.appointment_date === todayStr).length;
+          document.getElementById("dbStatToday").textContent = todayCount;
+          document.getElementById("dbStatUpcoming").textContent = appts.length;
+
+          const list = document.getElementById("dbAppointmentsList");
+          if (!appts.length) {
+            list.innerHTML = "<p>No appointments booked with you yet.</p>";
+          } else {
+            list.innerHTML = appts
+              .map(
+                (a) => `
+              <div class="db-slot" style="margin-bottom:8px;">
+                <b>${a.patient_name}</b> — ${a.appointment_date} · ${a.slot_time || "Time TBD"}
+                <small style="display:block;">${a.visit_type} · ${a.status}${a.reason ? " · " + a.reason : ""}</small>
+              </div>`
+              )
+              .join("");
+          }
+
+          // Distinct patients this doctor has appointments with, most recent first.
+          const byPatient = {};
+          appts.forEach((a) => {
+            if (!byPatient[a.patient_id] || a.appointment_date > byPatient[a.patient_id].appointment_date) {
+              byPatient[a.patient_id] = a;
+            }
+          });
+          const patients = Object.values(byPatient).sort((a, b) =>
+            b.appointment_date.localeCompare(a.appointment_date)
+          );
+
+          const patientsList = document.getElementById("dbPatientsList");
+          patientsList.innerHTML = patients.length
+            ? patients
+                .map(
+                  (a) => `
+              <div class="db-slot" style="margin-bottom:8px;">
+                <b>${a.patient_name}</b>
+                <small style="display:block;">Last visit: ${a.appointment_date} · ${a.status}</small>
+              </div>`
+                )
+                .join("")
+            : "<p>No patients attended yet.</p>";
+
+          const select = document.getElementById("dbPatientSelect");
+          select.innerHTML =
+            '<option value="">Select a patient…</option>' +
+            patients.map((a) => `<option value="${a.patient_id}">${a.patient_name}</option>`).join("");
+        } catch (err) {
+          console.error("Could not load appointments:", err.message);
+        }
+      }
+
+      document.getElementById("dbLogoutBtn").addEventListener("click", async () => {
+        await logout();
+        window.location.href = "login.html";
+      });
+
+      /* ── AUTO-ENTER DASHBOARD IF ALREADY LOGGED IN ── */
+      (async function checkExistingSession() {
+        try {
+          const result = await getCurrentUser();
+          if (result.data.role === "DOCTOR") {
+            await loadDoctorDashboard(result.data);
+            showPage("dashboard");
+          }
+        } catch (e) {
+          // not logged in - default view stays as-is
+        }
+      })();
 
       function resetForm() {
         document.querySelector(".stepper").style.opacity = "1";
@@ -2616,25 +2796,79 @@
             });
           });
 
-        // Medical record tabs
-        const tabContent = {
-          visits: "Select a patient to view their previous visits.",
-          allergies: "No known allergies on file for the selected patient.",
-          diseases: "No chronic conditions on file for the selected patient.",
-          medications:
-            "No current medications on file for the selected patient.",
-          reports: "No lab reports linked to the selected patient yet.",
-          surgeries: "No surgical history on file for the selected patient.",
-        };
+        // Medical record tabs - now driven by whichever patient is selected
+        // in #dbPatientSelect (populated in loadDoctorDashboard).
+        function renderRecordTab() {
+          const patientId = document.getElementById("dbPatientSelect").value;
+          const activeTab = document.querySelector("#dbRecordTabs .db-tab.active")?.dataset.tab || "visits";
+          const contentEl = document.getElementById("dbRecordContent");
+
+          if (!patientId) {
+            contentEl.textContent = "Select a patient to view their records.";
+            return;
+          }
+          const record = window._doctorPatientRecords?.[patientId];
+          if (!record) {
+            contentEl.textContent = "Loading…";
+            return;
+          }
+
+          if (activeTab === "visits") {
+            contentEl.innerHTML = record.visits.length
+              ? record.visits
+                  .map((v) => `<div>${v.appointment_date} · ${v.status}${v.reason ? " · " + v.reason : ""}</div>`)
+                  .join("")
+              : "No previous visits on file for this patient.";
+          } else if (activeTab === "medications") {
+            contentEl.innerHTML = record.prescriptions.length
+              ? record.prescriptions
+                  .map((p) => `<div>${p.medication_name}${p.dosage ? " · " + p.dosage : ""}${p.instructions ? " · " + p.instructions : ""}</div>`)
+                  .join("")
+              : "No medications prescribed for this patient yet.";
+          } else if (activeTab === "diseases") {
+            contentEl.textContent = record.medicalHistory || "No medical history on file for this patient.";
+          } else {
+            // allergies / reports / surgeries have no dedicated data model yet
+            contentEl.textContent = "No records available for this patient yet.";
+          }
+        }
+
         document.querySelectorAll("#dbRecordTabs .db-tab").forEach((tab) => {
           tab.addEventListener("click", () => {
             document
               .querySelectorAll("#dbRecordTabs .db-tab")
               .forEach((t) => t.classList.remove("active"));
             tab.classList.add("active");
-            document.getElementById("dbRecordContent").textContent =
-              tabContent[tab.dataset.tab];
+            renderRecordTab();
           });
+        });
+
+        document.getElementById("dbPatientSelect").addEventListener("change", async function () {
+          const patientId = this.value;
+          if (!patientId) {
+            document.getElementById("dbRecordContent").textContent = "Select a patient to view their records.";
+            return;
+          }
+          document.getElementById("dbRecordContent").textContent = "Loading…";
+          window._doctorPatientRecords = window._doctorPatientRecords || {};
+          try {
+            const [patientResult, rxResult] = await Promise.all([
+              apiRequest("/patients?id=" + patientId, "GET"),
+              listPrescriptions(patientId),
+            ]);
+            const visits = (window._doctorAllAppointments || []).filter(
+              (a) => String(a.patient_id) === String(patientId)
+            );
+            window._doctorPatientRecords[patientId] = {
+              medicalHistory: patientResult.data.medical_history,
+              visits,
+              prescriptions: rxResult.data,
+            };
+          } catch (err) {
+            console.error("Could not load patient record:", err.message);
+            window._doctorPatientRecords[patientId] = { medicalHistory: null, visits: [], prescriptions: [] };
+          }
+          renderRecordTab();
         });
 
         // Month navigation (cosmetic — cycles a fixed label list)
@@ -2653,8 +2887,36 @@
         // Prescription actions
         document.getElementById("dbPrintBtn").onclick = () =>
           showDashToast("Sending to printer...");
-        document.getElementById("dbSendRxBtn").onclick = () =>
-          showDashToast("Prescription sent digitally");
+        document.getElementById("dbSendRxBtn").onclick = async () => {
+          const patientId = document.getElementById("dbPatientSelect").value;
+          const medicationName = document.getElementById("dbRxMedicine").value;
+          const dosage = document.getElementById("dbRxDosage").value.trim();
+          const duration = document.getElementById("dbRxDuration").value.trim();
+
+          if (!patientId) {
+            alert("Select a patient first.");
+            return;
+          }
+          if (!medicationName) {
+            alert("Select a medicine first.");
+            return;
+          }
+
+          try {
+            await addPrescription({
+              patientId,
+              medicationName,
+              dosage: dosage || null,
+              instructions: duration ? "Duration: " + duration : null,
+            });
+            showDashToast("Prescription sent digitally");
+            delete window._doctorPatientRecords[patientId]; // force a refetch next time this patient is viewed
+            document.getElementById("dbRxDosage").value = "";
+            document.getElementById("dbRxDuration").value = "";
+          } catch (err) {
+            alert("Could not send prescription: " + err.message);
+          }
+        };
 
         // Floating chat widget
         const chatWidget = document.getElementById("dbChatWidget");

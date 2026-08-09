@@ -917,93 +917,8 @@
         <!-- Slider -->
         <div class="slider-wrapper">
           <div class="doctor-track" id="doctorTrack">
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/men/32.jpg"
-                alt=""
-              />
-              <h3>Dr. Raj Sharma</h3>
-              <p class="speciality">General Physician</p>
-              <div class="experience">7 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
-
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/women/44.jpg"
-                alt=""
-              />
-              <h3>Dr. Priya Singh</h3>
-              <p class="speciality">Radiologist</p>
-              <div class="experience">10 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
-
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/men/45.jpg"
-                alt=""
-              />
-              <h3>Dr. Amit Kumar</h3>
-              <p class="speciality">Cardiologist</p>
-              <div class="experience">8 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
-
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/women/68.jpg"
-                alt=""
-              />
-              <h3>Dr. Neha Gupta</h3>
-              <p class="speciality">Neurologist</p>
-              <div class="experience">12 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
-
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/men/52.jpg"
-                alt=""
-              />
-              <h3>Dr. Vikram Patel</h3>
-              <p class="speciality">Gastroenterologist</p>
-              <div class="experience">6 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
-
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/men/65.jpg"
-                alt=""
-              />
-              <h3>Dr. Rahul Das</h3>
-              <p class="speciality">Surgeon</p>
-              <div class="experience">7 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
-
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/women/22.jpg"
-                alt=""
-              />
-              <h3>Dr. Sneha Roy</h3>
-              <p class="speciality">Ophthalmologist</p>
-              <div class="experience">9 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
-
-            <div class="doctor-card">
-              <img
-                src="https://randomuser.me/api/portraits/men/76.jpg"
-                alt=""
-              />
-              <h3>Dr. Arjun Verma</h3>
-              <p class="speciality">Dermatologist</p>
-              <div class="experience">11 Years Experience</div>
-              <button class="book-btn">Book Now</button>
-            </div>
+            <!-- Doctor cards are rendered here at runtime from real database records -->
+            <p style="padding: 20px; color: #888;">Loading doctors…</p>
           </div>
         </div>
 
@@ -1054,7 +969,7 @@
     <div class="doctor-stats-row">
       <div class="stat-box">
         <span class="material-symbols-outlined stat-icon success">favorite</span>
-        <h3 id="docSuccess">98%</h3><p>Success</p>
+        <h3 id="docSuccess">General Medicine</h3><p>Department</p>
       </div>
       <div class="stat-box">
         <span class="material-symbols-outlined stat-icon exp">military_tech</span>
@@ -1376,6 +1291,7 @@
     </footer>
 
     <div class="overlay" id="overlay"></div>
+    <script src="api.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

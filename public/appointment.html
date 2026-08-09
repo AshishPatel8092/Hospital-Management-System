@@ -423,6 +423,20 @@
         <h1>Book Your Appointment</h1>
       </div>
 
+      <div
+        id="authBanner"
+        style="
+          display: none;
+          background: #fff3cd;
+          color: #664d03;
+          border: 1px solid #ffe69c;
+          border-radius: 8px;
+          padding: 12px 16px;
+          margin-bottom: 16px;
+          font-size: 14px;
+        "
+      ></div>
+
       <div class="main-content">
         <!-- Left Section -->
         <div class="left-section">
@@ -569,34 +583,55 @@
       </div>
     </div>
 
+    <script src="api.js"></script>
     <script>
-      // Sample doctors data
-      const doctors = [
-        {
-          id: 1,
-          name: "Dr. Rohan Mehta",
-          speciality: "ENT Specialist",
-          fee: 600,
-        },
-        {
-          id: 2,
-          name: "Dr. Priya Singh",
-          speciality: "Cardiologist",
-          fee: 800,
-        },
-        {
-          id: 3,
-          name: "Dr. Aman Kumar",
-          speciality: "Orthopedic Surgeon",
-          fee: 700,
-        },
-        {
-          id: 4,
-          name: "Dr. Neha Gupta",
-          speciality: "Dermatologist",
-          fee: 550,
-        },
-      ];
+      // Doctors are loaded from the backend (see loadDoctors below) instead
+      // of being hardcoded here.
+      let doctors = [];
+      let currentPatient = null; // filled in from the logged-in patient's profile, if any
+      let isLoggedInPatient = false;
+
+      async function loadDoctors() {
+        const result = await listDoctors();
+        doctors = result.data.map((d) => ({
+          id: d.doctor_id,
+          name: "Dr. " + d.first_name + " " + d.last_name,
+          speciality: d.specialization || d.department || "General Medicine",
+          fee: d.consultation_fee || null,
+        }));
+      }
+
+      async function checkLoginAndPrefill() {
+        const banner = document.getElementById("authBanner");
+        try {
+          const me = await getCurrentUser();
+          if (me.data.role !== "PATIENT") {
+            isLoggedInPatient = false;
+            banner.textContent =
+              "You're signed in as " + me.data.role + ". Only patient accounts can book appointments.";
+            banner.style.display = "block";
+            updateConfirmButton();
+            return;
+          }
+          isLoggedInPatient = true;
+          banner.style.display = "none";
+          const profile = await apiRequest("/patients?self=true", "GET");
+          currentPatient = profile.data;
+          document.getElementById("fullName").value =
+            currentPatient.first_name + " " + currentPatient.last_name;
+          document.getElementById("mobile").value = currentPatient.phone || "";
+          document.getElementById("email").value = currentPatient.email || "";
+          document.getElementById("gender").value = currentPatient.gender || "";
+          updateConfirmButton();
+        } catch (e) {
+          isLoggedInPatient = false;
+          banner.innerHTML =
+            'Please <a href="login.html">log in</a> as a patient to book an appointment.';
+          banner.style.display = "block";
+          updateConfirmButton();
+        }
+      }
+
 
       // Generate dates (4 dates starting from today)
       function generateDates() {
@@ -766,13 +801,15 @@
           doctorDisplay.classList.remove("not-selected");
           specialityDisplay.textContent = selectedDoctor.speciality;
           specialityDisplay.classList.remove("not-selected");
-          feeDisplay.textContent = `₹${selectedDoctor.fee}`;
+          feeDisplay.textContent = selectedDoctor.fee
+            ? `₹${selectedDoctor.fee}`
+            : "Payable at hospital";
         } else {
           doctorDisplay.textContent = "Not selected";
           doctorDisplay.classList.add("not-selected");
           specialityDisplay.textContent = "Not selected";
           specialityDisplay.classList.add("not-selected");
-          feeDisplay.textContent = "₹600";
+          feeDisplay.textContent = "Payable at hospital";
         }
 
         if (selectedDate) {
@@ -803,24 +840,19 @@
       // Validate form
       function validateForm() {
         const fullName = document.getElementById("fullName").value.trim();
-        const age = document.getElementById("age").value;
         const mobile = document.getElementById("mobile").value.trim();
         const gender = document.getElementById("gender").value;
 
+        if (!isLoggedInPatient) {
+          alert("Please log in as a patient before booking an appointment.");
+          return false;
+        }
         if (!fullName) {
           alert("Please enter your full name");
           return false;
         }
-        if (!age) {
-          alert("Please enter your age");
-          return false;
-        }
-        if (mobile.length !== 10 || isNaN(mobile)) {
+        if (mobile && (mobile.length !== 10 || isNaN(mobile))) {
           alert("Please enter a valid 10-digit mobile number");
-          return false;
-        }
-        if (!gender) {
-          alert("Please select your gender");
           return false;
         }
         if (!selectedDoctor) {
@@ -841,54 +873,86 @@
       // Update confirm button state
       function updateConfirmButton() {
         const confirmBtn = document.getElementById("confirmBtn");
-        const isComplete = selectedDoctor && selectedDate && selectedTime;
-        if (isComplete) {
-          confirmBtn.disabled = false;
-        } else {
-          confirmBtn.disabled = true;
-        }
+        const isComplete =
+          isLoggedInPatient && selectedDoctor && selectedDate && selectedTime;
+        confirmBtn.disabled = !isComplete;
+      }
+
+      // Format a JS Date as a local YYYY-MM-DD string (avoids the UTC
+      // off-by-one-day issue that toISOString() has near midnight).
+      function toLocalDateString(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
       }
 
       // Confirm booking
-      function confirmBooking() {
+      async function confirmBooking() {
         if (!validateForm()) {
           return;
         }
 
-        const fullName = document.getElementById("fullName").value.trim();
-        const age = document.getElementById("age").value;
-        const mobile = document.getElementById("mobile").value.trim();
-        const gender = document.getElementById("gender").value;
-        const email = document.getElementById("email").value.trim();
+        const confirmBtn = document.getElementById("confirmBtn");
+        confirmBtn.disabled = true;
+        confirmBtn.textContent =
+          selectedPayment === "Online" ? "Processing payment…" : "Booking…";
 
-        const bookingDetails = {
-          doctor: selectedDoctor.name,
-          speciality: selectedDoctor.speciality,
-          date: selectedDate.date.toLocaleDateString("en-IN"),
-          time: selectedTime,
-          fee: selectedDoctor.fee,
-          payment: selectedPayment,
-          patient: {
-            name: fullName,
-            age: age,
-            mobile: mobile,
-            gender: gender,
-            email: email,
-          },
-        };
+        try {
+          const result = await bookAppointment({
+            doctorId: selectedDoctor.id,
+            appointmentDate: toLocalDateString(selectedDate.date),
+            slotTime: selectedTime,
+            visitType: "In-person",
+            reason: null,
+            paymentMethod: selectedPayment,
+          });
 
-        alert(
-          `Appointment Confirmed!\n\nDoctor: ${bookingDetails.doctor}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.time}\nFee: ₹${bookingDetails.fee}\nPayment: ${bookingDetails.payment}`,
-        );
-        console.log("Booking Details:", bookingDetails);
+          const bill = result.data.bill;
+          const paymentLine =
+            bill.paymentStatus === "Paid"
+              ? `Payment of ₹${bill.amount} received online. You're all set.`
+              : `₹${bill.amount} due at the hospital - pay at the reception during your visit.`;
+
+          alert(
+            `Appointment confirmed with ${selectedDoctor.name} on ` +
+              `${selectedDate.date.toLocaleDateString("en-IN")} at ${selectedTime}.\n\n` +
+              `${paymentLine}\n\nYou'll find it on your dashboard now.`
+          );
+          window.location.href = "register-p.html";
+        } catch (err) {
+          alert("Booking failed: " + err.message);
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = "Confirm Booking";
+        }
       }
 
       // Initialize on page load
-      window.addEventListener("DOMContentLoaded", () => {
+      window.addEventListener("DOMContentLoaded", async () => {
+        await loadDoctors();
         initializeDoctors();
         initializeDates();
         initializeTimeSlots();
         updateSummary();
+        await checkLoginAndPrefill();
+
+        // Support deep-linking from a doctor card elsewhere on the site,
+        // e.g. appointment.html?doctorId=3&payment=Online
+        const params = new URLSearchParams(window.location.search);
+        const preselectId = Number(params.get("doctorId"));
+        if (preselectId) {
+          const radio = document.querySelector(
+            `input[name="doctor"][value="${preselectId}"]`
+          );
+          if (radio) {
+            radio.checked = true;
+            selectDoctor(preselectId);
+          }
+        }
+        const preselectPayment = params.get("payment");
+        if (preselectPayment === "Online" || preselectPayment === "Cash") {
+          selectPayment(preselectPayment);
+        }
       });
     </script>
   </body>

@@ -56,11 +56,18 @@ router.post('/register', async (req, res) => {
          smokingStatus || null, alcoholStatus || null]
       );
     } else if (upperRole === 'DOCTOR') {
-      const { firstName = fullName, lastName = '', department, specialization, gender } = req.body;
+      const {
+        firstName = fullName, lastName = '', department, specialization, gender,
+        qualifications, experienceYears, consultationFee, clinicLocation, bio,
+      } = req.body;
       await connection.execute(
-        `INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [userId, firstName, lastName, department || null, specialization || null, gender || null]
+        `INSERT INTO doctors
+         (user_id, first_name, last_name, department, specialization, gender,
+          qualifications, experience_years, consultation_fee, clinic_location, bio)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [userId, firstName, lastName, department || null, specialization || null, gender || null,
+         qualifications || null, experienceYears || null, consultationFee || null,
+         clinicLocation || null, bio || null]
       );
     }
 

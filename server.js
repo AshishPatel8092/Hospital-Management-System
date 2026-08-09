@@ -28,6 +28,9 @@ app.use('/api/patients', require('./routes/patients'));
 app.use('/api/appointments', require('./routes/appointments'));
 app.use('/api/billing', require('./routes/billing'));
 app.use('/api/pharmacy', require('./routes/pharmacy'));
+app.use('/api/contact', require('./routes/contact'));
+app.use('/api/demo-requests', require('./routes/demo'));
+app.use('/api/prescriptions', require('./routes/prescriptions'));
 
 app.get('/api/health', (req, res) => res.json({ success: true, message: 'API is running.' }));
 

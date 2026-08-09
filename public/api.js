@@ -44,6 +44,22 @@ function listAppointments() {
 function listMyBills() {
   return apiRequest('/billing', 'GET');
 }
+function payBill(billId, paymentMethod) {
+  return apiRequest(`/billing?id=${billId}`, 'PUT', { paymentStatus: 'Paid', paymentMethod });
+}
 function listPharmacyStock() {
   return apiRequest('/pharmacy', 'GET');
+}
+function submitContactForm(fields) {
+  return apiRequest('/contact', 'POST', fields);
+}
+function submitDemoRequest(fields) {
+  return apiRequest('/demo-requests', 'POST', fields);
+}
+function listPrescriptions(patientId) {
+  const q = patientId ? `?patientId=${encodeURIComponent(patientId)}` : '';
+  return apiRequest(`/prescriptions${q}`, 'GET');
+}
+function addPrescription(fields) {
+  return apiRequest('/prescriptions', 'POST', fields);
 }

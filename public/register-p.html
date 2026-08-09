@@ -1960,6 +1960,7 @@
             ><button>💊 Prescriptions</button><button>🧪 Lab Reports</button
             ><button>💳 Payments & Bills</button
             ><button>🔔 Notifications</button><button>★ Doctor Reviews</button>
+            <button id="ptLogoutBtn" style="margin-top: 16px">⏻ Log Out</button>
           </nav>
         </aside>
         <div>
@@ -1982,18 +1983,23 @@
                   <h2>Your Health at a Glance</h2>
                   <div class="pt-stats">
                     <div class="pt-stat">
-                      <span>Upcoming appointments</span><b>2</b>
+                      <span>Upcoming appointments</span><b id="ptStatUpcoming">0</b>
                     </div>
                     <div class="pt-stat">
-                      <span>Active prescriptions</span><b>3</b>
+                      <span>Active prescriptions</span><b id="ptStatPrescriptions">0</b>
                     </div>
                     <div class="pt-stat">
-                      <span>Reports ready</span><b>4</b>
+                      <span>Completed visits</span><b id="ptStatCompleted">0</b>
                     </div>
                   </div>
                 </section>
+                <section class="pt-card" id="ptNextApptCard" style="display: none">
+                  <h2>Your Next Appointment</h2>
+                  <div id="ptNextAppt"></div>
+                </section>
                 <section class="pt-card">
                   <h2>Upcoming Appointments</h2>
+                  <div id="ptAppointmentsList">
                   <div class="pt-row">
                     <div>
                       <b>Dr. Anya Sharma · Cardiology</b
@@ -2014,9 +2020,11 @@
                       Details
                     </button>
                   </div>
+                  </div>
                 </section>
                 <section class="pt-card">
                   <h2>Recent Prescriptions</h2>
+                  <div id="ptPrescriptionsList">
                   <div class="pt-row">
                     <div>
                       <b>Atorvastatin 10mg</b
@@ -2048,10 +2056,11 @@
                       View
                     </button>
                   </div>
+                  </div>
                 </section>
                 <section class="pt-card">
                   <h2>Medical History</h2>
-                  <div class="pt-pills">
+                  <div class="pt-pills" id="ptHealthPills">
                     <span class="pt-pill">Blood Group: O+</span
                     ><span class="pt-pill">No known drug allergies</span
                     ><span class="pt-pill">Last check-up: Jul 2026</span>
@@ -2114,15 +2123,7 @@
                 </section>
                 <section class="pt-card">
                   <h2>Payments & Bills</h2>
-                  <div class="pt-row">
-                    <div>
-                      <b>Consultation fee</b
-                      ><small>Dr. Anya Sharma · ₹800 · Due today</small>
-                    </div>
-                    <button class="pt-btn primary" id="ptPayNow">
-                      Pay now
-                    </button>
-                  </div>
+                  <div id="ptBillsList">
                   <div class="pt-row">
                     <div>
                       <b>Payment options</b
@@ -2130,6 +2131,7 @@
                         >UPI · Credit Card · Debit Card · Net Banking</small
                       >
                     </div>
+                  </div>
                   </div>
                 </section>
                 <section class="pt-card">
@@ -2200,7 +2202,7 @@
       }
 
       /* ── SIGN IN ── */
-      function doSignIn() {
+      async function doSignIn() {
         const email = document.getElementById("si-email");
         const pw = document.getElementById("si-password");
         let ok = true;
@@ -2212,9 +2214,27 @@
           ok = false;
         } else pw.closest(".field").classList.remove("has-error");
         if (!ok) return;
-        document.getElementById("signin-form-wrap").style.display = "none";
-        document.getElementById("signin-success").style.display = "block";
-        setTimeout(() => showPage("dashboard"), 900);
+
+        try {
+          const result = await login(email.value, pw.value);
+          if (result.data.role !== "PATIENT") {
+            alert(
+              "This account is registered as " +
+                result.data.role +
+                ". Please use the correct sign-in page for that role."
+            );
+            await logout();
+            return;
+          }
+          document.getElementById("signin-form-wrap").style.display = "none";
+          document.getElementById("signin-success").style.display = "block";
+          await loadPatientDashboard(result.data);
+          setTimeout(() => showPage("dashboard"), 900);
+        } catch (err) {
+          pw.closest(".field").classList.add("has-error");
+          document.getElementById("si-pw-err").textContent = err.message;
+          document.getElementById("si-pw-err").style.display = "block";
+        }
       }
 
       function togglePw() {
@@ -2328,18 +2348,165 @@
 
         try {
           await registerPatient(fields);
+          const result = await login(fields.email, fields.password);
           document
             .querySelectorAll(".step-panel")
             .forEach((p) => p.classList.remove("active"));
-          document.getElementById("ptName").textContent = fields.fullName;
-          document.getElementById("ptAvatar").textContent = (
-            first[0] + (last[0] || "")
-          ).toUpperCase();
+          await loadPatientDashboard(result.data);
           showPage("dashboard");
         } catch (err) {
           alert("Registration failed: " + err.message);
         }
       }
+
+      /* ── DASHBOARD DATA ── */
+      async function loadPatientDashboard(session) {
+        document.getElementById("ptName").textContent = session.fullName;
+        const parts = session.fullName.trim().split(/\s+/);
+        document.getElementById("ptAvatar").textContent = (
+          (parts[0]?.[0] || "") + (parts[1]?.[0] || "")
+        ).toUpperCase();
+
+        try {
+          const profileResult = await apiRequest("/patients?self=true", "GET");
+          const p = profileResult.data;
+          const pillsEl = document.getElementById("ptHealthPills");
+          const pills = [];
+          pills.push(
+            `<span class="pt-pill">Blood Group: ${p.blood_group || "Not provided"}</span>`
+          );
+          if (p.smoking_status)
+            pills.push(`<span class="pt-pill">Smoking: ${p.smoking_status}</span>`);
+          if (p.alcohol_status)
+            pills.push(`<span class="pt-pill">Alcohol: ${p.alcohol_status}</span>`);
+          pillsEl.innerHTML = pills.join("");
+        } catch (err) {
+          console.error("Could not load patient profile:", err.message);
+        }
+
+        try {
+          const apptResult = await listAppointments();
+          const list = document.getElementById("ptAppointmentsList");
+          const appts = apptResult.data;
+
+          document.getElementById("ptStatUpcoming").textContent = appts.filter(
+            (a) => a.status !== "Completed" && a.status !== "Cancelled"
+          ).length;
+          document.getElementById("ptStatCompleted").textContent = appts.filter(
+            (a) => a.status === "Completed"
+          ).length;
+
+          if (!appts.length) {
+            list.innerHTML =
+              '<div class="pt-row"><div><b>No appointments booked yet</b><small>Book one from the "Book Appointment" page.</small></div></div>';
+          } else {
+            list.innerHTML = appts
+              .map(
+                (a) => `
+              <div class="pt-row">
+                <div>
+                  <b>Dr. ${a.doctor_name}</b>
+                  <small>${a.appointment_date} · ${a.slot_time || "Time TBD"} · ${a.visit_type} · ${a.status}</small>
+                </div>
+              </div>`
+              )
+              .join("");
+          }
+
+          // Highlight the single soonest upcoming appointment, if any.
+          const todayStr = new Date().toISOString().slice(0, 10);
+          const upcoming = appts
+            .filter((a) => a.appointment_date >= todayStr && a.status !== "Cancelled")
+            .sort((a, b) => a.appointment_date.localeCompare(b.appointment_date));
+          const nextCard = document.getElementById("ptNextApptCard");
+          if (upcoming.length) {
+            document.getElementById("ptNextAppt").innerHTML = `
+              <div class="pt-row">
+                <div>
+                  <b>Dr. ${upcoming[0].doctor_name}</b>
+                  <small>${upcoming[0].appointment_date} · ${upcoming[0].slot_time || "Time TBD"} · ${upcoming[0].visit_type} · ${upcoming[0].status}</small>
+                </div>
+              </div>`;
+            nextCard.style.display = "";
+          } else {
+            nextCard.style.display = "none";
+          }
+        } catch (err) {
+          console.error("Could not load appointments:", err.message);
+        }
+
+        try {
+          const rxResult = await listPrescriptions();
+          const rx = rxResult.data;
+          document.getElementById("ptStatPrescriptions").textContent = rx.length;
+          const rxList = document.getElementById("ptPrescriptionsList");
+          if (!rx.length) {
+            rxList.innerHTML =
+              '<div class="pt-row"><div><b>No prescriptions yet</b><small>Medications your doctor prescribes will show up here.</small></div></div>';
+          } else {
+            rxList.innerHTML = rx
+              .map(
+                (r) => `
+              <div class="pt-row">
+                <div>
+                  <b>${r.medication_name}${r.dosage ? " · " + r.dosage : ""}</b>
+                  <small>Dr. ${r.doctor_name}${r.instructions ? " · " + r.instructions : ""}</small>
+                </div>
+              </div>`
+              )
+              .join("");
+          }
+        } catch (err) {
+          console.error("Could not load prescriptions:", err.message);
+        }
+
+        try {
+          const billResult = await listMyBills();
+          const bills = billResult.data;
+          const billsList = document.getElementById("ptBillsList");
+          if (!bills.length) {
+            billsList.innerHTML =
+              '<div class="pt-row"><div><b>No bills yet</b><small>Bills from the front desk will show up here.</small></div></div>';
+          } else {
+            billsList.innerHTML = bills
+              .map(
+                (b) => `
+              <div class="pt-row">
+                <div>
+                  <b>${b.description}</b>
+                  <small>₹${b.amount} · ${b.payment_status}${b.payment_method ? " · " + b.payment_method : ""}</small>
+                </div>
+                ${
+                  b.payment_status === "Pending"
+                    ? `<button class="pt-btn primary" data-pay-bill="${b.bill_id}" data-pay-amount="${b.amount}">Pay now</button>`
+                    : `<span class="pt-pill">Paid</span>`
+                }
+              </div>`
+              )
+              .join("");
+          }
+        } catch (err) {
+          console.error("Could not load bills:", err.message);
+        }
+      }
+
+      document.getElementById("ptLogoutBtn").addEventListener("click", async () => {
+        await logout();
+        window.location.href = "login.html";
+      });
+
+      /* ── AUTO-ENTER DASHBOARD IF ALREADY LOGGED IN ── */
+      (async function checkExistingSession() {
+        try {
+          const result = await getCurrentUser();
+          if (result.data.role === "PATIENT") {
+            await loadPatientDashboard(result.data);
+            showPage("dashboard");
+          }
+        } catch (e) {
+          // not logged in - default view (sign in / register) stays as-is
+        }
+      })();
 
       function resetForm() {
         document.querySelector(".stepper").style.opacity = "1";
@@ -2402,14 +2569,33 @@
           '<textarea placeholder="Type your follow-up question for your doctor..."></textarea>',
           "Send message",
         );
-      document.getElementById("ptPay").onclick = document.getElementById(
-        "ptPayNow",
-      ).onclick = () =>
+
+      let activePayBillId = null;
+
+      function openPayBillModal(billId, amount) {
+        activePayBillId = billId;
         openPatientModal(
           "Pay Hospital Bill",
-          '<select><option>UPI</option><option>Credit Card</option><option>Debit Card</option><option>Net Banking</option></select><input placeholder="Enter payment details">',
-          "Pay ₹800",
+          '<select id="ptPayMethod"><option>UPI</option><option>Credit Card</option><option>Debit Card</option><option>Net Banking</option></select><input placeholder="Enter payment details (simulated - not a real charge)">',
+          `Pay ₹${amount}`,
         );
+      }
+
+      // Sidebar "Pay Bills" shortcut just brings the Payments & Bills card
+      // into view - the actual payment happens per-bill (see below), since
+      // a bill has to be picked to know what's being paid.
+      document.getElementById("ptPay").onclick = () =>
+        document.getElementById("ptBillsList").scrollIntoView({ behavior: "smooth", block: "center" });
+
+      // Real per-bill "Pay now" buttons are rendered dynamically inside
+      // #ptBillsList (see loadPatientDashboard), so they're wired here via
+      // event delegation rather than a direct listener.
+      document.getElementById("ptBillsList").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-pay-bill]");
+        if (!btn) return;
+        openPayBillModal(btn.dataset.payBill, btn.dataset.payAmount);
+      });
+
       document.getElementById("ptReview").onclick = () =>
         openPatientModal(
           "Rate Your Doctor",
@@ -2422,15 +2608,34 @@
         if (event.target.id === "ptModal")
           event.currentTarget.classList.remove("open");
       };
-      document.getElementById("ptSubmit").onclick = () => {
+      document.getElementById("ptSubmit").onclick = async () => {
         const title = document.getElementById("ptModalTitle").textContent;
+
+        if (title === "Pay Hospital Bill" && activePayBillId) {
+          const methodEl = document.getElementById("ptPayMethod");
+          const method = methodEl ? methodEl.value : "Online";
+          const submitBtn = document.getElementById("ptSubmit");
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Processing…";
+          try {
+            await payBill(activePayBillId, method);
+            document.getElementById("ptModal").classList.remove("open");
+            patientToast("Payment completed successfully.");
+            const me = await getCurrentUser();
+            await loadPatientDashboard(me.data);
+          } catch (err) {
+            alert("Payment failed: " + err.message);
+          } finally {
+            submitBtn.disabled = false;
+          }
+          return;
+        }
+
         document.getElementById("ptModal").classList.remove("open");
         patientToast(
-          title === "Pay Hospital Bill"
-            ? "Payment completed successfully."
-            : title === "Rate Your Doctor"
-              ? "Thank you for your review."
-              : "Message sent securely to your doctor.",
+          title === "Rate Your Doctor"
+            ? "Thank you for your review."
+            : "Message sent securely to your doctor.",
         );
       };
     </script>

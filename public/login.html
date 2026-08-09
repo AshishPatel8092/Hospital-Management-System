@@ -469,6 +469,23 @@
     </div>
   <script src="api.js"></script>
   <script>
+    function destinationFor(role) {
+      if (role === 'PATIENT') return 'register-p.html';
+      if (role === 'DOCTOR') return 'register.html';
+      return 'index.html';
+    }
+
+    // If a session already exists (e.g. the user hit "back" to this page,
+    // or bookmarked it), skip the login form entirely and go straight in.
+    (async function checkExistingSession() {
+      try {
+        const result = await getCurrentUser();
+        window.location.href = destinationFor(result.data.role);
+      } catch (e) {
+        // not logged in - show the login form as normal
+      }
+    })();
+
     async function doSignIn() {
       const email = document.getElementById('si-email').value;
       const password = document.getElementById('si-password').value;
@@ -479,10 +496,7 @@
         document.getElementById('signin-form-wrap').style.display = 'none';
         document.getElementById('signin-success').style.display = 'block';
         setTimeout(() => {
-          const role = result.data.role;
-          if (role === 'PATIENT') window.location.href = 'register-p.html';
-          else if (role === 'DOCTOR') window.location.href = 'register.html';
-          else window.location.href = 'index.html';
+          window.location.href = destinationFor(result.data.role);
         }, 900);
       } catch (err) {
         errEl.textContent = err.message;

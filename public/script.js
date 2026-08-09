@@ -347,9 +347,11 @@ editDetailsBtn.addEventListener("click", () => {
 });
 
 confirmBookingBtn.addEventListener("click", () => {
-  alert(`Booking confirmed for ${currentServiceKey}!`);
-  bookingForm.reset();
+  // This modal books a service package rather than a specific doctor, and
+  // the cards here are marketing content, not records from the database.
+  // Real bookings go through appointment.html, which talks to the backend.
   closeBooking();
+  window.location.href = "appointment.html";
 });
 
 function closeBooking() {
@@ -362,12 +364,22 @@ function closeBooking() {
 bookingClose.addEventListener("click", closeBooking);
 summaryClose.addEventListener("click", closeBooking);
 const doctorTrack = document.getElementById("doctorTrack");
-const doctorCards = doctorTrack
+let doctorCards = doctorTrack
   ? doctorTrack.querySelectorAll(".doctor-card")
   : [];
 
-const totalCards = doctorCards.length;
+let totalCards = doctorCards.length;
 let currentIndex = 0;
+
+// Re-reads the current .doctor-card elements from the DOM. Needed because
+// the cards are no longer static HTML - they're rendered at runtime from
+// real doctor records (see loadRealDoctors below), so the slider's
+// bookkeeping has to be refreshed once that render happens.
+function refreshDoctorCardsCache() {
+  doctorCards = doctorTrack ? doctorTrack.querySelectorAll(".doctor-card") : [];
+  totalCards = doctorCards.length;
+  currentIndex = 0;
+}
 
 function getSliderMetrics() {
   const wrapper = document.querySelector(".slider-wrapper");
@@ -434,77 +446,9 @@ window.addEventListener("resize", () => {
 });
 
 // ----- Doctor Profile / Appointment Page -----
-const doctorExtraData = {
-  "Dr. Raj Sharma": {
-    qualifications: "MBBS",
-    location: "City Care Clinic",
-    fee: 500,
-    about:
-      "General health checkups, fever, infections, and routine consultations.",
-    success: "97%",
-    patients: "3.1k",
-  },
-  "Dr. Priya Singh": {
-    qualifications: "MBBS, DMRD",
-    location: "City Imaging Center",
-    fee: 700,
-    about:
-      "Expert in diagnostic imaging including X-Ray, CT, and MRI interpretation.",
-    success: "96%",
-    patients: "2.4k",
-  },
-  "Dr. Amit Kumar": {
-    qualifications: "MBBS, MD (Cardiology)",
-    location: "City Hospital, Block A",
-    fee: 900,
-    about: "Expert in heart rhythm, cardiac care, and coronary interventions.",
-    success: "95%",
-    patients: "7k+",
-  },
-  "Dr. Neha Gupta": {
-    qualifications: "MBBS, DM (Neurology)",
-    location: "NeuroCare Center",
-    fee: 1000,
-    about:
-      "Specializes in neurological disorders, migraines, and cognitive health.",
-    success: "94%",
-    patients: "5.2k",
-  },
-  "Dr. Vikram Patel": {
-    qualifications: "MBBS, MD (Gastroenterology)",
-    location: "City Digestive Clinic",
-    fee: 800,
-    about: "Focused on digestive disorders, endoscopy, and liver health.",
-    success: "96%",
-    patients: "4k",
-  },
-  "Dr. Rahul Das": {
-    qualifications: "MBBS, MS (Surgery)",
-    location: "City Surgical Center",
-    fee: 1200,
-    about: "Experienced in general and minimally invasive surgical procedures.",
-    success: "98%",
-    patients: "3.6k",
-  },
-  "Dr. Sneha Roy": {
-    qualifications: "MBBS, MS (Ophthalmology)",
-    location: "Vision Care Clinic",
-    fee: 600,
-    about:
-      "Specializes in vision correction, cataract, and eye health screening.",
-    success: "97%",
-    patients: "5k",
-  },
-  "Dr. Arjun Verma": {
-    qualifications: "MBBS, MD (Dermatology)",
-    location: "SkinCare Clinic",
-    fee: 750,
-    about:
-      "Expert in skin conditions, acne treatment, and cosmetic dermatology.",
-    success: "95%",
-    patients: "4.5k",
-  },
-};
+// Real doctor data is fetched from the backend (see loadRealDoctors below)
+// and attached directly to each card, so there's no lookup table of fake
+// marketing stats here anymore.
 
 const doctorProfileOverlay = document.getElementById("doctorProfileOverlay");
 // const doctorBackBtn = document.getElementById("doctorBackBtn");
@@ -528,6 +472,7 @@ let selectedTime = null;
 let selectedPayment = "Cash";
 let currentDoctorName = "";
 let currentDoctorFee = 0;
+let currentDoctorId = null;
 
 function getUpcomingDates(count) {
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -607,61 +552,101 @@ function renderTimeSlots() {
   });
 }
 
-document.querySelectorAll(".doctor-card").forEach((card) => {
-  const btn = card.querySelector(".book-btn");
-  const name = card.querySelector("h3").textContent.trim();
-  const speciality = card.querySelector(".speciality").textContent.trim();
-  const experience = card.querySelector(".experience").textContent.trim();
-  const img = card.querySelector("img").src;
+function openDoctorProfile(doctor) {
+  currentDoctorName = doctor.name;
+  currentDoctorFee = doctor.fee;
+  currentDoctorId = doctor.id;
 
-  btn.addEventListener("click", () => {
-    const extra = doctorExtraData[name];
-    if (!extra) return;
+  document.getElementById("docImage").src = doctor.image;
+  document.getElementById("docName").textContent = doctor.name;
+  document.getElementById("docSpeciality").textContent = doctor.speciality;
+  document.getElementById("docQualifications").textContent = doctor.qualifications;
+  document.getElementById("docLocation").textContent = doctor.location;
+  document.getElementById("docFee").textContent = doctor.fee ? `₹${doctor.fee}` : "Contact for pricing";
+  document.getElementById("docAvailability").textContent = "Available";
+  document.getElementById("docSuccess").textContent = doctor.department;
+  document.getElementById("docExperience").textContent = doctor.experience;
+  document.getElementById("docPatients").textContent = doctor.patients;
+  document.getElementById("docAbout").textContent = doctor.about;
 
-    currentDoctorName = name;
-    currentDoctorFee = extra.fee;
+  document.getElementById("sumDoctorName").textContent = doctor.name;
+  document.getElementById("sumDoctorSpeciality").textContent = doctor.speciality;
+  document.getElementById("sumSelectedDate").textContent = "Not selected";
+  document.getElementById("sumSelectedTime").textContent = "Not selected";
+  document.getElementById("sumFee").textContent = doctor.fee ? `₹${doctor.fee}` : "Contact for pricing";
 
-    document.getElementById("docImage").src = img;
-    document.getElementById("docName").textContent = name;
-    document.getElementById("docSpeciality").textContent = speciality;
-    document.getElementById("docQualifications").textContent =
-      extra.qualifications;
-    document.getElementById("docLocation").textContent = extra.location;
-    document.getElementById("docFee").textContent = `₹${extra.fee}`;
-    document.getElementById("docAvailability").textContent = "Available";
-    document.getElementById("docSuccess").textContent = extra.success;
-    document.getElementById("docExperience").textContent = experience;
-    document.getElementById("docPatients").textContent = extra.patients;
-    document.getElementById("docAbout").textContent = extra.about;
+  selectedDate = null;
+  selectedTime = null;
+  selectedPayment = "Cash";
+  payCashBtn.classList.add("active");
+  payOnlineBtn.classList.remove("active");
 
-    document.getElementById("sumDoctorName").textContent = name;
-    document.getElementById("sumDoctorSpeciality").textContent = speciality;
-    document.getElementById("sumSelectedDate").textContent = "Not selected";
-    document.getElementById("sumSelectedTime").textContent = "Not selected";
-    document.getElementById("sumFee").textContent = `₹${extra.fee}`;
+  document.getElementById("patName").value = "";
+  document.getElementById("patAge").value = "";
+  document.getElementById("patMobile").value = "";
+  document.getElementById("patGender").value = "";
+  document.getElementById("patEmail").value = "";
 
-    selectedDate = null;
-    selectedTime = null;
-    selectedPayment = "Cash";
-    payCashBtn.classList.add("active");
-    payOnlineBtn.classList.remove("active");
+  timeSlotsMsg.style.display = "block";
+  timeSlotsContainer.innerHTML = "";
 
-    document.getElementById("patName").value = "";
-    document.getElementById("patAge").value = "";
-    document.getElementById("patMobile").value = "";
-    document.getElementById("patGender").value = "";
-    document.getElementById("patEmail").value = "";
+  renderDatePills();
 
-    timeSlotsMsg.style.display = "block";
-    timeSlotsContainer.innerHTML = "";
+  doctorProfileOverlay.classList.add("active");
+  document.body.style.overflow = "hidden";
+  window.scrollTo(0, 0);
+}
 
-    renderDatePills();
+function renderDoctorCard(doctor) {
+  return `
+    <div class="doctor-card">
+      <img src="${doctor.image}" alt="" />
+      <h3>${doctor.name}</h3>
+      <p class="speciality">${doctor.speciality}</p>
+      <div class="experience">${doctor.experience}</div>
+      <button class="book-btn" data-doctor-id="${doctor.id}">Book Now</button>
+    </div>`;
+}
 
-    doctorProfileOverlay.classList.add("active");
-    document.body.style.overflow = "hidden";
-    window.scrollTo(0, 0);
-  });
-});
+// Fetches real doctors from the backend and renders them into the
+// homepage carousel, replacing the "Loading doctors…" placeholder.
+async function loadRealDoctors() {
+  if (!doctorTrack) return;
+  try {
+    const result = await listDoctors();
+    const doctors = result.data.map((d) => ({
+      id: d.doctor_id,
+      name: "Dr. " + d.first_name + " " + d.last_name,
+      speciality: d.specialization || d.department || "General Medicine",
+      department: d.department || "General Medicine",
+      experience: d.experience_years ? `${d.experience_years} Years Experience` : "Experience not specified",
+      qualifications: d.qualifications || "Not specified",
+      location: d.clinic_location || "Casto Healthcare",
+      fee: d.consultation_fee || null,
+      patients: d.patients_treated || 0,
+      about: d.bio || `${"Dr. " + d.first_name} sees patients for ${d.department || "general"} care at Casto Healthcare.`,
+      image: `https://randomuser.me/api/portraits/${d.gender === "Female" ? "women" : "men"}/${(d.doctor_id % 90) + 1}.jpg`,
+    }));
+
+    if (!doctors.length) {
+      doctorTrack.innerHTML = '<p style="padding: 20px; color: #888;">No doctors registered yet.</p>';
+      return;
+    }
+
+    doctorTrack.innerHTML = doctors.map(renderDoctorCard).join("");
+    refreshDoctorCardsCache();
+
+    doctorTrack.querySelectorAll(".book-btn").forEach((btn) => {
+      const doctor = doctors.find((d) => String(d.id) === btn.dataset.doctorId);
+      btn.addEventListener("click", () => openDoctorProfile(doctor));
+    });
+  } catch (err) {
+    console.error("Could not load doctors:", err.message);
+    doctorTrack.innerHTML = '<p style="padding: 20px; color: #888;">Could not load doctors right now.</p>';
+  }
+}
+
+loadRealDoctors();
 
 doctorBackBtn.addEventListener("click", () => {
   doctorProfileOverlay.classList.remove("active");
@@ -680,20 +665,16 @@ payOnlineBtn.addEventListener("click", () => {
 });
 
 confirmDoctorBookingBtn.addEventListener("click", () => {
-  const name = document.getElementById("patName").value.trim();
-  const mobile = document.getElementById("patMobile").value.trim();
-
-  if (!name || !mobile) {
-    alert("Please fill in your name and mobile number before confirming.");
-    return;
-  }
-
-  alert(
-    `Appointment confirmed with ${currentDoctorName}\nDate: ${selectedDate || "Not selected"}\nTime: ${selectedTime || "Not selected"}\nPayment: ${selectedPayment}\nFee: ₹${currentDoctorFee}`,
-  );
-
+  // The overlay is a browsing/preview experience; the actual booking (and
+  // the doctor's dashboard being updated) happens on appointment.html,
+  // which talks to the real backend. Passing doctorId + the payment choice
+  // already made here carries both into that real booking flow.
   doctorProfileOverlay.classList.remove("active");
   document.body.style.overflow = "";
+  const params = new URLSearchParams();
+  if (currentDoctorId) params.set("doctorId", currentDoctorId);
+  params.set("payment", selectedPayment === "Online" ? "Online" : "Cash");
+  window.location.href = "appointment.html?" + params.toString();
 });
 
 // Duplicate badges for seamless infinite scroll

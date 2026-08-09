@@ -286,7 +286,12 @@
         <div class="contact-form">
           <div class="form-group">
             <label>Full Name</label>
-            <input type="text" class="form-control" placeholder="Full Name" />
+            <input
+              type="text"
+              class="form-control"
+              id="contactName"
+              placeholder="Full Name"
+            />
           </div>
 
           <div class="form-group">
@@ -294,7 +299,18 @@
             <input
               type="email"
               class="form-control"
+              id="contactEmail"
               placeholder="Enter your email address"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number (optional)</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="contactPhone"
+              placeholder="Enter your phone number"
             />
           </div>
 
@@ -302,13 +318,50 @@
             <label>About your inquiry</label>
             <textarea
               class="form-control"
+              id="contactMessage"
               placeholder="Enter your message"
             ></textarea>
           </div>
 
-          <button class="submit-btn">Submit</button>
+          <button class="submit-btn" id="contactSubmitBtn">Submit</button>
         </div>
       </div>
     </div>
+    <script src="api.js"></script>
+    <script>
+      document.getElementById("contactSubmitBtn").addEventListener("click", async () => {
+        const btn = document.getElementById("contactSubmitBtn");
+        const fields = {
+          fullName: document.getElementById("contactName").value.trim(),
+          email: document.getElementById("contactEmail").value.trim(),
+          phone: document.getElementById("contactPhone").value.trim(),
+          message: document.getElementById("contactMessage").value.trim(),
+        };
+
+        if (!fields.fullName || !fields.email || !fields.message) {
+          alert("Please fill in your name, email, and message before submitting.");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Sending…";
+
+        try {
+          const result = await submitContactForm(fields);
+          alert(
+            "Thank you, " + fields.fullName + "! " + result.message
+          );
+          document.getElementById("contactName").value = "";
+          document.getElementById("contactEmail").value = "";
+          document.getElementById("contactPhone").value = "";
+          document.getElementById("contactMessage").value = "";
+        } catch (err) {
+          alert("Something went wrong: " + err.message);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Submit";
+        }
+      });
+    </script>
   </body>
 </html>
