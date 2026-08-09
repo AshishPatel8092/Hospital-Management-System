@@ -3,10 +3,7 @@
 -- MySQL 8.0 Schema
 -- =====================================================================
 
-DROP DATABASE IF EXISTS hms_db;
-CREATE DATABASE hms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE hms_db;
-
+USE railway;
 -- ---------------------------------------------------------------------
 -- USERS  (login + role for RBAC)
 -- ---------------------------------------------------------------------

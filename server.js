@@ -3,7 +3,15 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED PROMISE REJECTION - this would otherwise fail silently:', err);
+});
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION - process is about to exit:', err);
+});
+
 const app = express();
+app.set('trust proxy', 1); // Railway (and most PaaS hosts) sit behind a reverse proxy
 
 app.use(express.json());
 

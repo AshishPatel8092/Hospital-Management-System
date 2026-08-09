@@ -11,6 +11,20 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
+  connectTimeout: 10000, // fail fast (10s) instead of hanging if the DB is unreachable
 });
+
+// Runs once at startup so a bad DB_HOST/DB_PASSWORD/etc. shows up clearly
+// in the deployment logs immediately, instead of surfacing later as a
+// vague "Application failed to respond" on the first real request.
+pool.getConnection()
+  .then((conn) => {
+    console.log('Database connection OK (' + process.env.DB_HOST + ':' + (process.env.DB_PORT || 3306) + ')');
+    conn.release();
+  })
+  .catch((err) => {
+    console.error('Database connection FAILED at startup:', err.message);
+    console.error('Check DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME in your environment variables.');
+  });
 
 module.exports = pool;
