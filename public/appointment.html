@@ -228,6 +228,19 @@
       }
 
       /* Patient Details */
+      .patient-recap {
+        background: #fafafa;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 14px 16px;
+        font-size: 13.5px;
+        color: #333;
+        line-height: 1.7;
+      }
+      .patient-recap b {
+        color: #111;
+      }
+
       .form-group {
         display: flex;
         flex-direction: column;
@@ -456,48 +469,13 @@
             </div>
           </div>
 
-          <!-- Patient Details -->
+          <!-- Patient Details - read-only, pulled from your logged-in profile.
+               There's nothing to re-type here; log in as a different
+               patient to book under a different name. -->
           <div>
-            <div class="section-title patient-details">Patient Details</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" placeholder="Full Name" />
-              </div>
-              <div class="form-group">
-                <label for="age">Age</label>
-                <input
-                  type="number"
-                  id="age"
-                  placeholder="Age"
-                  min="1"
-                  max="120"
-                />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="mobile">Mobile Number (10 digits)</label>
-              <input
-                type="tel"
-                id="mobile"
-                placeholder="Mobile Number (10 digits)"
-                maxlength="10"
-              />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="gender">Gender</label>
-                <select id="gender">
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="email">Email (optional - for receipts)</label>
-                <input type="email" id="email" placeholder="Email (optional)" />
-              </div>
+            <div class="section-title patient-details">Booking For</div>
+            <div id="patientRecap" class="patient-recap">
+              <p>Log in to see your details here.</p>
             </div>
           </div>
         </div>
@@ -603,6 +581,7 @@
 
       async function checkLoginAndPrefill() {
         const banner = document.getElementById("authBanner");
+        const recap = document.getElementById("patientRecap");
         try {
           const me = await getCurrentUser();
           if (me.data.role !== "PATIENT") {
@@ -617,17 +596,18 @@
           banner.style.display = "none";
           const profile = await apiRequest("/patients?self=true", "GET");
           currentPatient = profile.data;
-          document.getElementById("fullName").value =
-            currentPatient.first_name + " " + currentPatient.last_name;
-          document.getElementById("mobile").value = currentPatient.phone || "";
-          document.getElementById("email").value = currentPatient.email || "";
-          document.getElementById("gender").value = currentPatient.gender || "";
+          recap.innerHTML = `
+            <div><b>${currentPatient.first_name} ${currentPatient.last_name}</b></div>
+            <div>${currentPatient.phone || "No phone on file"}${currentPatient.email ? " · " + currentPatient.email : ""}</div>
+            ${currentPatient.gender ? `<div>${currentPatient.gender}</div>` : ""}
+          `;
           updateConfirmButton();
         } catch (e) {
           isLoggedInPatient = false;
           banner.innerHTML =
             'Please <a href="login.html">log in</a> as a patient to book an appointment.';
           banner.style.display = "block";
+          recap.innerHTML = "<p>Log in to see your details here.</p>";
           updateConfirmButton();
         }
       }
@@ -839,20 +819,8 @@
 
       // Validate form
       function validateForm() {
-        const fullName = document.getElementById("fullName").value.trim();
-        const mobile = document.getElementById("mobile").value.trim();
-        const gender = document.getElementById("gender").value;
-
         if (!isLoggedInPatient) {
           alert("Please log in as a patient before booking an appointment.");
-          return false;
-        }
-        if (!fullName) {
-          alert("Please enter your full name");
-          return false;
-        }
-        if (mobile && (mobile.length !== 10 || isNaN(mobile))) {
-          alert("Please enter a valid 10-digit mobile number");
           return false;
         }
         if (!selectedDoctor) {

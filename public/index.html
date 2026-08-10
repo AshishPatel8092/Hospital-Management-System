@@ -44,8 +44,14 @@
       </ul>
       <!-- Search -->
       <div class="search-container" id="searchContainer">
-        <input type="text" class="search-input" placeholder="Search..." />
-
+        <input
+          type="text"
+          class="search-input"
+          id="siteSearchInput"
+          placeholder="Search... e.g. 'book an appointment'"
+          autocomplete="off"
+        />
+        <div class="search-results" id="searchResults"></div>
         <button class="search-btn" onclick="toggleSearch()">🔍</button>
       </div>
     </nav>

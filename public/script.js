@@ -57,6 +57,9 @@ document.getElementById("overlay").addEventListener("click", function () {
 
 function toggleSearch() {
   document.getElementById("searchContainer").classList.toggle("active");
+  if (document.getElementById("searchContainer").classList.contains("active")) {
+    document.getElementById("siteSearchInput").focus();
+  }
 }
 
 // Close search bar when clicking outside
@@ -68,6 +71,157 @@ document.addEventListener("click", function (e) {
     search.classList.remove("active");
   }
 });
+
+// ----- Site FAQ search -----
+// Small, deterministic keyword-matched FAQ - no external API needed.
+// Each entry's `action` either scrolls to a section on this page
+// (type: "scroll") or sends the visitor to another page (type: "link").
+const SITE_FAQ = [
+  {
+    keywords: ["book appointment", "book a doctor", "how to book", "make appointment", "schedule appointment", "see a doctor"],
+    question: "How do I book an appointment?",
+    answer: "Go to the Doctors section, pick a doctor, and click Book Now - or use the Book Appointment page directly to choose from every doctor.",
+    action: { type: "link", href: "appointment.html", label: "Go to Book Appointment" },
+  },
+  {
+    keywords: ["doctor section", "where are doctors", "find doctors", "our doctors", "list of doctors", "see doctors"],
+    question: "Where is the doctors section?",
+    answer: "Scroll down to \"Our Expert Doctors\", or click Doctors in the top menu.",
+    action: { type: "scroll", target: "#doctors", label: "Take me there" },
+  },
+  {
+    keywords: ["register patient", "sign up patient", "create patient account", "patient account", "new patient"],
+    question: "How do I register as a patient?",
+    answer: "Open the patient registration page and fill in your details - you'll be logged in automatically once you're done.",
+    action: { type: "link", href: "register-p.html", label: "Go to Patient Registration" },
+  },
+  {
+    keywords: ["register doctor", "sign up doctor", "join as doctor", "doctor account", "create doctor account"],
+    question: "How do I register as a doctor?",
+    answer: "Open the doctor registration page - you'll need your department, specialization, and consultation fee.",
+    action: { type: "link", href: "register.html", label: "Go to Doctor Registration" },
+  },
+  {
+    keywords: ["log in", "login", "sign in", "already have account"],
+    question: "How do I log in?",
+    answer: "Use the Sign In page with the email and password you registered with. Patients and doctors are redirected to their own dashboard automatically.",
+    action: { type: "link", href: "login.html", label: "Go to Sign In" },
+  },
+  {
+    keywords: ["contact", "support", "help", "reach you", "get in touch", "customer service"],
+    question: "How do I contact support?",
+    answer: "Use the Contact Us page to send a message - we'll get back to you within 24 hours. You can also see our phone, email, and address there.",
+    action: { type: "link", href: "contact.html", label: "Go to Contact Us" },
+  },
+  {
+    keywords: ["demo", "request demo", "not sure which doctor", "what do i need", "match me with a doctor"],
+    question: "What is \"Request a Demo\"?",
+    answer: "Describe your symptom or need and we'll match you with a real doctor from the right department, with a suggested date and time.",
+    action: { type: "link", href: "request-demo.html", label: "Go to Request a Demo" },
+  },
+  {
+    keywords: ["payment", "pay", "how to pay", "payment method", "upi", "card", "cash", "online payment"],
+    question: "What payment methods are supported?",
+    answer: "You can pay cash at the hospital during your visit, or pay online (UPI/Card, simulated for this project) right when you book.",
+  },
+  {
+    keywords: ["bill", "bills", "invoice", "how much", "consultation fee", "cost"],
+    question: "Where do I see my bills?",
+    answer: "Log in and open your Patient Dashboard - the \"Payments & Bills\" card shows every bill and lets you pay any that are still pending.",
+    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+  },
+  {
+    keywords: ["prescription", "medication", "medicine", "what did the doctor prescribe"],
+    question: "Where do I see my prescriptions?",
+    answer: "Your Patient Dashboard has a \"Recent Prescriptions\" card listing everything a doctor has prescribed you.",
+    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+  },
+  {
+    keywords: ["next appointment", "upcoming appointment", "my appointment", "when is my appointment"],
+    question: "How do I see my upcoming appointments?",
+    answer: "Your Patient Dashboard highlights your next appointment at the top, with the full list below it.",
+    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+  },
+  {
+    keywords: ["emergency", "urgent", "ambulance"],
+    question: "What if it's an emergency?",
+    answer: "Use the Emergency page for urgent situations and emergency contact details.",
+    action: { type: "link", href: "emergency.html", label: "Go to Emergency" },
+  },
+  {
+    keywords: ["cancel appointment", "reschedule", "change appointment"],
+    question: "Can I cancel or reschedule an appointment?",
+    answer: "This isn't self-service yet - contact us and we'll help you reschedule or cancel.",
+    action: { type: "link", href: "contact.html", label: "Go to Contact Us" },
+  },
+  {
+    keywords: ["department", "specialization", "specialist", "cardiologist", "dermatologist", "which doctor"],
+    question: "How do I find a doctor in a specific department?",
+    answer: "On the Book Appointment page, every real doctor is listed with their department - or describe your need on Request a Demo and we'll match you automatically.",
+    action: { type: "link", href: "appointment.html", label: "Go to Book Appointment" },
+  },
+];
+
+function searchFAQ(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  return SITE_FAQ.filter((entry) =>
+    entry.keywords.some((kw) => kw.includes(q) || q.includes(kw)) ||
+    entry.question.toLowerCase().includes(q)
+  ).slice(0, 6);
+}
+
+function runFAQAction(action) {
+  if (!action) return;
+  if (action.type === "link") {
+    window.location.href = action.href;
+  } else if (action.type === "scroll") {
+    document.getElementById("searchContainer").classList.remove("active");
+    document.querySelector(action.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function renderSearchResults(results) {
+  const box = document.getElementById("searchResults");
+  if (!results.length) {
+    box.innerHTML = '<div class="search-result-empty">No answer found - try "book appointment", "doctors", or "contact".</div>';
+    box.classList.add("has-results");
+    return;
+  }
+  box.innerHTML = results
+    .map(
+      (r, i) => `
+      <div class="search-result-item" data-idx="${i}">
+        <div class="sr-question">${r.question}</div>
+        <div class="sr-answer">${r.answer}</div>
+        ${r.action ? `<div class="sr-action">${r.action.label} →</div>` : ""}
+      </div>`
+    )
+    .join("");
+  box.classList.add("has-results");
+
+  box.querySelectorAll(".search-result-item").forEach((el) => {
+    el.addEventListener("click", () => runFAQAction(results[Number(el.dataset.idx)].action));
+  });
+}
+
+const siteSearchInput = document.getElementById("siteSearchInput");
+if (siteSearchInput) {
+  siteSearchInput.addEventListener("input", () => {
+    const results = searchFAQ(siteSearchInput.value);
+    if (!siteSearchInput.value.trim()) {
+      document.getElementById("searchResults").classList.remove("has-results");
+      return;
+    }
+    renderSearchResults(results);
+  });
+  siteSearchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const results = searchFAQ(siteSearchInput.value);
+      if (results.length) runFAQAction(results[0].action);
+    }
+  });
+}
 
 // const accordions = document.querySelectorAll(".accordion");
 

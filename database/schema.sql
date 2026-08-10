@@ -3,7 +3,10 @@
 -- MySQL 8.0 Schema
 -- =====================================================================
 
-USE railway;
+DROP DATABASE IF EXISTS hms_db;
+CREATE DATABASE hms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE hms_db;
+
 -- ---------------------------------------------------------------------
 -- USERS  (login + role for RBAC)
 -- ---------------------------------------------------------------------
@@ -179,6 +182,61 @@ INSERT INTO doctors (user_id, first_name, last_name, department, specialization,
 VALUES (LAST_INSERT_ID(), 'Ananya', 'Sharma', 'Cardiology', 'Cardiologist', 'Female',
         'MBBS, MD (Cardiology)', 9, 700.00, 'Casto Healthcare, Main Building, 2nd Floor',
         'Dr. Ananya Sharma specializes in interventional cardiology and preventive heart care.');
+
+-- Seven more seed doctors so the homepage carousel has a full roster of
+-- real, bookable doctors instead of decorative cards. All share the
+-- password Doctor@123 (same hash as above) - change these before any
+-- real deployment.
+INSERT INTO users (full_name, email, password_hash, role, phone) VALUES
+('Raj Sharma', 'raj.sharma@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500002'),
+('Priya Singh', 'priya.singh@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500003'),
+('Amit Kumar', 'amit.kumar@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500004'),
+('Neha Gupta', 'neha.gupta@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500005'),
+('Vikram Patel', 'vikram.patel@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500006'),
+('Rahul Das', 'rahul.das@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500007'),
+('Arjun Verma', 'arjun.verma@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500008');
+
+INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
+SELECT user_id, 'Raj', 'Sharma', 'General Medicine', 'General Physician', 'Male',
+       'MBBS', 6, 500.00, 'Casto Healthcare, Ground Floor',
+       'General health checkups, fever, infections, and routine consultations.'
+FROM users WHERE email = 'raj.sharma@medicare.com';
+
+INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
+SELECT user_id, 'Priya', 'Singh', 'General Medicine', 'Diagnostic Physician', 'Female',
+       'MBBS, DMRD', 8, 700.00, 'Casto Healthcare, Imaging Wing',
+       'Expert in diagnostic imaging including X-Ray, CT, and MRI interpretation.'
+FROM users WHERE email = 'priya.singh@medicare.com';
+
+INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
+SELECT user_id, 'Amit', 'Kumar', 'Cardiology', 'Cardiologist', 'Male',
+       'MBBS, MD (Cardiology)', 12, 900.00, 'Casto Healthcare, Block A',
+       'Expert in heart rhythm, cardiac care, and coronary interventions.'
+FROM users WHERE email = 'amit.kumar@medicare.com';
+
+INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
+SELECT user_id, 'Neha', 'Gupta', 'Neurology', 'Neurologist', 'Female',
+       'MBBS, DM (Neurology)', 10, 1000.00, 'Casto Healthcare, NeuroCare Center',
+       'Specializes in neurological disorders, migraines, and cognitive health.'
+FROM users WHERE email = 'neha.gupta@medicare.com';
+
+INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
+SELECT user_id, 'Vikram', 'Patel', 'General Medicine', 'Gastroenterologist', 'Male',
+       'MBBS, MD (Gastroenterology)', 11, 800.00, 'Casto Healthcare, Digestive Clinic',
+       'Focused on digestive disorders, endoscopy, and liver health.'
+FROM users WHERE email = 'vikram.patel@medicare.com';
+
+INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
+SELECT user_id, 'Rahul', 'Das', 'Orthopaedics', 'Orthopaedic Surgeon', 'Male',
+       'MBBS, MS (Surgery)', 14, 1200.00, 'Casto Healthcare, Surgical Center',
+       'Experienced in general and minimally invasive orthopaedic surgical procedures.'
+FROM users WHERE email = 'rahul.das@medicare.com';
+
+INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
+SELECT user_id, 'Arjun', 'Verma', 'Dermatology', 'Dermatologist', 'Male',
+       'MBBS, MD (Dermatology)', 11, 750.00, 'Casto Healthcare, SkinCare Clinic',
+       'Expert in skin conditions, acne treatment, and cosmetic dermatology.'
+FROM users WHERE email = 'arjun.verma@medicare.com';
 
 -- Sample pharmacy stock
 INSERT INTO pharmacy_inventory (item_name, category, quantity, unit_price, expiry_date, supplier, reorder_level)
