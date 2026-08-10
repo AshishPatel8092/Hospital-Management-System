@@ -165,10 +165,28 @@ const SITE_FAQ = [
 function searchFAQ(query) {
   const q = query.trim().toLowerCase();
   if (!q) return [];
-  return SITE_FAQ.filter((entry) =>
-    entry.keywords.some((kw) => kw.includes(q) || q.includes(kw)) ||
-    entry.question.toLowerCase().includes(q)
-  ).slice(0, 6);
+
+  const scored = SITE_FAQ.map((entry) => {
+    // Best single keyword match wins - an entry shouldn't score higher just
+    // because it lists more paraphrased keywords for the same intent.
+    let bestKeywordScore = 0;
+    entry.keywords.forEach((kw) => {
+      let s = 0;
+      if (kw === q) s = 10; // exact keyword match
+      else if (kw.includes(q)) s = 6; // user is mid-typing a known keyword
+      else if (q.includes(kw)) s = 4 + Math.min(kw.length, 20) * 0.1; // longer, more specific keyword phrase found in query scores a bit higher
+      if (s > bestKeywordScore) bestKeywordScore = s;
+    });
+    let score = bestKeywordScore;
+    if (entry.question.toLowerCase().includes(q)) score += 2;
+    return { entry, score };
+  });
+
+  return scored
+    .filter((s) => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6)
+    .map((s) => s.entry);
 }
 
 function runFAQAction(action) {
