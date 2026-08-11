@@ -78,107 +78,145 @@ document.addEventListener("click", function (e) {
 // (type: "scroll") or sends the visitor to another page (type: "link").
 const SITE_FAQ = [
   {
-    keywords: ["book appointment", "book a doctor", "how to book", "make appointment", "schedule appointment", "see a doctor"],
+    keywords: [
+      "book appointment", "book a doctor", "how to book", "make appointment", "make an appointment",
+      "schedule appointment", "schedule a doctor visit", "see a doctor", "get an appointment",
+      "need an appointment", "want an appointment", "take an appointment", "doctor appointment",
+      "appointment booking", "book now", "book doctor appointment", "i want to book an appointment",
+      "book a visit", "visit a doctor",
+    ],
     question: "How do I book an appointment?",
     answer: "Go to the Doctors section, pick a doctor, and click Book Now - or use the Book Appointment page directly to choose from every doctor.",
     action: { type: "link", href: "appointment.html", label: "Go to Book Appointment" },
   },
   {
-    keywords: ["doctor section", "where are doctors", "find doctors", "our doctors", "list of doctors", "see doctors"],
+    keywords: ["doctor section", "where are doctors", "find doctors", "our doctors", "list of doctors", "see doctors", "meet our doctors"],
     question: "Where is the doctors section?",
     answer: "Scroll down to \"Our Expert Doctors\", or click Doctors in the top menu.",
     action: { type: "scroll", target: "#doctors", label: "Take me there" },
   },
   {
-    keywords: ["register patient", "sign up patient", "create patient account", "patient account", "new patient"],
+    keywords: ["register patient", "sign up patient", "create patient account", "patient account", "new patient", "become a patient"],
     question: "How do I register as a patient?",
     answer: "Open the patient registration page and fill in your details - you'll be logged in automatically once you're done.",
     action: { type: "link", href: "register-p.html", label: "Go to Patient Registration" },
   },
   {
-    keywords: ["register doctor", "sign up doctor", "join as doctor", "doctor account", "create doctor account"],
+    keywords: ["register doctor", "sign up doctor", "join as doctor", "doctor account", "create doctor account", "become a doctor"],
     question: "How do I register as a doctor?",
     answer: "Open the doctor registration page - you'll need your department, specialization, and consultation fee.",
     action: { type: "link", href: "register.html", label: "Go to Doctor Registration" },
   },
   {
-    keywords: ["log in", "login", "sign in", "already have account"],
+    keywords: ["log in", "login", "sign in", "already have account", "access my account"],
     question: "How do I log in?",
     answer: "Use the Sign In page with the email and password you registered with. Patients and doctors are redirected to their own dashboard automatically.",
     action: { type: "link", href: "login.html", label: "Go to Sign In" },
   },
   {
-    keywords: ["contact", "support", "help", "reach you", "get in touch", "customer service"],
+    keywords: ["contact", "support", "help", "reach you", "get in touch", "customer service", "talk to someone"],
     question: "How do I contact support?",
     answer: "Use the Contact Us page to send a message - we'll get back to you within 24 hours. You can also see our phone, email, and address there.",
     action: { type: "link", href: "contact.html", label: "Go to Contact Us" },
   },
   {
-    keywords: ["demo", "request demo", "not sure which doctor", "what do i need", "match me with a doctor"],
+    keywords: ["demo", "request demo", "not sure which doctor", "what do i need", "match me with a doctor", "which doctor should i see", "symptom"],
     question: "What is \"Request a Demo\"?",
     answer: "Describe your symptom or need and we'll match you with a real doctor from the right department, with a suggested date and time.",
     action: { type: "link", href: "request-demo.html", label: "Go to Request a Demo" },
   },
   {
-    keywords: ["payment", "pay", "how to pay", "payment method", "upi", "card", "cash", "online payment"],
+    keywords: ["payment", "pay", "how to pay", "payment method", "upi", "card payment", "cash payment", "online payment", "how do i pay"],
     question: "What payment methods are supported?",
     answer: "You can pay cash at the hospital during your visit, or pay online (UPI/Card, simulated for this project) right when you book.",
   },
   {
-    keywords: ["bill", "bills", "invoice", "how much", "consultation fee", "cost"],
+    keywords: ["bill", "bills", "invoice", "how much does it cost", "consultation fee amount", "billing", "my bills", "unpaid bill", "pending bill"],
     question: "Where do I see my bills?",
     answer: "Log in and open your Patient Dashboard - the \"Payments & Bills\" card shows every bill and lets you pay any that are still pending.",
     action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
   },
   {
-    keywords: ["prescription", "medication", "medicine", "what did the doctor prescribe"],
+    keywords: ["prescription", "medication", "medicine", "what did the doctor prescribe", "my medicines"],
     question: "Where do I see my prescriptions?",
     answer: "Your Patient Dashboard has a \"Recent Prescriptions\" card listing everything a doctor has prescribed you.",
     action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
   },
   {
-    keywords: ["next appointment", "upcoming appointment", "my appointment", "when is my appointment"],
+    // Deliberately specific phrasing here (not bare "my appointment", which
+    // is genuinely ambiguous with booking intent) - these only fire for
+    // someone clearly asking about an appointment they already have.
+    keywords: [
+      "my upcoming appointment", "when is my appointment", "check my appointment status",
+      "see my booked appointment", "status of my appointment", "my appointment history",
+    ],
     question: "How do I see my upcoming appointments?",
     answer: "Your Patient Dashboard highlights your next appointment at the top, with the full list below it.",
     action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
   },
   {
-    keywords: ["emergency", "urgent", "ambulance"],
+    keywords: ["emergency", "urgent", "ambulance", "emergency contact"],
     question: "What if it's an emergency?",
     answer: "Use the Emergency page for urgent situations and emergency contact details.",
     action: { type: "link", href: "emergency.html", label: "Go to Emergency" },
   },
   {
-    keywords: ["cancel appointment", "reschedule", "change appointment"],
+    keywords: ["cancel appointment", "reschedule", "change appointment", "cancel my booking"],
     question: "Can I cancel or reschedule an appointment?",
     answer: "This isn't self-service yet - contact us and we'll help you reschedule or cancel.",
     action: { type: "link", href: "contact.html", label: "Go to Contact Us" },
   },
   {
-    keywords: ["department", "specialization", "specialist", "cardiologist", "dermatologist", "which doctor"],
+    keywords: ["department", "specialization", "specialist", "cardiologist", "dermatologist", "which doctor department", "find a specialist"],
     question: "How do I find a doctor in a specific department?",
     answer: "On the Book Appointment page, every real doctor is listed with their department - or describe your need on Request a Demo and we'll match you automatically.",
     action: { type: "link", href: "appointment.html", label: "Go to Book Appointment" },
   },
 ];
 
+const SEARCH_STOPWORDS = new Set([
+  "a", "an", "the", "i", "to", "is", "do", "does", "my", "me", "you", "your",
+  "of", "for", "in", "on", "at", "with", "and", "or", "please", "can", "how",
+  "what", "where", "when", "want", "need", "would", "like", "it", "its", "im",
+]);
+
+function tokenize(text) {
+  return text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w && !SEARCH_STOPWORDS.has(w));
+}
+
+// Precompute a token set per entry once, from every keyword + the question
+// itself, so matching isn't limited to exact keyword phrases.
+SITE_FAQ.forEach((entry) => {
+  const allText = entry.keywords.join(" ") + " " + entry.question;
+  entry._tokens = new Set(tokenize(allText));
+});
+
 function searchFAQ(query) {
-  const q = query.trim().toLowerCase();
-  if (!q) return [];
+  const queryTokens = tokenize(query);
+  if (!queryTokens.length) return [];
 
   const scored = SITE_FAQ.map((entry) => {
-    // Best single keyword match wins - an entry shouldn't score higher just
-    // because it lists more paraphrased keywords for the same intent.
-    let bestKeywordScore = 0;
-    entry.keywords.forEach((kw) => {
-      let s = 0;
-      if (kw === q) s = 10; // exact keyword match
-      else if (kw.includes(q)) s = 6; // user is mid-typing a known keyword
-      else if (q.includes(kw)) s = 4 + Math.min(kw.length, 20) * 0.1; // longer, more specific keyword phrase found in query scores a bit higher
-      if (s > bestKeywordScore) bestKeywordScore = s;
+    let score = 0;
+    queryTokens.forEach((qt) => {
+      if (entry._tokens.has(qt)) {
+        score += 3; // whole word matches
+      } else {
+        // partial credit for a token the user is still mid-typing
+        // (e.g. "appoint" while typing "appointment")
+        for (const et of entry._tokens) {
+          if (et.length >= 4 && qt.length >= 4 && (et.startsWith(qt) || qt.startsWith(et))) {
+            score += 1.5;
+            break;
+          }
+        }
+      }
     });
-    let score = bestKeywordScore;
-    if (entry.question.toLowerCase().includes(q)) score += 2;
+    // Small bonus the closer the match covers the whole query, so a
+    // 2-word exact phrase match outranks a 1-word partial overlap.
+    if (score > 0) score += (score / queryTokens.length) * 0.1;
     return { entry, score };
   });
 
@@ -225,16 +263,25 @@ function renderSearchResults(results) {
 
 const siteSearchInput = document.getElementById("siteSearchInput");
 if (siteSearchInput) {
+  let searchDebounceTimer = null;
+
   siteSearchInput.addEventListener("input", () => {
-    const results = searchFAQ(siteSearchInput.value);
-    if (!siteSearchInput.value.trim()) {
+    clearTimeout(searchDebounceTimer);
+    const value = siteSearchInput.value;
+    if (!value.trim()) {
       document.getElementById("searchResults").classList.remove("has-results");
       return;
     }
-    renderSearchResults(results);
+    // Wait for a short pause in typing before showing results, instead of
+    // re-searching on every single keystroke.
+    searchDebounceTimer = setTimeout(() => {
+      renderSearchResults(searchFAQ(value));
+    }, 350);
   });
+
   siteSearchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
+      clearTimeout(searchDebounceTimer);
       const results = searchFAQ(siteSearchInput.value);
       if (results.length) runFAQAction(results[0].action);
     }
