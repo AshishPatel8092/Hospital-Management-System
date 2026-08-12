@@ -72,26 +72,15 @@
       <div id="userSection">
         <div class="logged-in-only">
           <div class="menu-header">
-            <div class="profile-card">
+            <div class="profile-card" id="menuProfileCard" style="cursor: pointer">
               <img src="images/user.jpg" alt="Profile" class="profile-img" />
 
-              <h3>Dr. John Smith</h3>
-              <p>Premium Member</p>
+              <h3 id="menuProfileName">—</h3>
+              <p id="menuProfileRole">—</p>
 
               <div class="profile-stats">
-                <div>
-                  <strong>4.9</strong>
-                  Rating
-                </div>
-
-                <div>
-                  <strong>126</strong>
-                  Visits
-                </div>
-
-                <div>
-                  <strong>8</strong>
-                  Years
+                <div id="menuProfileGoto" style="grid-column: 1 / -1">
+                  Tap to go to my dashboard →
                 </div>
               </div>
             </div>
@@ -124,7 +113,7 @@
               Settings
             </a>
 
-            <a href="#" class="menu-item logout-item">
+            <a href="#" class="menu-item logout-item" id="menuLogoutBtn">
               <span class="material-symbols-outlined icon-red">logout</span>
               Logout
             </a>
@@ -1297,7 +1286,7 @@
     </footer>
 
     <div class="overlay" id="overlay"></div>
-    <script src="api.js?v=2"></script>
-    <script src="script.js?v=2"></script>
+    <script src="api.js?v=3"></script>
+    <script src="script.js?v=3"></script>
   </body>
 </html>

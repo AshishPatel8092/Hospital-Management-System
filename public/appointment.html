@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book Your Appointment</title>
+    <title>Billing & Payment</title>
     <style>
       * {
         margin: 0;
@@ -409,6 +409,89 @@
         background: #8a6bbf;
       }
 
+      /* ===== Step 2: Billing & Payment ===== */
+      .billing-summary {
+        max-width: 560px;
+        margin: 0 auto;
+      }
+
+      .back-link {
+        background: none;
+        border: none;
+        color: #7c5cbf;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0;
+        margin-bottom: 14px;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .billing-summary h2 {
+        margin: 0 0 16px;
+        font-size: 22px;
+      }
+
+      .payment-btn.selected {
+        background: #7c5cbf;
+        color: #fff;
+        border-color: #7c5cbf;
+      }
+
+      .pay-panel {
+        display: none;
+        margin-top: 14px;
+      }
+      .pay-panel.active {
+        display: block;
+      }
+
+      .pay-hint {
+        font-size: 13px;
+        color: #777;
+        line-height: 1.5;
+        margin: 8px 0 0;
+      }
+
+      .card-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .card-form label {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        font-size: 13px;
+        color: #444;
+        font-weight: 600;
+      }
+      .card-form input {
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 400;
+      }
+      .card-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .qr-panel {
+        text-align: center;
+        padding: 10px 0;
+      }
+      #qrcodeBox {
+        display: inline-block;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+      }
+
       /* Responsive Design */
       @media (max-width: 768px) {
         .container {
@@ -427,13 +510,17 @@
         .form-row {
           grid-template-columns: 1fr;
         }
+
+        .card-form-row {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>Book Your Appointment</h1>
+        <h1>Billing & Payment</h1>
       </div>
 
       <div
@@ -450,6 +537,8 @@
         "
       ></div>
 
+      <!-- ============== STEP 1: choose doctor, date, time ============== -->
+      <div id="selectionStep">
       <div class="main-content">
         <!-- Left Section -->
         <div class="left-section">
@@ -528,40 +617,111 @@
             </div>
           </div>
 
-          <div class="payment-section">
-            <div class="section-title" style="margin-bottom: 10px">
-              💳 Payment
+          <button
+            class="confirm-btn"
+            id="proceedBtn"
+            onclick="proceedToPayment()"
+            disabled
+          >
+            Proceed to Payment
+          </button>
+        </div>
+      </div>
+      </div>
+
+      <!-- ============== STEP 2: billing & payment ============== -->
+      <div id="paymentStep" style="display: none">
+        <div class="billing-summary">
+          <button class="back-link" onclick="backToSelection()">← Back to selection</button>
+          <h2>Review &amp; Pay</h2>
+          <div class="summary-box">
+            <div class="summary-item">
+              <span class="summary-label">Doctor:</span>
+              <span class="summary-value" id="paySummaryDoctor"></span>
             </div>
-            <div class="payment-options">
-              <button
-                class="payment-btn selected"
-                data-payment="Cash"
-                onclick="selectPayment('Cash')"
-              >
-                Cash
-              </button>
-              <button
-                class="payment-btn"
-                data-payment="Online"
-                onclick="selectPayment('Online')"
-              >
-                Online
-              </button>
+            <div class="summary-item">
+              <span class="summary-label">Speciality:</span>
+              <span class="summary-value" id="paySummarySpeciality"></span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Date:</span>
+              <span class="summary-value" id="paySummaryDate"></span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Time:</span>
+              <span class="summary-value" id="paySummaryTime"></span>
+            </div>
+            <div class="fee-section">
+              <div class="consultation-fee">
+                <span class="summary-label">Amount Payable:</span>
+                <span class="fee-amount" id="paySummaryFee">₹600</span>
+              </div>
             </div>
           </div>
 
-          <button
-            class="confirm-btn"
-            id="confirmBtn"
-            onclick="confirmBooking()"
-          >
-            Confirm Booking
+          <div class="payment-section">
+            <div class="section-title" style="margin-bottom: 10px">
+              💳 Choose Payment Method
+            </div>
+            <div class="payment-options" id="payMethodTabs">
+              <button class="payment-btn selected" data-method="Cash" onclick="selectPaymentMethod('Cash')">Cash</button>
+              <button class="payment-btn" data-method="Card" onclick="selectPaymentMethod('Card')">Debit/Credit Card</button>
+              <button class="payment-btn" data-method="UPI" onclick="selectPaymentMethod('UPI')">UPI</button>
+              <button class="payment-btn" data-method="PhonePe" onclick="selectPaymentMethod('PhonePe')">PhonePe / GPay</button>
+            </div>
+
+            <div id="payMethodPanel">
+              <div class="pay-panel active" data-panel="Cash">
+                <p class="pay-hint">Pay ₹<span class="panel-fee"></span> at the hospital reception during your visit.</p>
+              </div>
+
+              <div class="pay-panel" data-panel="Card">
+                <div class="card-form">
+                  <label>Card Number
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" />
+                  </label>
+                  <div class="card-form-row">
+                    <label>Expiry
+                      <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" />
+                    </label>
+                    <label>CVV
+                      <input type="password" id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric" />
+                    </label>
+                  </div>
+                  <label>Name on Card
+                    <input type="text" id="cardName" placeholder="As printed on the card" />
+                  </label>
+                  <p class="pay-hint">This is a simulated payment form for this project - no real card processing happens, and nothing here is sent to or stored on the server.</p>
+                </div>
+              </div>
+
+              <div class="pay-panel" data-panel="UPI">
+                <div class="card-form">
+                  <label>UPI ID
+                    <input type="text" id="upiId" placeholder="yourname@upi" />
+                  </label>
+                  <p class="pay-hint">Simulated for this project - enter any UPI ID format, nothing is actually charged.</p>
+                </div>
+              </div>
+
+              <div class="pay-panel" data-panel="PhonePe">
+                <div class="qr-panel">
+                  <div id="qrcodeBox"></div>
+                  <p class="pay-hint">Scan with PhonePe, Google Pay, or Paytm.<br />Simulated QR for this project - scanning it won't actually charge anyone.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="confirm-btn" id="confirmBtn" onclick="confirmBooking()">
+            Pay & Confirm Booking
           </button>
         </div>
       </div>
     </div>
 
-    <script src="api.js?v=2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="api.js?v=3"></script>
     <script>
       // Doctors are loaded from the backend (see loadDoctors below) instead
       // of being hardcoded here.
@@ -754,16 +914,34 @@
         updateSummary();
       }
 
-      // Select payment method
-      function selectPayment(method) {
+      // Select payment method (step 2)
+      function selectPaymentMethod(method) {
         selectedPayment = method;
         document.querySelectorAll(".payment-btn").forEach((btn) => {
-          if (btn.dataset.payment === method) {
-            btn.classList.add("selected");
-          } else {
-            btn.classList.remove("selected");
-          }
+          btn.classList.toggle("selected", btn.dataset.method === method);
         });
+        document.querySelectorAll(".pay-panel").forEach((panel) => {
+          panel.classList.toggle("active", panel.dataset.panel === method);
+        });
+
+        if (method === "PhonePe") {
+          renderPaymentQR();
+        }
+      }
+
+      // Renders a QR code encoding a (simulated, non-functional) UPI payment
+      // string for the currently selected doctor/fee. Regenerated each time
+      // the PhonePe tab is opened, since the amount can change per doctor.
+      function renderPaymentQR() {
+        const box = document.getElementById("qrcodeBox");
+        box.innerHTML = "";
+        const amount = selectedDoctor && selectedDoctor.fee ? selectedDoctor.fee : 500;
+        const upiString = `upi://pay?pa=castohealthcare@upi&pn=CastoHealthcare&am=${amount}&cu=INR&tn=Consultation`;
+        if (window.QRCode) {
+          new QRCode(box, { text: upiString, width: 170, height: 170 });
+        } else {
+          box.textContent = "QR code unavailable - use another payment method.";
+        }
       }
 
       // Update summary
@@ -838,12 +1016,60 @@
         return true;
       }
 
-      // Update confirm button state
+      // Update Proceed to Payment button state (step 1)
       function updateConfirmButton() {
-        const confirmBtn = document.getElementById("confirmBtn");
+        const proceedBtn = document.getElementById("proceedBtn");
         const isComplete =
           isLoggedInPatient && selectedDoctor && selectedDate && selectedTime;
-        confirmBtn.disabled = !isComplete;
+        proceedBtn.disabled = !isComplete;
+      }
+
+      // Move from Step 1 (selection) to Step 2 (billing & payment)
+      function proceedToPayment() {
+        if (!validateForm()) return;
+
+        document.getElementById("paySummaryDoctor").textContent = selectedDoctor.name;
+        document.getElementById("paySummarySpeciality").textContent = selectedDoctor.speciality;
+        document.getElementById("paySummaryDate").textContent = selectedDate.date.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" });
+        document.getElementById("paySummaryTime").textContent = selectedTime;
+        const feeText = selectedDoctor.fee ? `₹${selectedDoctor.fee}` : "Payable at hospital";
+        document.getElementById("paySummaryFee").textContent = feeText;
+        document.querySelectorAll(".panel-fee").forEach((el) => (el.textContent = selectedDoctor.fee || "500"));
+
+        selectPaymentMethod("Cash");
+
+        document.getElementById("selectionStep").style.display = "none";
+        document.getElementById("paymentStep").style.display = "block";
+        window.scrollTo(0, 0);
+      }
+
+      function backToSelection() {
+        document.getElementById("paymentStep").style.display = "none";
+        document.getElementById("selectionStep").style.display = "block";
+        window.scrollTo(0, 0);
+      }
+
+      // Light, simulated validation for the currently selected online
+      // payment method - nothing here is ever sent to the server, it's
+      // purely so the demo flow feels real before "processing" it.
+      function validatePaymentMethodInputs() {
+        if (selectedPayment === "Card") {
+          const num = document.getElementById("cardNumber").value.replace(/\s/g, "");
+          const expiry = document.getElementById("cardExpiry").value.trim();
+          const cvv = document.getElementById("cardCvv").value.trim();
+          if (num.length < 12 || !expiry.includes("/") || cvv.length < 3) {
+            alert("Please enter a valid card number, expiry (MM/YY), and CVV.");
+            return false;
+          }
+        } else if (selectedPayment === "UPI") {
+          const upi = document.getElementById("upiId").value.trim();
+          if (!upi.includes("@")) {
+            alert("Please enter a valid UPI ID, e.g. yourname@upi.");
+            return false;
+          }
+        }
+        // Cash and PhonePe (QR-based) need no extra input to proceed.
+        return true;
       }
 
       // Format a JS Date as a local YYYY-MM-DD string (avoids the UTC
@@ -857,14 +1083,14 @@
 
       // Confirm booking
       async function confirmBooking() {
-        if (!validateForm()) {
+        if (!validateForm() || !validatePaymentMethodInputs()) {
           return;
         }
 
         const confirmBtn = document.getElementById("confirmBtn");
         confirmBtn.disabled = true;
         confirmBtn.textContent =
-          selectedPayment === "Online" ? "Processing payment…" : "Booking…";
+          selectedPayment === "Cash" ? "Booking…" : "Processing payment…";
 
         try {
           const result = await bookAppointment({
@@ -879,7 +1105,7 @@
           const bill = result.data.bill;
           const paymentLine =
             bill.paymentStatus === "Paid"
-              ? `Payment of ₹${bill.amount} received online. You're all set.`
+              ? `Payment of ₹${bill.amount} received via ${selectedPayment}. You're all set.`
               : `₹${bill.amount} due at the hospital - pay at the reception during your visit.`;
 
           alert(
@@ -891,7 +1117,7 @@
         } catch (err) {
           alert("Booking failed: " + err.message);
           confirmBtn.disabled = false;
-          confirmBtn.textContent = "Confirm Booking";
+          confirmBtn.textContent = "Pay & Confirm Booking";
         }
       }
 
@@ -918,8 +1144,10 @@
           }
         }
         const preselectPayment = params.get("payment");
-        if (preselectPayment === "Online" || preselectPayment === "Cash") {
-          selectPayment(preselectPayment);
+        if (preselectPayment === "Cash") {
+          selectPaymentMethod("Cash");
+        } else if (preselectPayment === "Online") {
+          selectPaymentMethod("Card"); // "Online" is a legacy param value; Card is a reasonable default online method
         }
       });
     </script>

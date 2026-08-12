@@ -1044,3 +1044,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// ----- Hamburger menu: real logged-in profile -----
+// Shows the actual logged-in patient/doctor at the top of the side menu
+// (the CSS already hides/shows .logged-in-only based on body.logged-in),
+// and routes a click on the profile card to that person's own dashboard.
+(async function loadMenuProfile() {
+  try {
+    const me = await getCurrentUser();
+    const session = me.data;
+
+    document.body.classList.add("logged-in");
+    document.getElementById("menuProfileName").textContent = session.fullName;
+
+    const roleLabel = session.role === "PATIENT" ? "Patient"
+      : session.role === "DOCTOR" ? "Doctor"
+      : session.role === "ADMIN" ? "Administrator"
+      : session.role === "NURSE" ? "Front Desk"
+      : session.role;
+    document.getElementById("menuProfileRole").textContent = roleLabel;
+
+    const dashboardFor = { PATIENT: "register-p.html", DOCTOR: "register.html" };
+    const destination = dashboardFor[session.role];
+
+    const gotoEl = document.getElementById("menuProfileGoto");
+    if (destination) {
+      gotoEl.textContent = "Tap to go to my dashboard →";
+      document.getElementById("menuProfileCard").addEventListener("click", () => {
+        window.location.href = destination;
+      });
+    } else {
+      gotoEl.textContent = "";
+      document.getElementById("menuProfileCard").style.cursor = "default";
+    }
+  } catch (e) {
+    // not logged in - body stays without the "logged-in" class, so the
+    // CSS keeps the profile card hidden and only the public menu shows.
+  }
+})();
+
+const menuLogoutBtn = document.getElementById("menuLogoutBtn");
+if (menuLogoutBtn) {
+  menuLogoutBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await logout();
+    window.location.reload();
+  });
+}
