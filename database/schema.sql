@@ -18,7 +18,30 @@ CREATE TABLE users (
     role           ENUM('ADMIN','DOCTOR','NURSE','PATIENT') NOT NULL,
     phone          VARCHAR(20),
     is_active      TINYINT(1) NOT NULL DEFAULT 1,
+    email_verified       TINYINT(1) NOT NULL DEFAULT 0,
+    verification_code     VARCHAR(10) NULL,
+    verification_expires   DATETIME NULL,
+    twofa_code               VARCHAR(10) NULL,
+    twofa_expires             DATETIME NULL,
+    reset_code                 VARCHAR(10) NULL,
+    reset_expires                DATETIME NULL,
+    failed_login_attempts          INT NOT NULL DEFAULT 0,
+    lockout_until                    DATETIME NULL,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- MEDICAL REGISTRATION NUMBERS  (a pre-approved allowlist - anyone
+-- registering as a doctor must supply one of these, and each number can
+-- only be used once. Simulates verifying against a real medical council
+-- registry, which this project doesn't have access to.)
+-- ---------------------------------------------------------------------
+CREATE TABLE medical_registration_numbers (
+    registration_number  VARCHAR(50) PRIMARY KEY,
+    is_used               TINYINT(1) NOT NULL DEFAULT 0,
+    used_by_user_id        INT NULL,
+    created_at              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_regnum_user FOREIGN KEY (used_by_user_id) REFERENCES users(user_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -168,16 +191,16 @@ CREATE TABLE demo_requests (
 -- Seed data: one admin account (change password after first login)
 -- Password below is a real bcrypt hash of "Admin@123" (12 rounds)
 -- ---------------------------------------------------------------------
-INSERT INTO users (full_name, email, password_hash, role, phone)
+INSERT INTO users (full_name, email, password_hash, role, phone, email_verified)
 VALUES ('System Admin', 'admin@medicare.com',
         '$2a$12$RsaCGxrmAbRX63GCmI7rJeNBIY3C4Lw5iUbGRVZ7.1VM0mnKeDET2',
-        'ADMIN', '9999999999');
+        'ADMIN', '9999999999', 1);
 
 -- Sample doctor (login email: doctor@medicare.com / password: Doctor@123)
-INSERT INTO users (full_name, email, password_hash, role, phone)
+INSERT INTO users (full_name, email, password_hash, role, phone, email_verified)
 VALUES ('Ananya Sharma', 'doctor@medicare.com',
         '$2b$12$m8ssGvMtjYOqZ8Ax2m9Jgema1N1OUtfs36gFBkzmB7/EK6Azz/Zce',
-        'DOCTOR', '9876500001');
+        'DOCTOR', '9876500001', 1);
 INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
 VALUES (LAST_INSERT_ID(), 'Ananya', 'Sharma', 'Cardiology', 'Cardiologist', 'Female',
         'MBBS, MD (Cardiology)', 9, 700.00, 'Casto Healthcare, Main Building, 2nd Floor',
@@ -187,14 +210,14 @@ VALUES (LAST_INSERT_ID(), 'Ananya', 'Sharma', 'Cardiology', 'Cardiologist', 'Fem
 -- real, bookable doctors instead of decorative cards. All share the
 -- password Doctor@123 (same hash as above) - change these before any
 -- real deployment.
-INSERT INTO users (full_name, email, password_hash, role, phone) VALUES
-('Raj Sharma', 'raj.sharma@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500002'),
-('Priya Singh', 'priya.singh@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500003'),
-('Amit Kumar', 'amit.kumar@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500004'),
-('Neha Gupta', 'neha.gupta@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500005'),
-('Vikram Patel', 'vikram.patel@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500006'),
-('Rahul Das', 'rahul.das@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500007'),
-('Arjun Verma', 'arjun.verma@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500008');
+INSERT INTO users (full_name, email, password_hash, role, phone, email_verified) VALUES
+('Raj Sharma', 'raj.sharma@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500002', 1),
+('Priya Singh', 'priya.singh@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500003', 1),
+('Amit Kumar', 'amit.kumar@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500004', 1),
+('Neha Gupta', 'neha.gupta@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500005', 1),
+('Vikram Patel', 'vikram.patel@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500006', 1),
+('Rahul Das', 'rahul.das@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500007', 1),
+('Arjun Verma', 'arjun.verma@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500008', 1);
 
 INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
 SELECT user_id, 'Raj', 'Sharma', 'General Medicine', 'General Physician', 'Male',
@@ -203,7 +226,7 @@ SELECT user_id, 'Raj', 'Sharma', 'General Medicine', 'General Physician', 'Male'
 FROM users WHERE email = 'raj.sharma@medicare.com';
 
 INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
-SELECT user_id, 'Priya', 'Singh', 'General Medicine', 'Diagnostic Physician', 'Female',
+SELECT user_id, 'Priya', 'Singh', 'Radiology', 'Diagnostic Radiologist', 'Female',
        'MBBS, DMRD', 8, 700.00, 'Casto Healthcare, Imaging Wing',
        'Expert in diagnostic imaging including X-Ray, CT, and MRI interpretation.'
 FROM users WHERE email = 'priya.singh@medicare.com';
@@ -221,22 +244,32 @@ SELECT user_id, 'Neha', 'Gupta', 'Neurology', 'Neurologist', 'Female',
 FROM users WHERE email = 'neha.gupta@medicare.com';
 
 INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
-SELECT user_id, 'Vikram', 'Patel', 'General Medicine', 'Gastroenterologist', 'Male',
+SELECT user_id, 'Vikram', 'Patel', 'Gastroenterology', 'Gastroenterologist', 'Male',
        'MBBS, MD (Gastroenterology)', 11, 800.00, 'Casto Healthcare, Digestive Clinic',
        'Focused on digestive disorders, endoscopy, and liver health.'
 FROM users WHERE email = 'vikram.patel@medicare.com';
 
 INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
-SELECT user_id, 'Rahul', 'Das', 'Orthopaedics', 'Orthopaedic Surgeon', 'Male',
+SELECT user_id, 'Rahul', 'Das', 'General Surgery', 'General & Orthopaedic Surgeon', 'Male',
        'MBBS, MS (Surgery)', 14, 1200.00, 'Casto Healthcare, Surgical Center',
-       'Experienced in general and minimally invasive orthopaedic surgical procedures.'
+       'Experienced in general and minimally invasive surgical procedures.'
 FROM users WHERE email = 'rahul.das@medicare.com';
 
 INSERT INTO doctors (user_id, first_name, last_name, department, specialization, gender, qualifications, experience_years, consultation_fee, clinic_location, bio)
-SELECT user_id, 'Arjun', 'Verma', 'Dermatology', 'Dermatologist', 'Male',
-       'MBBS, MD (Dermatology)', 11, 750.00, 'Casto Healthcare, SkinCare Clinic',
-       'Expert in skin conditions, acne treatment, and cosmetic dermatology.'
+SELECT user_id, 'Arjun', 'Verma', 'Ophthalmology', 'Ophthalmologist', 'Male',
+       'MBBS, MS (Ophthalmology)', 11, 750.00, 'Casto Healthcare, Vision Care Clinic',
+       'Specializes in vision correction, cataract surgery, and eye health screening.'
 FROM users WHERE email = 'arjun.verma@medicare.com';
+
+-- Pre-approved medical registration numbers - a real new doctor signing up
+-- through the registration form (not one of the 8 seeded above) must enter
+-- one of these. Each can only be used once. Change/add more as needed.
+INSERT INTO medical_registration_numbers (registration_number) VALUES
+('MCI-2024-10234'),
+('MCI-2024-10567'),
+('MCI-2024-10891'),
+('MCI-2024-11023'),
+('MCI-2024-11456');
 
 -- Sample pharmacy stock
 INSERT INTO pharmacy_inventory (item_name, category, quantity, unit_price, expiry_date, supplier, reorder_level)

@@ -299,9 +299,91 @@
           font-size: 1.8rem;
         }
       }
-    </style>
+          .otp-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .otp-modal-overlay.open {
+        display: flex;
+      }
+      .otp-modal-box {
+        background: #fff;
+        border-radius: 14px;
+        padding: 28px 24px;
+        width: 100%;
+        max-width: 360px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      }
+      .otp-modal-box h3 {
+        margin: 0 0 8px;
+        font-size: 19px;
+      }
+      .otp-modal-hint {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.5;
+        margin: 0 0 16px;
+      }
+      .otp-modal-hint b {
+        color: #222;
+      }
+      .otp-modal-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        font-size: 20px;
+        letter-spacing: 6px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+      .otp-modal-error {
+        color: #d33;
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+      .otp-modal-submit {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #16a085;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        margin-bottom: 8px;
+      }
+      .otp-modal-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .otp-modal-cancel {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background: none;
+        color: #888;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      @media (max-width: 480px) {
+        .otp-modal-box {
+          padding: 22px 18px;
+        }
+      }
+</style>
   </head>
   <body>
+    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
+
     <!-- SIGN IN PAGE VIEW -->
     <div class="page-view" id="view-signin">
       <div class="page-header">
@@ -444,35 +526,111 @@
     <!-- FORGOT PASSWORD MODAL -->
     <div class="modal-overlay" id="forgot-modal">
       <div class="modal">
-        <h3>Reset Password</h3>
-        <p>Enter your registered email and we'll send you a reset link.</p>
-        <div class="field">
+        <h3 id="forgot-title">Reset Password</h3>
+        <p id="forgot-desc">Enter your registered email and we'll send you a reset code.</p>
+        <div class="field" id="forgot-email-field">
           <label>Email Address <span class="req">*</span></label>
           <input
             type="email"
             id="forgot-email"
             placeholder="patient@example.com"
           />
-          <span class="err-msg" id="forgot-err"
+          <span class="err-msg" id="forgot-err" style="display: none"
             >Please enter a valid email</span
+          >
+        </div>
+        <div class="field" id="forgot-code-field" style="display: none">
+          <label>Reset Code <span class="req">*</span></label>
+          <input type="text" id="forgot-code" maxlength="6" placeholder="6-digit code" />
+        </div>
+        <div class="field" id="forgot-newpw-field" style="display: none">
+          <label>New Password <span class="req">*</span></label>
+          <input type="password" id="forgot-newpw" placeholder="At least 8 characters" />
+          <span class="err-msg" id="forgot-newpw-hint" style="display: block; color: #888"
+            >At least 8 characters, with an uppercase, lowercase, number, and special character.</span
           >
         </div>
         <div class="modal-actions">
           <button class="btn btn-outline" onclick="closeForgot()">
             Cancel
           </button>
-          <button class="btn btn-primary" onclick="sendReset()">
-            Send Reset Link
+          <button class="btn btn-primary" id="forgot-action-btn" onclick="sendReset()">
+            Send Reset Code
           </button>
         </div>
       </div>
     </div>
   <script src="api.js?v=3"></script>
   <script>
+      renderBackButton("backBtnHolder");
+
     function destinationFor(role) {
       if (role === 'PATIENT') return 'register-p.html';
       if (role === 'DOCTOR') return 'register.html';
       return 'index.html';
+    }
+
+    let forgotStep = 'request'; // 'request' -> 'reset'
+
+    function openForgot() {
+      forgotStep = 'request';
+      document.getElementById('forgot-title').textContent = 'Reset Password';
+      document.getElementById('forgot-desc').textContent = "Enter your registered email and we'll send you a reset code.";
+      document.getElementById('forgot-email-field').style.display = 'block';
+      document.getElementById('forgot-code-field').style.display = 'none';
+      document.getElementById('forgot-newpw-field').style.display = 'none';
+      document.getElementById('forgot-action-btn').textContent = 'Send Reset Code';
+      document.getElementById('forgot-err').style.display = 'none';
+      document.getElementById('forgot-modal').classList.add('open');
+    }
+    function closeForgot() {
+      document.getElementById('forgot-modal').classList.remove('open');
+    }
+
+    async function sendReset() {
+      const errEl = document.getElementById('forgot-err');
+      errEl.style.display = 'none';
+
+      if (forgotStep === 'request') {
+        const email = document.getElementById('forgot-email').value.trim();
+        if (!isValidEmail(email)) {
+          errEl.textContent = 'Please enter a valid email';
+          errEl.style.display = 'block';
+          return;
+        }
+        try {
+          const result = await forgotPassword(email);
+          forgotStep = 'reset';
+          document.getElementById('forgot-desc').innerHTML =
+            (result.devNote ? result.devNote + '<br><b>Demo code: ' + result.devResetCode + '</b>' : 'Enter the code we sent you, along with a new password.');
+          document.getElementById('forgot-email-field').style.display = 'none';
+          document.getElementById('forgot-code-field').style.display = 'block';
+          document.getElementById('forgot-newpw-field').style.display = 'block';
+          document.getElementById('forgot-action-btn').textContent = 'Reset Password';
+        } catch (err) {
+          errEl.textContent = err.message;
+          errEl.style.display = 'block';
+        }
+        return;
+      }
+
+      // forgotStep === 'reset'
+      const email = document.getElementById('forgot-email').value.trim();
+      const code = document.getElementById('forgot-code').value.trim();
+      const newPw = document.getElementById('forgot-newpw').value;
+      if (!isStrongPassword(newPw)) {
+        errEl.textContent = passwordStrengthHint();
+        errEl.style.display = 'block';
+        return;
+      }
+      try {
+        await resetPassword(email, code, newPw);
+        closeForgot();
+        alert('Password updated. You can now log in with your new password.');
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.style.display = 'block';
+      }
     }
 
     // If a session already exists (e.g. the user hit "back" to this page,
@@ -490,19 +648,121 @@
       const email = document.getElementById('si-email').value;
       const password = document.getElementById('si-password').value;
       const errEl = document.getElementById('si-pw-err');
+      errEl.style.display = 'none';
 
       try {
         const result = await login(email, password);
-        document.getElementById('signin-form-wrap').style.display = 'none';
-        document.getElementById('signin-success').style.display = 'block';
-        setTimeout(() => {
-          window.location.href = destinationFor(result.data.role);
-        }, 900);
+        // Password was correct - now require the 2FA code before actually
+        // signing them in.
+        openOtpModal({
+          title: 'Verify it\'s you',
+          hint: (result.devNote ? result.devNote + '<br><b>Demo code: ' + result.devTwoFactorCode + '</b>' : 'Enter the code sent to your email.'),
+          onVerify: async (code) => {
+            const final = await verifyLoginOtp(email, code);
+            document.getElementById('signin-form-wrap').style.display = 'none';
+            document.getElementById('signin-success').style.display = 'block';
+            setTimeout(() => {
+              window.location.href = destinationFor(final.data.role);
+            }, 900);
+          },
+        });
       } catch (err) {
+        if (err.data && err.data.requiresVerification) {
+          openOtpModal({
+            title: 'Verify your email',
+            hint: 'This account hasn\'t been verified yet. Enter the code sent when you registered, or click Cancel and register again for a new code.',
+            onVerify: async (code) => {
+              await verifyEmail(email, code);
+              window.location.href = 'login.html';
+            },
+          });
+          return;
+        }
         errEl.textContent = err.message;
         errEl.style.display = 'block';
       }
     }
   </script>
-  </body>
+    <!-- Shared verification/2FA code modal -->
+  <div class="otp-modal-overlay" id="otpModal">
+    <div class="otp-modal-box">
+      <h3 id="otpModalTitle">Enter verification code</h3>
+      <p class="otp-modal-hint" id="otpModalHint"></p>
+      <input
+        type="text"
+        id="otpModalInput"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        placeholder="6-digit code"
+        class="otp-modal-input"
+      />
+      <div class="otp-modal-error" id="otpModalError" style="display: none"></div>
+      <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
+      <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
+    </div>
+  </div>
+  <script>
+    // Opens the OTP modal. onVerify(code) is called each time the person
+    // submits - it should return a Promise that resolves on success (the
+    // modal is then closed automatically) or throws/rejects on a wrong
+    // code (the modal stays open with the error shown, so they can just
+    // retry instead of restarting the whole registration/login flow).
+    function openOtpModal({ title, hint, onVerify, onCancel }) {
+      const modal = document.getElementById("otpModal");
+      const input = document.getElementById("otpModalInput");
+      const errorEl = document.getElementById("otpModalError");
+      const submitBtn = document.getElementById("otpModalSubmit");
+      const cancelBtn = document.getElementById("otpModalCancel");
+
+      document.getElementById("otpModalTitle").textContent = title;
+      document.getElementById("otpModalHint").innerHTML = hint;
+      input.value = "";
+      errorEl.style.display = "none";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Verify";
+      modal.classList.add("open");
+      input.focus();
+
+      function cleanup() {
+        modal.classList.remove("open");
+        submitBtn.removeEventListener("click", onSubmit);
+        cancelBtn.removeEventListener("click", onCancelClick);
+        input.removeEventListener("keydown", onKeydown);
+      }
+      async function onSubmit() {
+        const code = input.value.trim();
+        if (!/^\d{6}$/.test(code)) {
+          errorEl.textContent = "Enter the 6-digit code.";
+          errorEl.style.display = "block";
+          return;
+        }
+        errorEl.style.display = "none";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Verifying…";
+        try {
+          await onVerify(code);
+          cleanup();
+        } catch (err) {
+          errorEl.textContent = err.message || "Incorrect code.";
+          errorEl.style.display = "block";
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Verify";
+        }
+      }
+      function onCancelClick() {
+        cleanup();
+        if (onCancel) onCancel();
+      }
+      function onKeydown(e) {
+        if (e.key === "Enter") onSubmit();
+      }
+
+      submitBtn.addEventListener("click", onSubmit);
+      cancelBtn.addEventListener("click", onCancelClick);
+      input.addEventListener("keydown", onKeydown);
+    }
+  </script>
+</body>
 </html>

@@ -309,6 +309,16 @@ img {
 body.logged-in .logged-in-only {
   display: block;
 }
+
+/* shown by default - for people who haven't logged in on this device */
+
+.guest-only {
+  display: block;
+}
+
+body.logged-in .guest-only {
+  display: none;
+}
 /* Background Blur Overlay */
 
 .overlay {

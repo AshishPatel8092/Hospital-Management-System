@@ -399,6 +399,15 @@
         transition: all 0.25s ease;
       }
 
+      #paymentStep .confirm-btn:not(:disabled) {
+        background: #1a1a2e;
+        border-radius: 30px;
+        padding: 15px;
+      }
+      #paymentStep .confirm-btn:not(:disabled):hover {
+        background: #0f0f1e;
+      }
+
       .confirm-btn:not(:disabled) {
         background: #9d7dcf;
         color: white;
@@ -433,10 +442,58 @@
         font-size: 22px;
       }
 
-      .payment-btn.selected {
-        background: #7c5cbf;
-        color: #fff;
+      .pay-method-list {
+        border: 1px solid #e5e5e5;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .pay-method-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .pay-method-row:last-child {
+        border-bottom: none;
+      }
+      .pay-method-row:hover {
+        background: #faf8ff;
+      }
+      .pay-method-icon {
+        font-size: 20px;
+        width: 28px;
+        text-align: center;
+      }
+      .pay-method-label {
+        flex: 1;
+        font-size: 14.5px;
+        font-weight: 600;
+        color: #333;
+      }
+      .pay-method-check {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+        flex-shrink: 0;
+        position: relative;
+      }
+      .pay-method-row.selected {
+        background: #f4effc;
+      }
+      .pay-method-row.selected .pay-method-check {
         border-color: #7c5cbf;
+        background: #7c5cbf;
+      }
+      .pay-method-row.selected .pay-method-check::after {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: #fff;
       }
 
       .pay-panel {
@@ -518,6 +575,8 @@
     </style>
   </head>
   <body>
+    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
+
     <div class="container">
       <div class="header">
         <h1>Billing & Payment</h1>
@@ -661,13 +720,29 @@
 
           <div class="payment-section">
             <div class="section-title" style="margin-bottom: 10px">
-              💳 Choose Payment Method
+              Select Payment Method
             </div>
-            <div class="payment-options" id="payMethodTabs">
-              <button class="payment-btn selected" data-method="Cash" onclick="selectPaymentMethod('Cash')">Cash</button>
-              <button class="payment-btn" data-method="Card" onclick="selectPaymentMethod('Card')">Debit/Credit Card</button>
-              <button class="payment-btn" data-method="UPI" onclick="selectPaymentMethod('UPI')">UPI</button>
-              <button class="payment-btn" data-method="PhonePe" onclick="selectPaymentMethod('PhonePe')">PhonePe / GPay</button>
+            <div class="pay-method-list" id="payMethodTabs">
+              <div class="pay-method-row selected" data-method="Cash" onclick="selectPaymentMethod('Cash')">
+                <span class="pay-method-icon">💵</span>
+                <span class="pay-method-label">Cash at Hospital</span>
+                <span class="pay-method-check"></span>
+              </div>
+              <div class="pay-method-row" data-method="Card" onclick="selectPaymentMethod('Card')">
+                <span class="pay-method-icon">💳</span>
+                <span class="pay-method-label">Debit / Credit Card</span>
+                <span class="pay-method-check"></span>
+              </div>
+              <div class="pay-method-row" data-method="UPI" onclick="selectPaymentMethod('UPI')">
+                <span class="pay-method-icon">🏦</span>
+                <span class="pay-method-label">UPI</span>
+                <span class="pay-method-check"></span>
+              </div>
+              <div class="pay-method-row" data-method="PhonePe" onclick="selectPaymentMethod('PhonePe')">
+                <span class="pay-method-icon">📱</span>
+                <span class="pay-method-label">PhonePe / Google Pay</span>
+                <span class="pay-method-check"></span>
+              </div>
             </div>
 
             <div id="payMethodPanel">
@@ -723,6 +798,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="api.js?v=3"></script>
     <script>
+      renderBackButton("backBtnHolder");
+
       // Doctors are loaded from the backend (see loadDoctors below) instead
       // of being hardcoded here.
       let doctors = [];
@@ -917,8 +994,8 @@
       // Select payment method (step 2)
       function selectPaymentMethod(method) {
         selectedPayment = method;
-        document.querySelectorAll(".payment-btn").forEach((btn) => {
-          btn.classList.toggle("selected", btn.dataset.method === method);
+        document.querySelectorAll(".pay-method-row").forEach((row) => {
+          row.classList.toggle("selected", row.dataset.method === method);
         });
         document.querySelectorAll(".pay-panel").forEach((panel) => {
           panel.classList.toggle("active", panel.dataset.panel === method);

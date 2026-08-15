@@ -207,6 +207,8 @@
     </style>
   </head>
   <body>
+    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
+
     <div class="demo-wrapper">
       <div class="demo-container">
         <!-- LEFT -->
@@ -329,6 +331,8 @@
     </div>
     <script src="api.js?v=3"></script>
     <script>
+      renderBackButton("backBtnHolder");
+
       document.getElementById("demoSubmitBtn").addEventListener("click", async () => {
         const btn = document.getElementById("demoSubmitBtn");
         const fields = {

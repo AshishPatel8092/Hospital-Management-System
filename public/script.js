@@ -940,6 +940,111 @@ function toggleCard(element) {
 }
 
 //  Diagnose AI widget functions
+// Emergency situations this tool should recognize and respond to
+// immediately with real guidance, instead of running the regular
+// (keyword-matched, non-diagnostic) symptom flow below.
+const EMERGENCY_PATTERNS = [
+  {
+    keywords: ["cpr", "not breathing", "stopped breathing", "no pulse", "cardiac arrest", "unresponsive", "unconscious and not breathing"],
+    title: "This sounds like it could be cardiac arrest",
+    steps: [
+      "Call emergency services (112) right now, or have someone else call while you help.",
+      "Check responsiveness - tap firmly and shout. Check if they're breathing normally.",
+      "If not breathing normally: lay them on their back on a firm, flat surface.",
+      "Kneel beside them, place the heel of one hand on the center of the chest, other hand on top.",
+      "Push hard and fast - about 5-6 cm deep, at 100-120 compressions per minute.",
+      "Let the chest fully rise between compressions. Continue until help arrives or an AED is available.",
+    ],
+  },
+  {
+    keywords: ["choking", "can't breathe", "something stuck in throat", "swallowed wrong"],
+    title: "This sounds like choking",
+    steps: [
+      "If they can cough or speak, encourage them to keep coughing - don't intervene yet.",
+      "If they can't breathe, cough, or speak: call emergency services (112) immediately.",
+      "Stand behind them, lean them forward, and give 5 firm back blows between the shoulder blades.",
+      "If that doesn't work, give 5 abdominal thrusts (Heimlich maneuver): fist above the navel, grasp with your other hand, pull sharply inward and upward.",
+      "Alternate 5 back blows and 5 abdominal thrusts until the object is dislodged or help arrives.",
+    ],
+  },
+  {
+    keywords: ["heart attack", "chest pain radiating", "crushing chest pain", "chest pain and arm"],
+    title: "This could be a heart attack",
+    steps: [
+      "Call emergency services (112) immediately - don't try to drive yourself.",
+      "Have the person sit down, stay calm, and loosen tight clothing.",
+      "Do not give food or drink.",
+      "If they have prescribed nitroglycerin, help them take it as directed.",
+      "Stay with them and be ready to start CPR if they become unresponsive and stop breathing normally.",
+    ],
+  },
+  {
+    keywords: ["stroke", "face drooping", "slurred speech", "sudden numbness", "sudden confusion one side"],
+    title: "This could be a stroke - remember FAST",
+    steps: [
+      "Face: ask them to smile - does one side droop?",
+      "Arms: ask them to raise both arms - does one drift downward?",
+      "Speech: ask them to repeat a phrase - is it slurred or strange?",
+      "Time: if you see any of these signs, call emergency services (112) immediately and note when symptoms started.",
+      "Do not give food, drink, or medication while waiting for help.",
+    ],
+  },
+  {
+    keywords: ["severe bleeding", "won't stop bleeding", "bleeding heavily", "deep cut bleeding"],
+    title: "This sounds like severe bleeding",
+    steps: [
+      "Call emergency services (112) if bleeding is heavy or won't stop.",
+      "Apply firm, direct pressure on the wound with a clean cloth.",
+      "Keep the wound elevated above heart level if possible.",
+      "Don't remove the cloth if it soaks through - add more on top and keep pressing.",
+      "Keep the person warm and still until help arrives.",
+    ],
+  },
+];
+
+const CRISIS_KEYWORDS = ["suicide", "want to die", "kill myself", "end my life", "self harm", "hurt myself"];
+
+function checkForEmergency(input) {
+  const lower = input.toLowerCase();
+  for (const pattern of EMERGENCY_PATTERNS) {
+    if (pattern.keywords.some((kw) => lower.includes(kw))) return pattern;
+  }
+  return null;
+}
+
+function renderEmergencyCard(resultBox, pattern) {
+  resultBox.innerHTML = `
+    <div class="ai-result-card" style="border-left: 4px solid #dc2626;">
+      <span class="ai-badge" style="background: #dc2626;">⚠️ Emergency Guidance</span>
+      <h3 style="color: #dc2626;">${pattern.title}</h3>
+      <div class="ai-section-box" style="border-left-color: #dc2626; background: #fef2f2;">
+        <ol style="margin: 0; padding-left: 20px; line-height: 1.8;">
+          ${pattern.steps.map((s) => `<li>${s}</li>`).join("")}
+        </ol>
+      </div>
+      <p style="font-size: 12.5px; color: #888; margin-top: 10px;">
+        This is general guidance, not medical training or a diagnosis. If this is happening right now, call emergency services first - don't wait on this tool.
+      </p>
+      <a href="emergency.html" class="ai-book-doctor-btn" style="display: inline-block; text-decoration: none; text-align: center;">See full emergency guide</a>
+    </div>
+  `;
+}
+
+function renderCrisisCard(resultBox) {
+  resultBox.innerHTML = `
+    <div class="ai-result-card" style="border-left: 4px solid #dc2626;">
+      <h3 style="color: #dc2626;">You matter, and support is available</h3>
+      <p>If you're going through a difficult time, please reach out to someone who can help right now:</p>
+      <div class="ai-section-box" style="border-left-color: #dc2626; background: #fef2f2;">
+        <p><strong>iCall (India):</strong> 9152987821</p>
+        <p><strong>Vandrevala Foundation:</strong> 1860-2662-345</p>
+        <p><strong>Emergency services:</strong> 112</p>
+      </div>
+      <p style="font-size: 12.5px; color: #888;">This tool can't provide the support you need right now, but a real person can.</p>
+    </div>
+  `;
+}
+
 function setPreset(text) {
   const input = document.getElementById("aiSymptomInput");
   if (input) input.value = text;
@@ -956,10 +1061,21 @@ function runAiDiagnosis() {
     return;
   }
 
+  const lowerInput = input.toLowerCase();
+  if (CRISIS_KEYWORDS.some((kw) => lowerInput.includes(kw))) {
+    renderCrisisCard(resultBox);
+    return;
+  }
+  const emergency = checkForEmergency(input);
+  if (emergency) {
+    renderEmergencyCard(resultBox, emergency);
+    return;
+  }
+
   resultBox.innerHTML = `
           <div class="ai-loading">
             <span class="material-symbols-outlined ai-spin" style="font-size: 36px; color: #1a7a8a;">progress_activity</span>
-            <p>Analyzing clinical symptom patterns...</p>
+            <p>Looking at what you described...</p>
           </div>
         `;
 
@@ -991,13 +1107,13 @@ function runAiDiagnosis() {
 
     resultBox.innerHTML = `
             <div class="ai-result-card">
-              <span class="ai-badge">AI Confidence: 91%</span>
+              <span class="ai-badge">Possible match (not a diagnosis)</span>
               <h3>${diagnosis}</h3>
               <p class="ai-urgency"><strong>Urgency:</strong> ${urgency}</p>
               
               <div class="ai-section-box">
-                <h4>💊 Recommended Medicine</h4>
-                <p><strong>${medName}</strong><br>Dosage: ${dosage}</p>
+                <h4>💊 Medicine Sometimes Used For This</h4>
+                <p><strong>${medName}</strong><br>Typical use: ${dosage} - confirm with a doctor or pharmacist before taking anything.</p>
               </div>
 
               <div class="ai-section-box">
@@ -1016,6 +1132,8 @@ function runAiDiagnosis() {
                 <p><strong>Avoid:</strong> Cold beverages, processed sugars, dairy if congested, and heavy strenuous physical exertion.</p>
                 <p><strong>Don't:</strong> Self-medicate with high-dose painkillers without checking with your physician.</p>
               </div>
+
+              <p style="font-size: 12px; color: #888;">This is a simple keyword-matching demo tool for this project, not a real medical AI - it's not a diagnosis. Please see a doctor for anything you're actually concerned about.</p>
 
               <button class="ai-book-doctor-btn" onclick="alert('Consultation request sent to ${doctor}!')">Book Consultation</button>
             </div>
@@ -1085,9 +1203,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const menuLogoutBtn = document.getElementById("menuLogoutBtn");
 if (menuLogoutBtn) {
-  menuLogoutBtn.addEventListener("click", async (e) => {
+  menuLogoutBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    await logout();
-    window.location.reload();
+    confirmLogout(async () => {
+      await logout();
+      window.location.reload();
+    });
   });
 }

@@ -183,6 +183,8 @@
   </head>
 
   <body>
+    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
+
     <section class="hero">
       <div class="hero-text">
         <span class="tag">// EMERGENCY ASSISTANCE //</span>
@@ -327,6 +329,45 @@
       </div>
     </section>
 
+    <section class="emergency-section">
+      <div class="emergency-block">
+        <div class="emergency-content">
+          <span class="small-title"> // CPR // </span>
+
+          <h2>Cardiopulmonary Resuscitation (CPR)</h2>
+
+          <p>
+            Use CPR on an adult who is unresponsive and not breathing
+            normally. Call for emergency help (or have someone else call)
+            before or as soon as you start.
+          </p>
+
+          <ul>
+            <li>Check responsiveness - tap and shout, check for normal breathing</li>
+            <li>Call for emergency help immediately</li>
+            <li>Place the person on their back on a firm, flat surface</li>
+            <li>Kneel beside them, place the heel of one hand on the center of the chest, other hand on top</li>
+            <li>Push hard and fast - about 5-6 cm deep, at 100-120 compressions per minute</li>
+            <li>Let the chest fully rise between compressions</li>
+            <li>Continue until help arrives, an AED is available, or the person starts breathing</li>
+          </ul>
+
+          <p style="font-size: 13px; color: #888; margin-top: 8px">
+            This is general guidance, not medical training - a certified
+            first-aid/CPR course is the best way to learn this properly.
+          </p>
+
+          <a
+            href="https://www.youtube.com/results?search_query=how+to+do+cpr"
+            target="_blank"
+            class="video-btn"
+          >
+            ▶ Watch Video
+          </a>
+        </div>
+      </div>
+    </section>
+
     <section class="contact-emergency">
       <h2>Emergency Contact Numbers</h2>
 
@@ -352,5 +393,9 @@
         </div>
       </div>
     </section>
+    <script src="api.js?v=3"></script>
+    <script>
+      renderBackButton("backBtnHolder");
+    </script>
   </body>
 </html>

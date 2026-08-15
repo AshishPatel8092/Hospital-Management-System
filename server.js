@@ -42,5 +42,25 @@ app.use('/api/prescriptions', require('./routes/prescriptions'));
 
 app.get('/api/health', (req, res) => res.json({ success: true, message: 'API is running.' }));
 
+// Anything under /api/* that didn't match a route above is a genuinely
+// unknown endpoint - respond with JSON, not the HTML 404 page.
+app.use('/api', (req, res) => {
+  res.status(404).json({ success: false, message: 'API endpoint not found.' });
+});
+
+// Any other unmatched URL (a typo'd or removed page) gets the friendly
+// 404 page instead of Express's default plain-text error.
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
+// Last-resort handler for anything that slips past every route's own
+// try/catch - keeps a stray error from ever showing a stack trace to a
+// visitor, and still logs the real cause server-side for debugging.
+app.use((err, req, res, next) => {
+  console.error('Unhandled error in request pipeline:', err);
+  res.status(500).json({ success: false, message: 'Something went wrong on our end.' });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`HMS server running on http://localhost:${PORT}`));

@@ -125,6 +125,19 @@
         <div class="menu-group">
           <div class="menu-group-title">Healthcare Services</div>
 
+          <!-- Shown only once logged in - registration prompts below are
+               redundant (and confusing) for someone who already has an
+               account on this device. -->
+          <div class="logged-in-only">
+            <a href="appointment.html" class="menu-item">
+              <span class="material-symbols-outlined icon-orange">calendar_month</span>
+              Book an Appointment
+            </a>
+          </div>
+
+          <!-- Shown only to people who haven't logged in on this device -->
+          <div class="guest-only">
+
           <!-- DOCTORS -->
 
           <div class="expand-card">
@@ -182,6 +195,9 @@
               </a>
             </div>
           </div>
+
+          </div>
+          <!-- end guest-only -->
 
           <!-- FIND DOCTOR -->
 
