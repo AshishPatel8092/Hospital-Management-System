@@ -92,7 +92,7 @@
     <script>
       function goBack() {
         if (document.referrer && document.referrer.includes(window.location.host)) {
-          window.history.back();
+          window.location.href = document.referrer;
         } else {
           window.location.href = "index.html";
         }

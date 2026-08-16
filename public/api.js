@@ -118,8 +118,12 @@ function renderBackButton(containerId) {
   btn.addEventListener('mouseenter', () => (btn.style.background = '#f5f5f5'));
   btn.addEventListener('mouseleave', () => (btn.style.background = '#fff'));
   btn.addEventListener('click', () => {
+    // history.back() silently does nothing when this page was opened in a
+    // new tab (e.g. the hamburger menu's registration links use
+    // target="_blank"), since a new tab has no history to go back to.
+    // Navigating straight to the referrer works either way.
     if (document.referrer && document.referrer.includes(window.location.host)) {
-      window.history.back();
+      window.location.href = document.referrer;
     } else {
       window.location.href = 'index.html';
     }

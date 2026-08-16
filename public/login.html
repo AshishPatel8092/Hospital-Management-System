@@ -382,7 +382,7 @@
 </style>
   </head>
   <body>
-    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
+    <div id="backBtnHolder" style="padding: 20px 16px 0;"></div>
 
     <!-- SIGN IN PAGE VIEW -->
     <div class="page-view" id="view-signin">
@@ -582,9 +582,11 @@
       document.getElementById('forgot-action-btn').textContent = 'Send Reset Code';
       document.getElementById('forgot-err').style.display = 'none';
       document.getElementById('forgot-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
     function closeForgot() {
       document.getElementById('forgot-modal').classList.remove('open');
+      document.body.style.overflow = '';
     }
 
     async function sendReset() {
@@ -722,10 +724,12 @@
       submitBtn.disabled = false;
       submitBtn.textContent = "Verify";
       modal.classList.add("open");
+      document.body.style.overflow = "hidden";
       input.focus();
 
       function cleanup() {
         modal.classList.remove("open");
+        document.body.style.overflow = "";
         submitBtn.removeEventListener("click", onSubmit);
         cancelBtn.removeEventListener("click", onCancelClick);
         input.removeEventListener("keydown", onKeydown);

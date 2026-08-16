@@ -1177,7 +1177,6 @@
 </style>
   </head>
   <body>
-    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
 
     <!-- NAV -->
     <nav>
@@ -1195,6 +1194,8 @@
         >Already registered? <a onclick="showPage('signin')">Sign In</a></span
       >
     </nav>
+    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
+
 
     <!-- ══════════════════════════════════════
      SIGN IN PAGE VIEW
@@ -1460,9 +1461,12 @@
               <input
                 type="password"
                 id="regPassword"
-                placeholder="At least 8 characters"
+                placeholder="e.g. Casto@2026"
               />
-              <span class="err-msg">Password must be at least 8 characters</span>
+              <span class="err-msg" style="display: block; color: #888"
+                >8+ characters, with an uppercase letter, a lowercase
+                letter, a number, and a special character.</span
+              >
             </div>
 
             <div class="field">
@@ -2800,10 +2804,12 @@
       submitBtn.disabled = false;
       submitBtn.textContent = "Verify";
       modal.classList.add("open");
+      document.body.style.overflow = "hidden";
       input.focus();
 
       function cleanup() {
         modal.classList.remove("open");
+        document.body.style.overflow = "";
         submitBtn.removeEventListener("click", onSubmit);
         cancelBtn.removeEventListener("click", onCancelClick);
         input.removeEventListener("keydown", onKeydown);

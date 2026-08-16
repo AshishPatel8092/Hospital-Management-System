@@ -29,13 +29,12 @@ document.addEventListener("DOMContentLoaded", updateMenuView);
 // Hamburger Menu
 
 function toggleMenu() {
-  // function closeMenu() {
-  //   document.getElementById("menu").classList.remove("show");
-  //   document.getElementById("overlay").classList.remove("show");
-  // }
-  document.getElementById("menu").classList.toggle("show");
-
-  document.getElementById("overlay").classList.toggle("show");
+  const menu = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+  const opening = !menu.classList.contains("show");
+  menu.classList.toggle("show");
+  overlay.classList.toggle("show");
+  document.body.style.overflow = opening ? "hidden" : "";
 }
 document.addEventListener("click", function (event) {
   const menu = document.getElementById("menu");
@@ -45,12 +44,13 @@ document.addEventListener("click", function (event) {
   if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
     menu.classList.remove("show");
     overlay.classList.remove("show");
+    document.body.style.overflow = "";
   }
 });
 document.getElementById("overlay").addEventListener("click", function () {
   document.getElementById("menu").classList.remove("show");
-
   document.getElementById("overlay").classList.remove("show");
+  document.body.style.overflow = "";
 });
 
 // Search Bar
@@ -1149,6 +1149,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function closeHamburgerMenu() {
     menu.classList.remove("show");
     overlay.classList.remove("show");
+    document.body.style.overflow = "";
   }
 
   if (closeButton) {
@@ -1174,6 +1175,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.classList.add("logged-in");
     document.getElementById("menuProfileName").textContent = session.fullName;
+    const initials = session.fullName
+      .trim()
+      .split(/\s+/)
+      .map((w) => w[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+    const avatarEl = document.getElementById("menuProfileAvatar");
+    if (avatarEl) avatarEl.textContent = initials || "?";
 
     const roleLabel = session.role === "PATIENT" ? "Patient"
       : session.role === "DOCTOR" ? "Doctor"
