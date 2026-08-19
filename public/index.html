@@ -1224,29 +1224,62 @@
     </section>
 
     <!-- FAQs section -->
-     <section class="faq-section">
-    <div class="container">
-        <h2>Frequently Asked Questions</h2>
-        
-        <div class="faq-item">
-            <button class="faq-question">How do I book an online consultation?</button>
-            <div class="faq-answer">
-                <p>You can book an online consultation by logging into the Patient Portal, selecting your preferred specialist, and choosing an available time slot.</p>
-            </div>
+ <section class="faq-section">
+    <div class="faq-container">
+        <!-- Header -->
+        <div class="faq-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about our hospital management system.</p>
+            <div class="header-line"></div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question">What insurance plans do you accept?</button>
-            <div class="faq-answer">
-                <p>We accept a wide range of national and international insurance providers. Please visit our 'Insurance' page for the full list.</p>
+        <!-- Accordion -->
+        <div class="faq-accordion">
+            
+            <!-- Question 1 -->
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I book an appointment online?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>To book an appointment, simply go to the "Appointments" section, select your preferred doctor and date, and click "Confirm Booking." You will receive a confirmation notification instantly.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="faq-item">
-            <button class="faq-question">Is emergency care available 24/7?</button>
-            <div class="faq-answer">
-                <p>Yes, our Emergency Department is fully staffed and operational 24 hours a day, 7 days a week.</p>
+            <!-- Question 2 -->
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I access my medical records digitally?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes! Once you log in to your patient portal, navigate to "My Records." You can view and download your prescriptions, lab reports, and visit history securely.</p>
+                </div>
             </div>
+
+            <!-- Question 3 -->
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I cancel or reschedule an appointment?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Go to "My Appointments," select the appointment you wish to change, and click "Reschedule" or "Cancel." We request cancellations be made at least 24 hours in advance.</p>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Is my health data secure on this platform?</span>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolutely. We use industry-standard encryption and strict access controls to ensure that your medical information is only accessible by you and your authorized healthcare providers.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>

@@ -79,105 +79,282 @@ document.addEventListener("click", function (e) {
 const SITE_FAQ = [
   {
     keywords: [
-      "book appointment", "book a doctor", "how to book", "make appointment", "make an appointment",
-      "schedule appointment", "schedule a doctor visit", "see a doctor", "get an appointment",
-      "need an appointment", "want an appointment", "take an appointment", "doctor appointment",
-      "appointment booking", "book now", "book doctor appointment", "i want to book an appointment",
-      "book a visit", "visit a doctor",
+      "book appointment",
+      "book a doctor",
+      "how to book",
+      "make appointment",
+      "make an appointment",
+      "schedule appointment",
+      "schedule a doctor visit",
+      "see a doctor",
+      "get an appointment",
+      "need an appointment",
+      "want an appointment",
+      "take an appointment",
+      "doctor appointment",
+      "appointment booking",
+      "book now",
+      "book doctor appointment",
+      "i want to book an appointment",
+      "book a visit",
+      "visit a doctor",
     ],
     question: "How do I book an appointment?",
-    answer: "Go to the Doctors section, pick a doctor, and click Book Now - or use the Book Appointment page directly to choose from every doctor.",
-    action: { type: "link", href: "appointment.html", label: "Go to Book Appointment" },
+    answer:
+      "Go to the Doctors section, pick a doctor, and click Book Now - or use the Book Appointment page directly to choose from every doctor.",
+    action: {
+      type: "link",
+      href: "appointment.html",
+      label: "Go to Book Appointment",
+    },
   },
   {
-    keywords: ["doctor section", "where are doctors", "find doctors", "our doctors", "list of doctors", "see doctors", "meet our doctors"],
+    keywords: [
+      "doctor section",
+      "where are doctors",
+      "find doctors",
+      "our doctors",
+      "list of doctors",
+      "see doctors",
+      "meet our doctors",
+    ],
     question: "Where is the doctors section?",
-    answer: "Scroll down to \"Our Expert Doctors\", or click Doctors in the top menu.",
+    answer:
+      'Scroll down to "Our Expert Doctors", or click Doctors in the top menu.',
     action: { type: "scroll", target: "#doctors", label: "Take me there" },
   },
   {
-    keywords: ["register patient", "sign up patient", "create patient account", "patient account", "new patient", "become a patient"],
+    keywords: [
+      "register patient",
+      "sign up patient",
+      "create patient account",
+      "patient account",
+      "new patient",
+      "become a patient",
+    ],
     question: "How do I register as a patient?",
-    answer: "Open the patient registration page and fill in your details - you'll be logged in automatically once you're done.",
-    action: { type: "link", href: "register-p.html", label: "Go to Patient Registration" },
+    answer:
+      "Open the patient registration page and fill in your details - you'll be logged in automatically once you're done.",
+    action: {
+      type: "link",
+      href: "register-p.html",
+      label: "Go to Patient Registration",
+    },
   },
   {
-    keywords: ["register doctor", "sign up doctor", "join as doctor", "doctor account", "create doctor account", "become a doctor"],
+    keywords: [
+      "register doctor",
+      "sign up doctor",
+      "join as doctor",
+      "doctor account",
+      "create doctor account",
+      "become a doctor",
+    ],
     question: "How do I register as a doctor?",
-    answer: "Open the doctor registration page - you'll need your department, specialization, and consultation fee.",
-    action: { type: "link", href: "register.html", label: "Go to Doctor Registration" },
+    answer:
+      "Open the doctor registration page - you'll need your department, specialization, and consultation fee.",
+    action: {
+      type: "link",
+      href: "register.html",
+      label: "Go to Doctor Registration",
+    },
   },
   {
-    keywords: ["log in", "login", "sign in", "already have account", "access my account"],
+    keywords: [
+      "log in",
+      "login",
+      "sign in",
+      "already have account",
+      "access my account",
+    ],
     question: "How do I log in?",
-    answer: "Use the Sign In page with the email and password you registered with. Patients and doctors are redirected to their own dashboard automatically.",
+    answer:
+      "Use the Sign In page with the email and password you registered with. Patients and doctors are redirected to their own dashboard automatically.",
     action: { type: "link", href: "login.html", label: "Go to Sign In" },
   },
   {
-    keywords: ["contact", "support", "help", "reach you", "get in touch", "customer service", "talk to someone"],
+    keywords: [
+      "contact",
+      "support",
+      "help",
+      "reach you",
+      "get in touch",
+      "customer service",
+      "talk to someone",
+    ],
     question: "How do I contact support?",
-    answer: "Use the Contact Us page to send a message - we'll get back to you within 24 hours. You can also see our phone, email, and address there.",
+    answer:
+      "Use the Contact Us page to send a message - we'll get back to you within 24 hours. You can also see our phone, email, and address there.",
     action: { type: "link", href: "contact.html", label: "Go to Contact Us" },
   },
   {
-    keywords: ["demo", "request demo", "not sure which doctor", "what do i need", "match me with a doctor", "which doctor should i see", "symptom"],
-    question: "What is \"Request a Demo\"?",
-    answer: "Describe your symptom or need and we'll match you with a real doctor from the right department, with a suggested date and time.",
-    action: { type: "link", href: "request-demo.html", label: "Go to Request a Demo" },
+    keywords: [
+      "demo",
+      "request demo",
+      "not sure which doctor",
+      "what do i need",
+      "match me with a doctor",
+      "which doctor should i see",
+      "symptom",
+    ],
+    question: 'What is "Request a Demo"?',
+    answer:
+      "Describe your symptom or need and we'll match you with a real doctor from the right department, with a suggested date and time.",
+    action: {
+      type: "link",
+      href: "request-demo.html",
+      label: "Go to Request a Demo",
+    },
   },
   {
-    keywords: ["payment", "pay", "how to pay", "payment method", "upi", "card payment", "cash payment", "online payment", "how do i pay"],
+    keywords: [
+      "payment",
+      "pay",
+      "how to pay",
+      "payment method",
+      "upi",
+      "card payment",
+      "cash payment",
+      "online payment",
+      "how do i pay",
+    ],
     question: "What payment methods are supported?",
-    answer: "You can pay cash at the hospital during your visit, or pay online (UPI/Card, simulated for this project) right when you book.",
+    answer:
+      "You can pay cash at the hospital during your visit, or pay online (UPI/Card, simulated for this project) right when you book.",
   },
   {
-    keywords: ["bill", "bills", "invoice", "how much does it cost", "consultation fee amount", "billing", "my bills", "unpaid bill", "pending bill"],
+    keywords: [
+      "bill",
+      "bills",
+      "invoice",
+      "how much does it cost",
+      "consultation fee amount",
+      "billing",
+      "my bills",
+      "unpaid bill",
+      "pending bill",
+    ],
     question: "Where do I see my bills?",
-    answer: "Log in and open your Patient Dashboard - the \"Payments & Bills\" card shows every bill and lets you pay any that are still pending.",
-    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+    answer:
+      'Log in and open your Patient Dashboard - the "Payments & Bills" card shows every bill and lets you pay any that are still pending.',
+    action: {
+      type: "link",
+      href: "register-p.html",
+      label: "Go to my dashboard",
+    },
   },
   {
-    keywords: ["prescription", "medication", "medicine", "what did the doctor prescribe", "my medicines"],
+    keywords: [
+      "prescription",
+      "medication",
+      "medicine",
+      "what did the doctor prescribe",
+      "my medicines",
+    ],
     question: "Where do I see my prescriptions?",
-    answer: "Your Patient Dashboard has a \"Recent Prescriptions\" card listing everything a doctor has prescribed you.",
-    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+    answer:
+      'Your Patient Dashboard has a "Recent Prescriptions" card listing everything a doctor has prescribed you.',
+    action: {
+      type: "link",
+      href: "register-p.html",
+      label: "Go to my dashboard",
+    },
   },
   {
     // Deliberately specific phrasing here (not bare "my appointment", which
     // is genuinely ambiguous with booking intent) - these only fire for
     // someone clearly asking about an appointment they already have.
     keywords: [
-      "my upcoming appointment", "when is my appointment", "check my appointment status",
-      "see my booked appointment", "status of my appointment", "my appointment history",
+      "my upcoming appointment",
+      "when is my appointment",
+      "check my appointment status",
+      "see my booked appointment",
+      "status of my appointment",
+      "my appointment history",
     ],
     question: "How do I see my upcoming appointments?",
-    answer: "Your Patient Dashboard highlights your next appointment at the top, with the full list below it.",
-    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+    answer:
+      "Your Patient Dashboard highlights your next appointment at the top, with the full list below it.",
+    action: {
+      type: "link",
+      href: "register-p.html",
+      label: "Go to my dashboard",
+    },
   },
   {
     keywords: ["emergency", "urgent", "ambulance", "emergency contact"],
     question: "What if it's an emergency?",
-    answer: "Use the Emergency page for urgent situations and emergency contact details.",
+    answer:
+      "Use the Emergency page for urgent situations and emergency contact details.",
     action: { type: "link", href: "emergency.html", label: "Go to Emergency" },
   },
   {
-    keywords: ["cancel appointment", "reschedule", "change appointment", "cancel my booking"],
+    keywords: [
+      "cancel appointment",
+      "reschedule",
+      "change appointment",
+      "cancel my booking",
+    ],
     question: "Can I cancel or reschedule an appointment?",
-    answer: "This isn't self-service yet - contact us and we'll help you reschedule or cancel.",
+    answer:
+      "This isn't self-service yet - contact us and we'll help you reschedule or cancel.",
     action: { type: "link", href: "contact.html", label: "Go to Contact Us" },
   },
   {
-    keywords: ["department", "specialization", "specialist", "cardiologist", "dermatologist", "which doctor department", "find a specialist"],
+    keywords: [
+      "department",
+      "specialization",
+      "specialist",
+      "cardiologist",
+      "dermatologist",
+      "which doctor department",
+      "find a specialist",
+    ],
     question: "How do I find a doctor in a specific department?",
-    answer: "On the Book Appointment page, every real doctor is listed with their department - or describe your need on Request a Demo and we'll match you automatically.",
-    action: { type: "link", href: "appointment.html", label: "Go to Book Appointment" },
+    answer:
+      "On the Book Appointment page, every real doctor is listed with their department - or describe your need on Request a Demo and we'll match you automatically.",
+    action: {
+      type: "link",
+      href: "appointment.html",
+      label: "Go to Book Appointment",
+    },
   },
 ];
 
 const SEARCH_STOPWORDS = new Set([
-  "a", "an", "the", "i", "to", "is", "do", "does", "my", "me", "you", "your",
-  "of", "for", "in", "on", "at", "with", "and", "or", "please", "can", "how",
-  "what", "where", "when", "want", "need", "would", "like", "it", "its", "im",
+  "a",
+  "an",
+  "the",
+  "i",
+  "to",
+  "is",
+  "do",
+  "does",
+  "my",
+  "me",
+  "you",
+  "your",
+  "of",
+  "for",
+  "in",
+  "on",
+  "at",
+  "with",
+  "and",
+  "or",
+  "please",
+  "can",
+  "how",
+  "what",
+  "where",
+  "when",
+  "want",
+  "need",
+  "would",
+  "like",
+  "it",
+  "its",
+  "im",
 ]);
 
 function tokenize(text) {
@@ -207,7 +384,11 @@ function searchFAQ(query) {
         // partial credit for a token the user is still mid-typing
         // (e.g. "appoint" while typing "appointment")
         for (const et of entry._tokens) {
-          if (et.length >= 4 && qt.length >= 4 && (et.startsWith(qt) || qt.startsWith(et))) {
+          if (
+            et.length >= 4 &&
+            qt.length >= 4 &&
+            (et.startsWith(qt) || qt.startsWith(et))
+          ) {
             score += 1.5;
             break;
           }
@@ -233,14 +414,17 @@ function runFAQAction(action) {
     window.location.href = action.href;
   } else if (action.type === "scroll") {
     document.getElementById("searchContainer").classList.remove("active");
-    document.querySelector(action.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .querySelector(action.target)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
 function renderSearchResults(results) {
   const box = document.getElementById("searchResults");
   if (!results.length) {
-    box.innerHTML = '<div class="search-result-empty">No answer found - try "book appointment", "doctors", or "contact".</div>';
+    box.innerHTML =
+      '<div class="search-result-empty">No answer found - try "book appointment", "doctors", or "contact".</div>';
     box.classList.add("has-results");
     return;
   }
@@ -251,13 +435,15 @@ function renderSearchResults(results) {
         <div class="sr-question">${r.question}</div>
         <div class="sr-answer">${r.answer}</div>
         ${r.action ? `<div class="sr-action">${r.action.label} →</div>` : ""}
-      </div>`
+      </div>`,
     )
     .join("");
   box.classList.add("has-results");
 
   box.querySelectorAll(".search-result-item").forEach((el) => {
-    el.addEventListener("click", () => runFAQAction(results[Number(el.dataset.idx)].action));
+    el.addEventListener("click", () =>
+      runFAQAction(results[Number(el.dataset.idx)].action),
+    );
   });
 }
 
@@ -779,9 +965,12 @@ function openDoctorProfile(doctor) {
   document.getElementById("docImage").src = doctor.image;
   document.getElementById("docName").textContent = doctor.name;
   document.getElementById("docSpeciality").textContent = doctor.speciality;
-  document.getElementById("docQualifications").textContent = doctor.qualifications;
+  document.getElementById("docQualifications").textContent =
+    doctor.qualifications;
   document.getElementById("docLocation").textContent = doctor.location;
-  document.getElementById("docFee").textContent = doctor.fee ? `₹${doctor.fee}` : "Contact for pricing";
+  document.getElementById("docFee").textContent = doctor.fee
+    ? `₹${doctor.fee}`
+    : "Contact for pricing";
   document.getElementById("docAvailability").textContent = "Available";
   document.getElementById("docSuccess").textContent = doctor.department;
   document.getElementById("docExperience").textContent = doctor.experience;
@@ -789,10 +978,13 @@ function openDoctorProfile(doctor) {
   document.getElementById("docAbout").textContent = doctor.about;
 
   document.getElementById("sumDoctorName").textContent = doctor.name;
-  document.getElementById("sumDoctorSpeciality").textContent = doctor.speciality;
+  document.getElementById("sumDoctorSpeciality").textContent =
+    doctor.speciality;
   document.getElementById("sumSelectedDate").textContent = "Not selected";
   document.getElementById("sumSelectedTime").textContent = "Not selected";
-  document.getElementById("sumFee").textContent = doctor.fee ? `₹${doctor.fee}` : "Contact for pricing";
+  document.getElementById("sumFee").textContent = doctor.fee
+    ? `₹${doctor.fee}`
+    : "Contact for pricing";
 
   selectedDate = null;
   selectedTime = null;
@@ -838,17 +1030,22 @@ async function loadRealDoctors() {
       name: "Dr. " + d.first_name + " " + d.last_name,
       speciality: d.specialization || d.department || "General Medicine",
       department: d.department || "General Medicine",
-      experience: d.experience_years ? `${d.experience_years} Years Experience` : "Experience not specified",
+      experience: d.experience_years
+        ? `${d.experience_years} Years Experience`
+        : "Experience not specified",
       qualifications: d.qualifications || "Not specified",
       location: d.clinic_location || "Casto Healthcare",
       fee: d.consultation_fee || null,
       patients: d.patients_treated || 0,
-      about: d.bio || `${"Dr. " + d.first_name} sees patients for ${d.department || "general"} care at Casto Healthcare.`,
+      about:
+        d.bio ||
+        `${"Dr. " + d.first_name} sees patients for ${d.department || "general"} care at Casto Healthcare.`,
       image: `https://randomuser.me/api/portraits/${d.gender === "Female" ? "women" : "men"}/${(d.doctor_id % 90) + 1}.jpg`,
     }));
 
     if (!doctors.length) {
-      doctorTrack.innerHTML = '<p style="padding: 20px; color: #888;">No doctors registered yet.</p>';
+      doctorTrack.innerHTML =
+        '<p style="padding: 20px; color: #888;">No doctors registered yet.</p>';
       return;
     }
 
@@ -861,7 +1058,8 @@ async function loadRealDoctors() {
     });
   } catch (err) {
     console.error("Could not load doctors:", err.message);
-    doctorTrack.innerHTML = '<p style="padding: 20px; color: #888;">Could not load doctors right now.</p>';
+    doctorTrack.innerHTML =
+      '<p style="padding: 20px; color: #888;">Could not load doctors right now.</p>';
   }
 }
 
@@ -945,7 +1143,15 @@ function toggleCard(element) {
 // (keyword-matched, non-diagnostic) symptom flow below.
 const EMERGENCY_PATTERNS = [
   {
-    keywords: ["cpr", "not breathing", "stopped breathing", "no pulse", "cardiac arrest", "unresponsive", "unconscious and not breathing"],
+    keywords: [
+      "cpr",
+      "not breathing",
+      "stopped breathing",
+      "no pulse",
+      "cardiac arrest",
+      "unresponsive",
+      "unconscious and not breathing",
+    ],
     title: "This sounds like it could be cardiac arrest",
     steps: [
       "Call emergency services (112) right now, or have someone else call while you help.",
@@ -957,7 +1163,12 @@ const EMERGENCY_PATTERNS = [
     ],
   },
   {
-    keywords: ["choking", "can't breathe", "something stuck in throat", "swallowed wrong"],
+    keywords: [
+      "choking",
+      "can't breathe",
+      "something stuck in throat",
+      "swallowed wrong",
+    ],
     title: "This sounds like choking",
     steps: [
       "If they can cough or speak, encourage them to keep coughing - don't intervene yet.",
@@ -968,7 +1179,12 @@ const EMERGENCY_PATTERNS = [
     ],
   },
   {
-    keywords: ["heart attack", "chest pain radiating", "crushing chest pain", "chest pain and arm"],
+    keywords: [
+      "heart attack",
+      "chest pain radiating",
+      "crushing chest pain",
+      "chest pain and arm",
+    ],
     title: "This could be a heart attack",
     steps: [
       "Call emergency services (112) immediately - don't try to drive yourself.",
@@ -979,7 +1195,13 @@ const EMERGENCY_PATTERNS = [
     ],
   },
   {
-    keywords: ["stroke", "face drooping", "slurred speech", "sudden numbness", "sudden confusion one side"],
+    keywords: [
+      "stroke",
+      "face drooping",
+      "slurred speech",
+      "sudden numbness",
+      "sudden confusion one side",
+    ],
     title: "This could be a stroke - remember FAST",
     steps: [
       "Face: ask them to smile - does one side droop?",
@@ -990,7 +1212,12 @@ const EMERGENCY_PATTERNS = [
     ],
   },
   {
-    keywords: ["severe bleeding", "won't stop bleeding", "bleeding heavily", "deep cut bleeding"],
+    keywords: [
+      "severe bleeding",
+      "won't stop bleeding",
+      "bleeding heavily",
+      "deep cut bleeding",
+    ],
     title: "This sounds like severe bleeding",
     steps: [
       "Call emergency services (112) if bleeding is heavy or won't stop.",
@@ -1002,7 +1229,14 @@ const EMERGENCY_PATTERNS = [
   },
 ];
 
-const CRISIS_KEYWORDS = ["suicide", "want to die", "kill myself", "end my life", "self harm", "hurt myself"];
+const CRISIS_KEYWORDS = [
+  "suicide",
+  "want to die",
+  "kill myself",
+  "end my life",
+  "self harm",
+  "hurt myself",
+];
 
 function checkForEmergency(input) {
   const lower = input.toLowerCase();
@@ -1185,22 +1419,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const avatarEl = document.getElementById("menuProfileAvatar");
     if (avatarEl) avatarEl.textContent = initials || "?";
 
-    const roleLabel = session.role === "PATIENT" ? "Patient"
-      : session.role === "DOCTOR" ? "Doctor"
-      : session.role === "ADMIN" ? "Administrator"
-      : session.role === "NURSE" ? "Front Desk"
-      : session.role;
+    const roleLabel =
+      session.role === "PATIENT"
+        ? "Patient"
+        : session.role === "DOCTOR"
+          ? "Doctor"
+          : session.role === "ADMIN"
+            ? "Administrator"
+            : session.role === "NURSE"
+              ? "Front Desk"
+              : session.role;
     document.getElementById("menuProfileRole").textContent = roleLabel;
 
-    const dashboardFor = { PATIENT: "register-p.html", DOCTOR: "register.html" };
+    const dashboardFor = {
+      PATIENT: "register-p.html",
+      DOCTOR: "register.html",
+    };
     const destination = dashboardFor[session.role];
 
     const gotoEl = document.getElementById("menuProfileGoto");
     if (destination) {
       gotoEl.textContent = "Tap to go to my dashboard →";
-      document.getElementById("menuProfileCard").addEventListener("click", () => {
-        window.location.href = destination;
-      });
+      document
+        .getElementById("menuProfileCard")
+        .addEventListener("click", () => {
+          window.location.href = destination;
+        });
     } else {
       gotoEl.textContent = "";
       document.getElementById("menuProfileCard").style.cursor = "default";
@@ -1225,15 +1469,39 @@ if (menuLogoutBtn) {
 // ----- Footer feedback form -----
 const FEEDBACK_QUESTIONS = [
   { key: "q1_navigation", text: "How easy was it to navigate the website?" },
-  { key: "q2_booking", text: "How would you rate the appointment booking process?" },
-  { key: "q3_doctor_info", text: "How clear was the information about doctors and services?" },
-  { key: "q4_registration", text: "How satisfied are you with the registration process?" },
-  { key: "q5_design", text: "How would you rate the overall design and visual appeal?" },
+  {
+    key: "q2_booking",
+    text: "How would you rate the appointment booking process?",
+  },
+  {
+    key: "q3_doctor_info",
+    text: "How clear was the information about doctors and services?",
+  },
+  {
+    key: "q4_registration",
+    text: "How satisfied are you with the registration process?",
+  },
+  {
+    key: "q5_design",
+    text: "How would you rate the overall design and visual appeal?",
+  },
   { key: "q6_speed", text: "How fast/responsive did the website feel?" },
-  { key: "q7_findability", text: "How easy was it to find what you were looking for?" },
-  { key: "q8_recommend", text: "How likely are you to recommend this website to others?" },
-  { key: "q9_billing", text: "How would you rate the billing and payment experience?" },
-  { key: "q10_overall", text: "Overall, how satisfied are you with the website?" },
+  {
+    key: "q7_findability",
+    text: "How easy was it to find what you were looking for?",
+  },
+  {
+    key: "q8_recommend",
+    text: "How likely are you to recommend this website to others?",
+  },
+  {
+    key: "q9_billing",
+    text: "How would you rate the billing and payment experience?",
+  },
+  {
+    key: "q10_overall",
+    text: "Overall, how satisfied are you with the website?",
+  },
 ];
 
 function renderFeedbackQuestions() {
@@ -1254,11 +1522,11 @@ function renderFeedbackQuestions() {
             style="flex: 1; padding: 8px 0; border: 1px solid #ddd; background: #fff;
                    border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;">
             ${n}
-          </button>`
+          </button>`,
           )
           .join("")}
       </div>
-    </div>`
+    </div>`,
   ).join("");
 
   container.querySelectorAll(".feedback-scale-btn").forEach((btn) => {
@@ -1288,10 +1556,12 @@ function closeFeedbackModal() {
 }
 
 const openFeedbackBtn = document.getElementById("openFeedbackBtn");
-if (openFeedbackBtn) openFeedbackBtn.addEventListener("click", openFeedbackModal);
+if (openFeedbackBtn)
+  openFeedbackBtn.addEventListener("click", openFeedbackModal);
 
 const feedbackCancelBtn = document.getElementById("feedbackCancelBtn");
-if (feedbackCancelBtn) feedbackCancelBtn.addEventListener("click", closeFeedbackModal);
+if (feedbackCancelBtn)
+  feedbackCancelBtn.addEventListener("click", closeFeedbackModal);
 
 const feedbackComments = document.getElementById("feedbackComments");
 if (feedbackComments) {
@@ -1301,7 +1571,10 @@ if (feedbackComments) {
     if (words.length > 100) {
       feedbackComments.value = words.slice(0, 100).join(" ");
     }
-    const finalCount = feedbackComments.value.trim().split(/\s+/).filter(Boolean).length;
+    const finalCount = feedbackComments.value
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean).length;
     countEl.textContent = `${finalCount} / 100 words`;
     countEl.style.color = finalCount >= 100 ? "#d33" : "#999";
   });
@@ -1315,10 +1588,12 @@ if (feedbackSubmitBtn) {
 
     const answers = {};
     let allAnswered = true;
-    document.querySelectorAll("#feedbackQuestions [data-question]").forEach((group) => {
-      if (!group.dataset.selected) allAnswered = false;
-      answers[group.dataset.question] = Number(group.dataset.selected);
-    });
+    document
+      .querySelectorAll("#feedbackQuestions [data-question]")
+      .forEach((group) => {
+        if (!group.dataset.selected) allAnswered = false;
+        answers[group.dataset.question] = Number(group.dataset.selected);
+      });
 
     if (!allAnswered) {
       errorEl.textContent = "Please answer all 10 questions before submitting.";
@@ -1329,19 +1604,25 @@ if (feedbackSubmitBtn) {
     feedbackSubmitBtn.disabled = true;
     feedbackSubmitBtn.textContent = "Submitting…";
     try {
-      await submitFeedback({ ...answers, comments: feedbackComments.value.trim() });
+      await submitFeedback({
+        ...answers,
+        comments: feedbackComments.value.trim(),
+      });
       closeFeedbackModal();
       alert("Thanks for your feedback! It really helps us improve.");
-      document.querySelectorAll("#feedbackQuestions [data-question]").forEach((group) => {
-        delete group.dataset.selected;
-        group.querySelectorAll(".feedback-scale-btn").forEach((b) => {
-          b.style.background = "#fff";
-          b.style.color = "#000";
-          b.style.borderColor = "#ddd";
+      document
+        .querySelectorAll("#feedbackQuestions [data-question]")
+        .forEach((group) => {
+          delete group.dataset.selected;
+          group.querySelectorAll(".feedback-scale-btn").forEach((b) => {
+            b.style.background = "#fff";
+            b.style.color = "#000";
+            b.style.borderColor = "#ddd";
+          });
         });
-      });
       feedbackComments.value = "";
-      document.getElementById("feedbackWordCount").textContent = "0 / 100 words";
+      document.getElementById("feedbackWordCount").textContent =
+        "0 / 100 words";
     } catch (err) {
       errorEl.textContent = err.message;
       errorEl.style.display = "block";
@@ -1350,4 +1631,26 @@ if (feedbackSubmitBtn) {
       feedbackSubmitBtn.textContent = "Submit";
     }
   });
+}
+// For FAQs
+function toggleFAQ(button) {
+  const item = button.parentElement;
+  const answer = button.nextElementSibling;
+
+  // Close other open items (Accordion effect)
+  document.querySelectorAll(".faq-item").forEach((otherItem) => {
+    if (otherItem !== item) {
+      otherItem.classList.remove("active");
+      otherItem.querySelector(".faq-answer").style.maxHeight = null;
+    }
+  });
+
+  // Toggle current item
+  item.classList.toggle("active");
+
+  if (item.classList.contains("active")) {
+    answer.style.maxHeight = answer.scrollHeight + "px";
+  } else {
+    answer.style.maxHeight = null;
+  }
 }
