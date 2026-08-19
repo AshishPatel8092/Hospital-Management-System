@@ -4312,9 +4312,10 @@ button {
 }
 
 /* FAQs section */
-/* Variables for easy customization */
+/* Variables */
 :root {
-  --primary-blue: #2563eb; /* Matches your website's blue */
+  --primary-blue: rgb(13, 92, 103);
+  --primary-blue-light: rgba(13, 92, 103, 0.1);
   --text-dark: #1e293b;
   --text-gray: #64748b;
   --bg-light: #f8fafc;
@@ -4325,7 +4326,7 @@ button {
 .faq-section {
   padding: 60px 20px;
   background-color: var(--bg-light);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .faq-container {
@@ -4394,13 +4395,14 @@ button {
 }
 
 .faq-question:hover {
-  background-color: #fcfcfc;
+  background-color: var(--primary-blue-light);
 }
 
 .faq-icon {
   font-size: 12px;
   color: var(--primary-blue);
   transition: transform 0.3s ease;
+  margin-left: 10px;
 }
 
 /* Answer Area */
@@ -4418,11 +4420,48 @@ button {
   margin: 0;
 }
 
-/* Class added by JS when open */
 .faq-item.active {
   border-color: var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(13, 92, 103, 0.1);
 }
 
 .faq-item.active .faq-icon {
   transform: rotate(180deg);
+}
+
+/* --- RESPONSIVE SETTINGS --- */
+
+/* Tablets (below 768px) */
+@media (max-width: 768px) {
+  .faq-header h2 {
+    font-size: 28px;
+  }
+  .faq-header p {
+    font-size: 16px;
+  }
+  .faq-question {
+    font-size: 16px;
+    padding: 15px;
+  }
+}
+
+/* Mobile Phones (below 480px) */
+@media (max-width: 480px) {
+  .faq-section {
+    padding: 40px 15px;
+  }
+  .faq-header h2 {
+    font-size: 24px;
+  }
+  .faq-header p {
+    font-size: 14px;
+  }
+  .faq-question {
+    font-size: 15px;
+    padding: 12px;
+  }
+  .faq-answer p {
+    font-size: 14px;
+    padding: 0 15px 15px 15px;
+  }
 }
