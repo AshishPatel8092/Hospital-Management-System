@@ -382,8 +382,6 @@
 </style>
   </head>
   <body>
-    <div id="backBtnHolder" style="padding: 20px 16px 0;"></div>
-
     <!-- SIGN IN PAGE VIEW -->
     <div class="page-view" id="view-signin">
       <div class="page-header">
@@ -562,7 +560,7 @@
     </div>
   <script src="api.js?v=3"></script>
   <script>
-      renderBackButton("backBtnHolder");
+      renderBackButton(16);
 
     function destinationFor(role) {
       if (role === 'PATIENT') return 'register-p.html';

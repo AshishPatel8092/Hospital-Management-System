@@ -39,6 +39,7 @@ app.use('/api/pharmacy', require('./routes/pharmacy'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/demo-requests', require('./routes/demo'));
 app.use('/api/prescriptions', require('./routes/prescriptions'));
+app.use('/api/feedback', require('./routes/feedback'));
 
 app.get('/api/health', (req, res) => res.json({ success: true, message: 'API is running.' }));
 

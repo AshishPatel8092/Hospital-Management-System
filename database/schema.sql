@@ -271,6 +271,28 @@ INSERT INTO medical_registration_numbers (registration_number) VALUES
 ('MCI-2024-11023'),
 ('MCI-2024-11456');
 
+-- ---------------------------------------------------------------------
+-- FEEDBACK  (from the footer "Give Feedback" button - anyone can submit,
+-- no login needed. q1-q10 are 1-5 ratings, comments is free text.)
+-- ---------------------------------------------------------------------
+CREATE TABLE feedback_responses (
+    feedback_id   INT AUTO_INCREMENT PRIMARY KEY,
+    submitted_by  INT NULL,
+    q1_navigation       TINYINT NOT NULL,
+    q2_booking            TINYINT NOT NULL,
+    q3_doctor_info          TINYINT NOT NULL,
+    q4_registration           TINYINT NOT NULL,
+    q5_design                    TINYINT NOT NULL,
+    q6_speed                        TINYINT NOT NULL,
+    q7_findability                     TINYINT NOT NULL,
+    q8_recommend                          TINYINT NOT NULL,
+    q9_billing                               TINYINT NOT NULL,
+    q10_overall                                 TINYINT NOT NULL,
+    comments      VARCHAR(700),
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_feedback_user FOREIGN KEY (submitted_by) REFERENCES users(user_id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
 -- Sample pharmacy stock
 INSERT INTO pharmacy_inventory (item_name, category, quantity, unit_price, expiry_date, supplier, reorder_level)
 VALUES

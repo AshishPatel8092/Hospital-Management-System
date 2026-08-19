@@ -1221,3 +1221,133 @@ if (menuLogoutBtn) {
     });
   });
 }
+
+// ----- Footer feedback form -----
+const FEEDBACK_QUESTIONS = [
+  { key: "q1_navigation", text: "How easy was it to navigate the website?" },
+  { key: "q2_booking", text: "How would you rate the appointment booking process?" },
+  { key: "q3_doctor_info", text: "How clear was the information about doctors and services?" },
+  { key: "q4_registration", text: "How satisfied are you with the registration process?" },
+  { key: "q5_design", text: "How would you rate the overall design and visual appeal?" },
+  { key: "q6_speed", text: "How fast/responsive did the website feel?" },
+  { key: "q7_findability", text: "How easy was it to find what you were looking for?" },
+  { key: "q8_recommend", text: "How likely are you to recommend this website to others?" },
+  { key: "q9_billing", text: "How would you rate the billing and payment experience?" },
+  { key: "q10_overall", text: "Overall, how satisfied are you with the website?" },
+];
+
+function renderFeedbackQuestions() {
+  const container = document.getElementById("feedbackQuestions");
+  if (!container || container.dataset.rendered) return;
+  container.dataset.rendered = "true";
+  container.innerHTML = FEEDBACK_QUESTIONS.map(
+    (q, i) => `
+    <div style="margin-bottom: 14px;">
+      <label style="font-size: 13.5px; font-weight: 600; display: block; margin-bottom: 6px;">
+        ${i + 1}. ${q.text}
+      </label>
+      <div style="display: flex; gap: 6px;" data-question="${q.key}">
+        ${[1, 2, 3, 4, 5]
+          .map(
+            (n) => `
+          <button type="button" class="feedback-scale-btn" data-value="${n}"
+            style="flex: 1; padding: 8px 0; border: 1px solid #ddd; background: #fff;
+                   border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;">
+            ${n}
+          </button>`
+          )
+          .join("")}
+      </div>
+    </div>`
+  ).join("");
+
+  container.querySelectorAll(".feedback-scale-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const group = btn.closest("[data-question]");
+      group.querySelectorAll(".feedback-scale-btn").forEach((b) => {
+        b.style.background = "#fff";
+        b.style.color = "#000";
+        b.style.borderColor = "#ddd";
+      });
+      btn.style.background = "#16a085";
+      btn.style.color = "#fff";
+      btn.style.borderColor = "#16a085";
+      group.dataset.selected = btn.dataset.value;
+    });
+  });
+}
+
+function openFeedbackModal() {
+  renderFeedbackQuestions();
+  document.getElementById("feedbackModal").style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+function closeFeedbackModal() {
+  document.getElementById("feedbackModal").style.display = "none";
+  document.body.style.overflow = "";
+}
+
+const openFeedbackBtn = document.getElementById("openFeedbackBtn");
+if (openFeedbackBtn) openFeedbackBtn.addEventListener("click", openFeedbackModal);
+
+const feedbackCancelBtn = document.getElementById("feedbackCancelBtn");
+if (feedbackCancelBtn) feedbackCancelBtn.addEventListener("click", closeFeedbackModal);
+
+const feedbackComments = document.getElementById("feedbackComments");
+if (feedbackComments) {
+  feedbackComments.addEventListener("input", () => {
+    const words = feedbackComments.value.trim().split(/\s+/).filter(Boolean);
+    const countEl = document.getElementById("feedbackWordCount");
+    if (words.length > 100) {
+      feedbackComments.value = words.slice(0, 100).join(" ");
+    }
+    const finalCount = feedbackComments.value.trim().split(/\s+/).filter(Boolean).length;
+    countEl.textContent = `${finalCount} / 100 words`;
+    countEl.style.color = finalCount >= 100 ? "#d33" : "#999";
+  });
+}
+
+const feedbackSubmitBtn = document.getElementById("feedbackSubmitBtn");
+if (feedbackSubmitBtn) {
+  feedbackSubmitBtn.addEventListener("click", async () => {
+    const errorEl = document.getElementById("feedbackError");
+    errorEl.style.display = "none";
+
+    const answers = {};
+    let allAnswered = true;
+    document.querySelectorAll("#feedbackQuestions [data-question]").forEach((group) => {
+      if (!group.dataset.selected) allAnswered = false;
+      answers[group.dataset.question] = Number(group.dataset.selected);
+    });
+
+    if (!allAnswered) {
+      errorEl.textContent = "Please answer all 10 questions before submitting.";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    feedbackSubmitBtn.disabled = true;
+    feedbackSubmitBtn.textContent = "Submitting…";
+    try {
+      await submitFeedback({ ...answers, comments: feedbackComments.value.trim() });
+      closeFeedbackModal();
+      alert("Thanks for your feedback! It really helps us improve.");
+      document.querySelectorAll("#feedbackQuestions [data-question]").forEach((group) => {
+        delete group.dataset.selected;
+        group.querySelectorAll(".feedback-scale-btn").forEach((b) => {
+          b.style.background = "#fff";
+          b.style.color = "#000";
+          b.style.borderColor = "#ddd";
+        });
+      });
+      feedbackComments.value = "";
+      document.getElementById("feedbackWordCount").textContent = "0 / 100 words";
+    } catch (err) {
+      errorEl.textContent = err.message;
+      errorEl.style.display = "block";
+    } finally {
+      feedbackSubmitBtn.disabled = false;
+      feedbackSubmitBtn.textContent = "Submit";
+    }
+  });
+}

@@ -234,8 +234,6 @@
   </head>
 
   <body>
-    <div id="backBtnHolder" style="padding: 20px 16px 0;"></div>
-
     <div class="contact-wrapper">
       <div class="contact-container">
         <!-- LEFT -->
@@ -331,7 +329,7 @@
     </div>
     <script src="api.js?v=3"></script>
     <script>
-      renderBackButton("backBtnHolder");
+      renderBackButton(16);
 
       document.getElementById("contactSubmitBtn").addEventListener("click", async () => {
         const btn = document.getElementById("contactSubmitBtn");

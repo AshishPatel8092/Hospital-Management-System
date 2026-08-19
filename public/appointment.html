@@ -418,9 +418,9 @@
         background: #8a6bbf;
       }
 
-      /* ===== Step 2: Billing & Payment ===== */
+      /* ===== Step 2: Billing & Payment (two-column checkout layout) ===== */
       .billing-summary {
-        max-width: 560px;
+        max-width: 980px;
         margin: 0 auto;
       }
 
@@ -437,44 +437,94 @@
         text-decoration: underline;
       }
 
-      .billing-summary h2 {
-        margin: 0 0 16px;
-        font-size: 22px;
-      }
-
-      .pay-method-list {
-        border: 1px solid #e5e5e5;
-        border-radius: 12px;
-        overflow: hidden;
-      }
-
-      /* Step progress bar, like the reference design */
-      .step-progress {
+      .checkout-header {
         display: flex;
-        gap: 6px;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
         margin-bottom: 22px;
       }
-      .step-progress span {
-        flex: 1;
-        height: 4px;
-        border-radius: 2px;
-        background: #e9e4f5;
+      .checkout-header h2 {
+        margin: 0 0 4px;
+        font-size: 22px;
       }
-      .step-progress span.done {
-        background: #1a1a2e;
+      .checkout-subtitle {
+        margin: 0;
+        font-size: 13px;
+        color: #888;
+      }
+      .secure-badge {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #444;
+        background: #f4f4f4;
+        border-radius: 20px;
+        padding: 7px 14px;
+        white-space: nowrap;
       }
 
-      .pay-method-list {
+      .checkout-grid {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 22px;
+        align-items: start;
+      }
+
+      .checkout-card {
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 18px;
+        background: #fff;
+      }
+      .checkout-card-title {
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 12px;
+      }
+      .checkout-line {
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
+        font-size: 13.5px;
+        color: #444;
+        padding: 6px 0;
+      }
+      .checkout-line-value {
+        font-weight: 600;
+        color: #222;
+        text-align: right;
+      }
+      .checkout-divider {
+        height: 1px;
+        background: #eee;
+        margin: 8px 0;
+      }
+      .checkout-total {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+      }
+      .checkout-patient-recap {
+        font-size: 13.5px;
+        color: #333;
+        line-height: 1.7;
+      }
+
+      .pay-method-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         gap: 10px;
-        border: none;
+        margin-bottom: 18px;
       }
       .pay-method-row {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px 16px;
+        gap: 10px;
+        padding: 13px 14px;
         border: 1px solid #eee;
         border-radius: 12px;
         cursor: pointer;
@@ -482,39 +532,41 @@
         background: #fff;
       }
       .pay-method-row:hover {
-        border-color: #d9cdf2;
+        border-color: #b9d6da;
       }
       .pay-method-icon {
-        font-size: 20px;
-        width: 32px;
-        height: 32px;
+        font-size: 18px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        background: #f6f4fb;
+        background: #f4f9fa;
+        flex-shrink: 0;
       }
       .pay-method-label {
         flex: 1;
-        font-size: 14.5px;
+        font-size: 13.5px;
         font-weight: 600;
         color: #333;
       }
       .pay-method-check {
-        width: 20px;
-        height: 20px;
-        border-radius: 6px;
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
         border: 1.5px solid #ccc;
         flex-shrink: 0;
         position: relative;
       }
       .pay-method-row.selected {
-        border-color: #1a1a2e;
-        box-shadow: 0 0 0 1px #1a1a2e;
+        border-color: #1a7a8a;
+        background: #f4f9fa;
+        box-shadow: 0 0 0 1px #1a7a8a;
       }
       .pay-method-row.selected .pay-method-check {
-        border-color: #1a1a2e;
-        background: #1a1a2e;
+        border-color: #1a7a8a;
+        background: #1a7a8a;
       }
       .pay-method-row.selected .pay-method-check::after {
         content: "✓";
@@ -524,13 +576,46 @@
         align-items: center;
         justify-content: center;
         color: #fff;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 700;
+      }
+
+      .pay-method-detail {
+        border: 1.5px solid #1a7a8a;
+        border-radius: 14px;
+        padding: 18px;
+        background: #f9fdfd;
+      }
+
+      .card-brands {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #888;
+        letter-spacing: 0.03em;
+        margin-bottom: 12px;
+      }
+
+      .checkout-checkbox-row {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 500 !important;
+        color: #555;
+      }
+
+      .checkout-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 22px;
+      }
+      .checkout-footer .confirm-btn {
+        max-width: 340px;
       }
 
       .pay-panel {
         display: none;
-        margin-top: 14px;
       }
       .pay-panel.active {
         display: block;
@@ -541,6 +626,22 @@
         color: #777;
         line-height: 1.5;
         margin: 8px 0 0;
+      }
+
+      @media (max-width: 700px) {
+        .checkout-grid {
+          grid-template-columns: 1fr;
+        }
+        .pay-method-grid {
+          grid-template-columns: 1fr;
+        }
+        .checkout-footer {
+          justify-content: stretch;
+        }
+        .checkout-footer .confirm-btn {
+          max-width: none;
+          width: 100%;
+        }
       }
 
       .card-form {
@@ -607,8 +708,6 @@
     </style>
   </head>
   <body>
-    <div id="backBtnHolder" style="padding: 20px 16px 0;"></div>
-
     <div class="container">
       <div class="header">
         <h1>Billing & Payment</h1>
@@ -724,111 +823,132 @@
       <div id="paymentStep" style="display: none">
         <div class="billing-summary">
           <button class="back-link" onclick="backToSelection()">← Back to selection</button>
-          <h2>Review &amp; Pay</h2>
-          <div class="step-progress">
-            <span class="done"></span>
-            <span class="done"></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="summary-box">
-            <div class="summary-item">
-              <span class="summary-label">Doctor:</span>
-              <span class="summary-value" id="paySummaryDoctor"></span>
+          <div class="checkout-header">
+            <div>
+              <h2>Billing &amp; Payment</h2>
+              <p class="checkout-subtitle">Review your appointment and complete payment</p>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Speciality:</span>
-              <span class="summary-value" id="paySummarySpeciality"></span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Date:</span>
-              <span class="summary-value" id="paySummaryDate"></span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Time:</span>
-              <span class="summary-value" id="paySummaryTime"></span>
-            </div>
-            <div class="fee-section">
-              <div class="consultation-fee">
-                <span class="summary-label">Amount Payable:</span>
-                <span class="fee-amount" id="paySummaryFee">₹600</span>
-              </div>
-            </div>
+            <span class="secure-badge">🔒 100% Secure Checkout</span>
           </div>
 
-          <div class="payment-section">
-            <div class="section-title" style="margin-bottom: 10px">
-              Select Payment Method
-            </div>
-            <div class="pay-method-list" id="payMethodTabs">
-              <div class="pay-method-row selected" data-method="Cash" onclick="selectPaymentMethod('Cash')">
-                <span class="pay-method-icon">💵</span>
-                <span class="pay-method-label">Cash at Hospital</span>
-                <span class="pay-method-check"></span>
+          <div class="checkout-grid">
+            <!-- LEFT: billing summary -->
+            <div class="checkout-col-left">
+              <div class="checkout-card">
+                <div class="checkout-card-title">Billing Summary</div>
+                <div class="checkout-line">
+                  <span>Doctor</span>
+                  <span id="paySummaryDoctor" class="checkout-line-value"></span>
+                </div>
+                <div class="checkout-line">
+                  <span>Speciality</span>
+                  <span id="paySummarySpeciality" class="checkout-line-value"></span>
+                </div>
+                <div class="checkout-line">
+                  <span>Date</span>
+                  <span id="paySummaryDate" class="checkout-line-value"></span>
+                </div>
+                <div class="checkout-line">
+                  <span>Time</span>
+                  <span id="paySummaryTime" class="checkout-line-value"></span>
+                </div>
+                <div class="checkout-line">
+                  <span>Consultation Fee</span>
+                  <span id="paySummarySubtotal" class="checkout-line-value"></span>
+                </div>
+                <div class="checkout-divider"></div>
+                <div class="checkout-line checkout-total">
+                  <span>Total Due</span>
+                  <span id="paySummaryFee" class="fee-amount">₹600</span>
+                </div>
               </div>
-              <div class="pay-method-row" data-method="Card" onclick="selectPaymentMethod('Card')">
-                <span class="pay-method-icon">💳</span>
-                <span class="pay-method-label">Debit / Credit Card</span>
-                <span class="pay-method-check"></span>
-              </div>
-              <div class="pay-method-row" data-method="UPI" onclick="selectPaymentMethod('UPI')">
-                <span class="pay-method-icon">🏦</span>
-                <span class="pay-method-label">UPI</span>
-                <span class="pay-method-check"></span>
-              </div>
-              <div class="pay-method-row" data-method="PhonePe" onclick="selectPaymentMethod('PhonePe')">
-                <span class="pay-method-icon">📱</span>
-                <span class="pay-method-label">PhonePe / Google Pay</span>
-                <span class="pay-method-check"></span>
+
+              <div class="checkout-card">
+                <div class="checkout-card-title">Booking For</div>
+                <div id="paySummaryPatient" class="checkout-patient-recap"></div>
               </div>
             </div>
 
-            <div id="payMethodPanel">
-              <div class="pay-panel active" data-panel="Cash">
-                <p class="pay-hint">Pay ₹<span class="panel-fee"></span> at the hospital reception during your visit.</p>
+            <!-- RIGHT: payment method selection -->
+            <div class="checkout-col-right">
+              <div class="checkout-card-title">Select Payment Method</div>
+
+              <div class="pay-method-grid" id="payMethodTabs">
+                <div class="pay-method-row selected" data-method="Cash" onclick="selectPaymentMethod('Cash')">
+                  <span class="pay-method-icon">💵</span>
+                  <span class="pay-method-label">Cash at Hospital</span>
+                  <span class="pay-method-check"></span>
+                </div>
+                <div class="pay-method-row" data-method="Card" onclick="selectPaymentMethod('Card')">
+                  <span class="pay-method-icon">💳</span>
+                  <span class="pay-method-label">Debit / Credit Card</span>
+                  <span class="pay-method-check"></span>
+                </div>
+                <div class="pay-method-row" data-method="UPI" onclick="selectPaymentMethod('UPI')">
+                  <span class="pay-method-icon">🏦</span>
+                  <span class="pay-method-label">UPI</span>
+                  <span class="pay-method-check"></span>
+                </div>
+                <div class="pay-method-row" data-method="PhonePe" onclick="selectPaymentMethod('PhonePe')">
+                  <span class="pay-method-icon">📱</span>
+                  <span class="pay-method-label">PhonePe / Google Pay</span>
+                  <span class="pay-method-check"></span>
+                </div>
               </div>
 
-              <div class="pay-panel" data-panel="Card">
-                <div class="card-form">
-                  <label>Card Number
-                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" />
-                  </label>
-                  <div class="card-form-row">
-                    <label>Expiry
-                      <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" />
+              <div id="payMethodPanel" class="pay-method-detail">
+                <div class="pay-panel active" data-panel="Cash">
+                  <p class="pay-hint">Pay ₹<span class="panel-fee"></span> at the hospital reception during your visit. No online payment needed.</p>
+                </div>
+
+                <div class="pay-panel" data-panel="Card">
+                  <div class="card-brands">VISA &nbsp;•&nbsp; Mastercard &nbsp;•&nbsp; RuPay</div>
+                  <div class="card-form">
+                    <label>Card Number
+                      <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" />
                     </label>
-                    <label>CVV
-                      <input type="password" id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric" />
+                    <div class="card-form-row">
+                      <label>Expiry
+                        <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" />
+                      </label>
+                      <label>CVV
+                        <input type="password" id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric" />
+                      </label>
+                    </div>
+                    <label>Name on Card
+                      <input type="text" id="cardName" placeholder="As printed on the card" />
                     </label>
+                    <label class="checkout-checkbox-row">
+                      <input type="checkbox" /> Save this card for future billing
+                    </label>
+                    <p class="pay-hint">Simulated payment form for this project - no real card processing happens, and nothing here is sent to or stored on the server.</p>
                   </div>
-                  <label>Name on Card
-                    <input type="text" id="cardName" placeholder="As printed on the card" />
-                  </label>
-                  <p class="pay-hint">This is a simulated payment form for this project - no real card processing happens, and nothing here is sent to or stored on the server.</p>
                 </div>
-              </div>
 
-              <div class="pay-panel" data-panel="UPI">
-                <div class="card-form">
-                  <label>UPI ID
-                    <input type="text" id="upiId" placeholder="yourname@upi" />
-                  </label>
-                  <p class="pay-hint">Simulated for this project - enter any UPI ID format, nothing is actually charged.</p>
+                <div class="pay-panel" data-panel="UPI">
+                  <div class="card-form">
+                    <label>UPI ID
+                      <input type="text" id="upiId" placeholder="yourname@upi" />
+                    </label>
+                    <p class="pay-hint">Simulated for this project - enter any UPI ID format, nothing is actually charged.</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="pay-panel" data-panel="PhonePe">
-                <div class="qr-panel">
-                  <div id="qrcodeBox"></div>
-                  <p class="pay-hint">Scan with PhonePe, Google Pay, or Paytm.<br />Simulated QR for this project - scanning it won't actually charge anyone.</p>
+                <div class="pay-panel" data-panel="PhonePe">
+                  <div class="qr-panel">
+                    <div id="qrcodeBox"></div>
+                    <p class="pay-hint">Scan with PhonePe, Google Pay, or Paytm.<br />Simulated QR for this project - scanning it won't actually charge anyone.</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <button class="confirm-btn" id="confirmBtn" onclick="confirmBooking()">
-            Confirm &amp; Pay →
-          </button>
+          <div class="checkout-footer">
+            <button class="confirm-btn" id="confirmBtn" onclick="confirmBooking()">
+              Proceed to Secure Payment
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -836,7 +956,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="api.js?v=3"></script>
     <script>
-      renderBackButton("backBtnHolder");
+      renderBackButton(16);
 
       // Doctors are loaded from the backend (see loadDoctors below) instead
       // of being hardcoded here.
@@ -1149,7 +1269,16 @@
         document.getElementById("paySummaryTime").textContent = selectedTime;
         const feeText = selectedDoctor.fee ? `₹${selectedDoctor.fee}` : "Payable at hospital";
         document.getElementById("paySummaryFee").textContent = feeText;
+        document.getElementById("paySummarySubtotal").textContent = feeText;
         document.querySelectorAll(".panel-fee").forEach((el) => (el.textContent = selectedDoctor.fee || "500"));
+
+        const recapEl = document.getElementById("paySummaryPatient");
+        if (currentPatient) {
+          recapEl.innerHTML = `
+            <div><b>${currentPatient.first_name} ${currentPatient.last_name}</b></div>
+            <div>${currentPatient.phone || "No phone on file"}${currentPatient.email ? " · " + currentPatient.email : ""}</div>
+          `;
+        }
 
         selectPaymentMethod("Cash");
 
@@ -1232,7 +1361,7 @@
         } catch (err) {
           alert("Booking failed: " + err.message);
           confirmBtn.disabled = false;
-          confirmBtn.textContent = "Confirm & Pay →";
+          confirmBtn.textContent = "Proceed to Secure Payment";
         }
       }
 

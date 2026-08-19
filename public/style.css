@@ -583,7 +583,6 @@ body.logged-in .guest-only {
   backdrop-filter: blur(3px);
   cursor: pointer;
 }
-
 .btn-primary:hover {
   transform: translateY(-1px);
 }
@@ -3787,7 +3786,6 @@ button {
 
 .hero-buttons > a {
   display: inline-flex;
-  text-decoration: none !important;
 }
 
 .btn-primary,
