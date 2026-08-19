@@ -582,10 +582,10 @@ body.logged-in .guest-only {
   border: 1.5px solid rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(3px);
   cursor: pointer;
-  text-decoration: none;
 }
 .btn-secondary a {
-  text-decoration: none;
+  text-decoration: none !important;
+  color: inherit;
 }
 .btn-primary:hover {
   transform: translateY(-1px);
