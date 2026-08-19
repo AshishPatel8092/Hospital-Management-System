@@ -583,10 +583,7 @@ body.logged-in .guest-only {
   backdrop-filter: blur(3px);
   cursor: pointer;
 }
-/* .btn-secondary a { */
-/* text-decoration: none !important; */
-/* color: inherit; */
-/* } */
+
 .btn-primary:hover {
   transform: translateY(-1px);
 }
