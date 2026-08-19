@@ -1,3 +1,7 @@
+require("dns").setDefaultResultOrder("ipv4first"); // <--- ADD THIS LINE AT THE TOP
+const nodemailer = require("nodemailer");
+const express = require("express");
+// ... rest of your requires
 const nodemailer = require("nodemailer");
 const express = require("express");
 const bcrypt = require("bcryptjs");
@@ -12,16 +16,16 @@ function generateCode() {
 
 async function deliverCode(email, purpose, code) {
   try {
-    // 1. Create the transporter (The "Mailman")
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com", // Explicit host
+      port: 465, // Standard SSL port
+      secure: true, // Use SSL
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
 
-    // 2. Define the email content
     const mailOptions = {
       from: `"Casto Health Care" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -33,18 +37,15 @@ async function deliverCode(email, purpose, code) {
                <p>Your <strong>${purpose}</strong> verification code is:</p>
                <h1 style="color: #008080; letter-spacing: 5px;">${code}</h1>
                <p>This code will expire in 10 minutes.</p>
-               <p>If you didn't request this, please ignore this email.</p>
              </div>`,
     };
 
-    // 3. Send the email
     await transporter.sendMail(mailOptions);
     console.log(`[EMAIL SENT] Success: ${purpose} code sent to ${email}`);
   } catch (error) {
     console.error(`[EMAIL ERROR] Failed to send email to ${email}:`, error);
   }
 }
-
 const CODE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 const MAX_FAILED_LOGINS = 5;
 const LOCKOUT_MS = 15 * 60 * 1000; // 15 minutes

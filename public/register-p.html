@@ -14,7 +14,6 @@
         margin: 0;
         padding: 0;
       }
-
       :root {
         --teal: #0f766e;
         --teal-lt: #ccfbf1;
@@ -27,7 +26,6 @@
         --slate-50: #f8fafc;
         --white: #ffffff;
       }
-
       body {
         font-family: "Inter", sans-serif;
         background: linear-gradient(
@@ -40,8 +38,6 @@
         display: flex;
         flex-direction: column;
       }
-
-      /* ── NAV ── */
       nav {
         display: flex;
         align-items: center;
@@ -92,8 +88,6 @@
       .nav-link a:hover {
         text-decoration: underline;
       }
-
-      /* ── PAGE WRAPPER ── */
       main {
         flex: 1;
         display: flex;
@@ -101,7 +95,6 @@
         align-items: center;
         padding: 0;
       }
-
       .page-header {
         text-align: center;
         margin-bottom: 36px;
@@ -117,8 +110,6 @@
         font-size: 0.95rem;
         color: var(--slate-400);
       }
-
-      /* ── STEPPER ── */
       .stepper {
         display: flex;
         align-items: center;
@@ -171,8 +162,6 @@
       .step-line.done {
         background: var(--teal);
       }
-
-      /* ── CARD ── */
       .card {
         background: white;
         border-radius: 20px;
@@ -183,8 +172,6 @@
         width: 100%;
         max-width: 780px;
       }
-
-      /* ── FORM GRID ── */
       .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -193,7 +180,6 @@
       .col-span-2 {
         grid-column: span 2;
       }
-
       .field {
         display: flex;
         flex-direction: column;
@@ -208,7 +194,6 @@
         color: var(--rose);
         margin-left: 2px;
       }
-
       .field input,
       .field select,
       .field textarea {
@@ -246,7 +231,6 @@
       .field.has-error select {
         border-color: var(--rose);
       }
-
       .field .input-wrap {
         position: relative;
       }
@@ -261,15 +245,12 @@
         color: var(--slate-400);
         pointer-events: none;
       }
-
       select {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 12px center;
         padding-right: 36px;
       }
-
-      /* ── SECTION LABEL ── */
       .section-label {
         font-size: 0.7rem;
         font-weight: 700;
@@ -280,8 +261,6 @@
         padding-bottom: 8px;
         margin-bottom: 20px;
       }
-
-      /* ── SUB-SECTION LABEL (inside step 2) ── */
       .sub-section-label {
         font-size: 0.75rem;
         font-weight: 700;
@@ -294,12 +273,6 @@
         padding-top: 14px;
         border-top: 1px dashed var(--slate-200);
       }
-      .sub-section-label:first-child {
-        border-top: none;
-        padding-top: 0;
-      }
-
-      /* ── RADIO & CHECKBOX ── */
       .radio-group,
       .check-group {
         display: flex;
@@ -356,8 +329,6 @@
         border-bottom: 2px solid white;
         transform: rotate(-45deg) translateY(-1px);
       }
-
-      /* ── PAIN SCALE ── */
       .pain-scale {
         display: flex;
         align-items: center;
@@ -389,10 +360,6 @@
         color: white;
         border-color: var(--teal);
       }
-      /* .pain-btn [data-level="8"],
-      .pain-btn [data-level="9"],
-      .pain-btn [data-level="10"] {
-      } */
       .pain-btn.selected[data-level="8"],
       .pain-btn.selected[data-level="9"],
       .pain-btn.selected[data-level="10"] {
@@ -406,16 +373,12 @@
         color: var(--slate-400);
         margin-top: 4px;
       }
-
-      /* ── STEP PANELS ── */
       .step-panel {
         display: none;
       }
       .step-panel.active {
         display: block;
       }
-
-      /* ── PRICING CARD ── */
       .pricing-box {
         background: var(--slate-50);
         border: 1.5px solid var(--slate-200);
@@ -452,8 +415,6 @@
       .pricing-row.total .price-val {
         color: var(--teal);
       }
-
-      /* ── SUBSCRIPTION ── */
       .subscribe-wrap {
         margin-bottom: 28px;
       }
@@ -469,8 +430,6 @@
         margin-top: 8px;
         line-height: 1.5;
       }
-
-      /* ── ACTIONS ── */
       .actions {
         display: flex;
         gap: 12px;
@@ -508,8 +467,6 @@
       .btn-outline:hover {
         background: var(--teal-lt);
       }
-
-      /* ── SUCCESS ── */
       #step-success {
         text-align: center;
         padding: 20px 0;
@@ -538,8 +495,6 @@
         font-size: 0.9rem;
         color: var(--slate-400);
       }
-
-      /* ── PAGE VIEWS ── */
       .page-view {
         display: none;
         flex-direction: column;
@@ -550,8 +505,6 @@
       .page-view.active {
         display: flex;
       }
-
-      /* ── SIGN IN CARD ── */
       .signin-card {
         background: white;
         border-radius: 20px;
@@ -671,8 +624,6 @@
       .register-prompt a:hover {
         text-decoration: underline;
       }
-
-      /* ── MODAL ── */
       .modal-overlay {
         display: none;
         position: fixed;
@@ -725,8 +676,6 @@
         flex: 1;
         justify-content: center;
       }
-
-      /* ── SIGN-IN SUCCESS ── */
       .signin-success {
         text-align: center;
         padding: 16px 0;
@@ -741,14 +690,11 @@
         font-size: 0.875rem;
         color: var(--slate-400);
       }
-
-      /* ── INFO CHIP (helper text under label) ── */
       .field .hint {
         font-size: 0.72rem;
         color: var(--slate-400);
         margin-top: -2px;
       }
-
       @media (max-width: 640px) {
         nav {
           padding: 14px 20px;
@@ -777,7 +723,6 @@
           font-size: 0.72rem;
         }
       }
-      /* Patient dashboard */
       #view-patient-dashboard {
         display: none;
         background: #f4f8f8;
@@ -1094,7 +1039,7 @@
           padding: 16px;
         }
       }
-          .otp-modal-overlay {
+      .otp-modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
@@ -1174,11 +1119,9 @@
           padding: 22px 18px;
         }
       }
-</style>
+    </style>
   </head>
   <body>
-
-    <!-- NAV -->
     <nav>
       <a class="logo" href="#">
         <div class="logo-icon">
@@ -1194,18 +1137,13 @@
         >Already registered? <a onclick="showPage('signin')">Sign In</a></span
       >
     </nav>
-    <div id="backBtnHolder" style="padding: 12px 16px 0;"></div>
+    <div id="backBtnHolder" style="padding: 12px 16px 0"></div>
 
-
-    <!-- ══════════════════════════════════════
-     SIGN IN PAGE VIEW
-══════════════════════════════════════ -->
     <div class="page-view" id="view-signin">
       <div class="page-header">
         <h1>Welcome Back</h1>
         <p>Sign in to your MediCare account</p>
       </div>
-
       <div class="signin-card">
         <div id="signin-form-wrap">
           <div class="signin-fields">
@@ -1241,7 +1179,7 @@
                   </svg>
                 </button>
               </div>
-              <span class="err-msg">Password is required</span>
+              <span class="err-msg" id="si-pw-err">Password is required</span>
             </div>
           </div>
           <div class="forgot-row">
@@ -1252,56 +1190,16 @@
           </button>
           <div class="divider">or continue with</div>
           <div class="social-btns">
-            <button class="btn-social">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  fill="#4285F4"
-                />
-                <path
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  fill="#34A853"
-                />
-                <path
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-                  fill="#FBBC05"
-                />
-                <path
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  fill="#EA4335"
-                />
-              </svg>
-              Continue with Google
-            </button>
-            <button class="btn-social">
-              <svg viewBox="0 0 24 24" fill="#0078D4">
-                <path
-                  d="M21.579 6.855c.14.42.21.865.21 1.33C21.789 13.67 17.566 18 12 18a9.86 9.86 0 01-5.032-1.378A7.03 7.03 0 0012 15.13a3.514 3.514 0 01-3.28-2.437c.214.04.434.063.66.063.32 0 .63-.043.924-.124A3.513 3.513 0 016.87 9.28v-.044c.446.248.956.397 1.498.414a3.51 3.51 0 01-1.085-4.686 9.963 9.963 0 007.23 3.665 3.956 3.956 0 01-.089-.8A3.511 3.511 0 0117.935 4.5a3.5 3.5 0 012.56 1.107 7.03 7.03 0 002.228-.852 3.525 3.525 0 01-1.543 1.942 7.01 7.01 0 002.018-.548 7.13 7.13 0 01-1.619 1.706z"
-                />
-              </svg>
-              Continue with Microsoft
-            </button>
+            <button class="btn-social">Continue with Google</button>
+            <button class="btn-social">Continue with Microsoft</button>
           </div>
           <div class="register-prompt">
             Don't have an account?
             <a onclick="showPage('register')">Register here</a>
           </div>
         </div>
-
-        <!-- Sign-in success -->
         <div class="signin-success" id="signin-success" style="display: none">
-          <div
-            class="success-icon"
-            style="
-              width: 72px;
-              height: 72px;
-              background: var(--teal-lt);
-              border-radius: 50%;
-              display: grid;
-              place-items: center;
-              margin: 0 auto 20px;
-            "
-          >
+          <div class="success-icon">
             <svg
               width="36"
               height="36"
@@ -1317,22 +1215,14 @@
           <p>
             You've signed in successfully.<br />Redirecting to your dashboard…
           </p>
-          <button
-            class="btn btn-outline btn-full"
-            style="margin-top: 24px"
-            onclick="showPage('register')"
-          >
-            ← Go to Registration
-          </button>
         </div>
       </div>
     </div>
 
-    <!-- FORGOT PASSWORD MODAL -->
     <div class="modal-overlay" id="forgot-modal">
       <div class="modal">
         <h3>Reset Password</h3>
-        <p>Enter your registered email and we'll send you a reset link.</p>
+        <p>Enter your registered email and we'll send you a reset code.</p>
         <div class="field">
           <label>Email Address <span class="req">*</span></label>
           <input
@@ -1347,22 +1237,17 @@
             Cancel
           </button>
           <button class="btn btn-primary" onclick="sendReset()">
-            Send Reset Link
+            Send Reset Code
           </button>
         </div>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-     REGISTRATION PAGE VIEW
-══════════════════════════════════════ -->
     <main id="view-register" class="page-view active">
       <div class="page-header">
         <h1>Patient Registration</h1>
         <p>Help us understand your health so we can take better care of you</p>
       </div>
-
-      <!-- STEPPER -->
       <div class="stepper">
         <div class="step active" id="s1">
           <div class="step-num">1</div>
@@ -1376,45 +1261,40 @@
         <div class="step-line" id="l2"></div>
         <div class="step" id="s3">
           <div class="step-num">3</div>
-          <span class="step-label">Confirm &amp; Submit</span>
+          <span class="step-label">Confirm & Submit</span>
         </div>
       </div>
-
-      <!-- CARD -->
       <div class="card">
-        <!-- ─────────── STEP 1 — Personal Details (unchanged) ─────────── -->
         <div class="step-panel active" id="step-1">
           <p class="section-label">Personal Information</p>
           <div class="form-grid">
             <div class="field">
-              <label>First Name <span class="req">*</span></label>
-              <input type="text" id="firstName" placeholder="e.g. Ananya" />
-              <span class="err-msg">First name is required</span>
+              <label>First Name <span class="req">*</span></label
+              ><input
+                type="text"
+                id="firstName"
+                placeholder="e.g. Ananya"
+              /><span class="err-msg">First name is required</span>
             </div>
-
             <div class="field">
-              <label>Last Name</label>
-              <input type="text" id="lastName" placeholder="e.g. Sharma" />
+              <label>Last Name</label
+              ><input type="text" id="lastName" placeholder="e.g. Sharma" />
             </div>
-
             <div class="field">
-              <label>Gender <span class="req">*</span></label>
-              <select id="gender">
+              <label>Gender <span class="req">*</span></label
+              ><select id="gender">
                 <option value="">Select gender</option>
                 <option>Male</option>
                 <option>Female</option>
                 <option>Other</option>
-                <option>Prefer not to say</option>
-              </select>
-              <span class="err-msg">Please select gender</span>
+                <option>Prefer not to say</option></select
+              ><span class="err-msg">Please select gender</span>
             </div>
-
             <div class="field">
               <label>Date of Birth <span class="req">*</span></label>
               <div class="input-wrap">
-                <input type="date" id="dob" />
-                <span class="icon">
-                  <svg
+                <input type="date" id="dob" /><span class="icon"
+                  ><svg
                     width="16"
                     height="16"
                     fill="none"
@@ -1425,78 +1305,68 @@
                     <rect x="3" y="4" width="18" height="18" rx="2" />
                     <line x1="16" y1="2" x2="16" y2="6" />
                     <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                  </svg>
-                </span>
+                    <line x1="3" y1="10" x2="21" y2="10" /></svg
+                ></span>
               </div>
               <span class="err-msg">Please enter date of birth</span>
             </div>
-
             <div class="field">
               <label
                 >Guardian / Emergency Contact Name
                 <span class="req">*</span></label
-              >
-              <input type="text" id="guardianFirst" placeholder="First Name" />
-              <span class="err-msg">Guardian name is required</span>
+              ><input
+                type="text"
+                id="guardianFirst"
+                placeholder="First Name"
+              /><span class="err-msg">Guardian name is required</span>
             </div>
-
             <div class="field">
-              <label>Guardian Last Name</label>
-              <input type="text" id="guardianLast" placeholder="Last Name" />
+              <label>Guardian Last Name</label
+              ><input type="text" id="guardianLast" placeholder="Last Name" />
             </div>
-
             <div class="field col-span-2">
-              <label>Email Address <span class="req">*</span></label>
-              <input
+              <label>Email Address <span class="req">*</span></label
+              ><input
                 type="email"
                 id="email"
                 placeholder="patient@example.com"
-              />
-              <span class="err-msg">Please enter a valid email</span>
+              /><span class="err-msg">Please enter a valid email</span>
             </div>
-
             <div class="field col-span-2">
-              <label>Password <span class="req">*</span></label>
-              <input
+              <label>Password <span class="req">*</span></label
+              ><input
                 type="password"
                 id="regPassword"
                 placeholder="e.g. Casto@2026"
-              />
-              <span class="err-msg" style="display: block; color: #888"
-                >8+ characters, with an uppercase letter, a lowercase
-                letter, a number, and a special character.</span
+              /><span class="err-msg" style="display: block; color: #888"
+                >8+ characters, with an uppercase letter, a lowercase letter, a
+                number, and a special character.</span
               >
             </div>
-
             <div class="field">
-              <label>Pin Code <span class="req">*</span></label>
-              <input
+              <label>Pin Code <span class="req">*</span></label
+              ><input
                 type="text"
                 id="pinCode"
                 maxlength="6"
                 placeholder="6-digit pin"
-              />
-              <span class="err-msg">Enter a valid 6-digit pin</span>
+              /><span class="err-msg">Enter a valid 6-digit pin</span>
             </div>
-
             <div class="field">
-              <label>Country <span class="req">*</span></label>
-              <select id="country">
+              <label>Country <span class="req">*</span></label
+              ><select id="country">
                 <option value="">Select country</option>
                 <option>India</option>
                 <option>United States</option>
                 <option>United Kingdom</option>
                 <option>Canada</option>
                 <option>Australia</option>
-                <option>Other</option>
-              </select>
-              <span class="err-msg">Please select a country</span>
+                <option>Other</option></select
+              ><span class="err-msg">Please select a country</span>
             </div>
-
             <div class="field">
-              <label>Time Zone <span class="req">*</span></label>
-              <select id="timezone">
+              <label>Time Zone <span class="req">*</span></label
+              ><select id="timezone">
                 <option value="IST">
                   IST — Indian Standard Time (GMT +5:30)
                 </option>
@@ -1509,14 +1379,15 @@
                 </option>
               </select>
             </div>
-
             <div class="field">
               <label
                 >Phone Number (with country code)
                 <span class="req">*</span></label
-              >
-              <input type="tel" id="phone" placeholder="+91 98765 43210" />
-              <span class="err-msg">Phone number is required</span>
+              ><input
+                type="tel"
+                id="phone"
+                placeholder="+91 98765 43210"
+              /><span class="err-msg">Phone number is required</span>
             </div>
           </div>
           <div class="actions">
@@ -1525,17 +1396,13 @@
             </button>
           </div>
         </div>
-
-        <!-- ─────────── STEP 2 — My Health Info (Patient-focused) ─────────── -->
         <div class="step-panel" id="step-2">
           <p class="section-label">My Health Information</p>
           <div class="form-grid">
-            <!-- VISIT REASON -->
             <p class="sub-section-label">Why are you visiting us today?</p>
-
             <div class="field col-span-2">
-              <label>Main Reason for Visit <span class="req">*</span></label>
-              <select id="visitReason">
+              <label>Main Reason for Visit <span class="req">*</span></label
+              ><select id="visitReason">
                 <option value="">Select the closest match</option>
                 <option>I have a fever or flu-like symptoms</option>
                 <option>I have chest pain or breathing difficulty</option>
@@ -1547,31 +1414,25 @@
                 <option>I need a routine health check-up</option>
                 <option>I need a second opinion</option>
                 <option>I need follow-up for an existing condition</option>
-                <option>Other</option>
-              </select>
-              <span class="err-msg">Please tell us why you are visiting</span>
+                <option>Other</option></select
+              ><span class="err-msg">Please tell us why you are visiting</span>
             </div>
-
             <div class="field col-span-2">
-              <label>Describe your symptoms in your own words</label>
-              <span class="hint"
+              <label>Describe your symptoms in your own words</label
+              ><span class="hint"
                 >Tell us what you feel, when it started, and how it affects your
                 daily life</span
-              >
-              <textarea
+              ><textarea
                 id="symptomDesc"
                 rows="3"
-                placeholder="e.g. I have had a dull ache in my lower back for the past two weeks. It gets worse when I sit for long hours…"
-                style="resize: vertical"
+                placeholder="e.g. I have had a dull ache in my lower back for the past two weeks..."
               ></textarea>
             </div>
-
             <div class="field">
               <label
                 >How long have you been feeling this way?
                 <span class="req">*</span></label
-              >
-              <select id="symptomDuration">
+              ><select id="symptomDuration">
                 <option value="">Select duration</option>
                 <option>Less than 24 hours</option>
                 <option>1 – 3 days</option>
@@ -1579,16 +1440,11 @@
                 <option>1 – 2 weeks</option>
                 <option>2 – 4 weeks</option>
                 <option>1 – 3 months</option>
-                <option>More than 3 months</option>
-              </select>
-              <span class="err-msg">Please select symptom duration</span>
+                <option>More than 3 months</option></select
+              ><span class="err-msg">Please select symptom duration</span>
             </div>
-
             <div class="field">
-              <label
-                >How would you rate your pain or discomfort right now?</label
-              >
-              <span class="hint">0 = no pain · 10 = worst pain imaginable</span>
+              <label>Pain Rating</label>
               <div class="pain-scale" id="painScale">
                 <button
                   class="pain-btn"
@@ -1596,81 +1452,71 @@
                   type="button"
                   onclick="selectPain(0)"
                 >
-                  0
-                </button>
-                <button
+                  0</button
+                ><button
                   class="pain-btn"
                   data-level="1"
                   type="button"
                   onclick="selectPain(1)"
                 >
-                  1
-                </button>
-                <button
+                  1</button
+                ><button
                   class="pain-btn"
                   data-level="2"
                   type="button"
                   onclick="selectPain(2)"
                 >
-                  2
-                </button>
-                <button
+                  2</button
+                ><button
                   class="pain-btn"
                   data-level="3"
                   type="button"
                   onclick="selectPain(3)"
                 >
-                  3
-                </button>
-                <button
+                  3</button
+                ><button
                   class="pain-btn"
                   data-level="4"
                   type="button"
                   onclick="selectPain(4)"
                 >
-                  4
-                </button>
-                <button
+                  4</button
+                ><button
                   class="pain-btn"
                   data-level="5"
                   type="button"
                   onclick="selectPain(5)"
                 >
-                  5
-                </button>
-                <button
+                  5</button
+                ><button
                   class="pain-btn"
                   data-level="6"
                   type="button"
                   onclick="selectPain(6)"
                 >
-                  6
-                </button>
-                <button
+                  6</button
+                ><button
                   class="pain-btn"
                   data-level="7"
                   type="button"
                   onclick="selectPain(7)"
                 >
-                  7
-                </button>
-                <button
+                  7</button
+                ><button
                   class="pain-btn"
                   data-level="8"
                   type="button"
                   onclick="selectPain(8)"
                 >
-                  8
-                </button>
-                <button
+                  8</button
+                ><button
                   class="pain-btn"
                   data-level="9"
                   type="button"
                   onclick="selectPain(9)"
                 >
-                  9
-                </button>
-                <button
+                  9</button
+                ><button
                   class="pain-btn"
                   data-level="10"
                   type="button"
@@ -1679,19 +1525,12 @@
                   10
                 </button>
               </div>
-              <div class="pain-label-row">
-                <span>😊 None</span><span>😐 Moderate</span
-                ><span>😣 Severe</span>
-              </div>
               <input type="hidden" id="painLevel" value="" />
             </div>
-
-            <!-- MEDICAL HISTORY -->
             <p class="sub-section-label">Your Medical Background</p>
-
             <div class="field">
-              <label>Blood Group</label>
-              <select id="bloodGroup">
+              <label>Blood Group</label
+              ><select id="bloodGroup">
                 <option value="">I don't know / Select</option>
                 <option>A+</option>
                 <option>A−</option>
@@ -1703,317 +1542,77 @@
                 <option>O−</option>
               </select>
             </div>
-
             <div class="field">
-              <label>Height</label>
-              <input
-                type="text"
-                id="height"
-                placeholder="e.g. 165 cm or 5 ft 5 in"
-              />
+              <label>Height</label
+              ><input type="text" id="height" placeholder="e.g. 165 cm" />
             </div>
-
             <div class="field">
-              <label>Weight</label>
-              <input
-                type="text"
-                id="weight"
-                placeholder="e.g. 65 kg or 143 lbs"
-              />
+              <label>Weight</label
+              ><input type="text" id="weight" placeholder="e.g. 65 kg" />
             </div>
-
-            <div class="field">
-              <label>Do you have any of these? (select all that apply)</label>
-              <div class="check-group" style="margin-top: 4px">
-                <label class="check-option"
-                  ><input type="checkbox" class="existingCondition" />
-                  <div class="cb"></div>
-                  Diabetes</label
-                >
-                <label class="check-option"
-                  ><input type="checkbox" class="existingCondition" />
-                  <div class="cb"></div>
-                  Hypertension</label
-                >
-                <label class="check-option"
-                  ><input type="checkbox" class="existingCondition" />
-                  <div class="cb"></div>
-                  Asthma</label
-                >
-                <label class="check-option"
-                  ><input type="checkbox" class="existingCondition" />
-                  <div class="cb"></div>
-                  Heart Disease</label
-                >
-                <label class="check-option"
-                  ><input type="checkbox" class="existingCondition" />
-                  <div class="cb"></div>
-                  Thyroid Disorder</label
-                >
-                <label class="check-option"
-                  ><input type="checkbox" id="noneCondition" />
-                  <div class="cb"></div>
-                  None of the above</label
-                >
-              </div>
-            </div>
-
             <div class="field col-span-2">
-              <label>Are you currently taking any medicines?</label>
-              <span class="hint"
-                >Include prescription drugs, vitamins, or supplements</span
-              >
-              <textarea
-                id="currentMeds"
-                rows="2"
-                placeholder="e.g. Metformin 500mg twice daily, Vitamin D once a week…"
-                style="resize: vertical"
-              ></textarea>
-            </div>
-
-            <div class="field col-span-2">
-              <label>Do you have any known allergies?</label>
-              <span class="hint"
-                >Include medicines, foods, latex, or anything else that causes a
-                reaction</span
-              >
-              <textarea
+              <label>Allergies</label
+              ><textarea
                 id="allergies"
                 rows="2"
-                placeholder="e.g. Penicillin causes rash, Peanuts cause swelling…"
-                style="resize: vertical"
+                placeholder="e.g. Penicillin..."
               ></textarea>
             </div>
-
-            <!-- LIFESTYLE -->
-            <p class="sub-section-label">Quick Lifestyle Questions</p>
-
-            <div class="field">
-              <label>Do you smoke?</label>
-              <div class="radio-group" style="margin-top: 4px">
-                <label class="radio-option"
-                  ><input type="radio" name="smoke" value="no" />
-                  <div class="rb"></div>
-                  No</label
-                >
-                <label class="radio-option"
-                  ><input type="radio" name="smoke" value="ex" />
-                  <div class="rb"></div>
-                  Ex-smoker</label
-                >
-                <label class="radio-option"
-                  ><input type="radio" name="smoke" value="yes" />
-                  <div class="rb"></div>
-                  Yes</label
-                >
-              </div>
-            </div>
-
-            <div class="field">
-              <label>Do you consume alcohol?</label>
-              <div class="radio-group" style="margin-top: 4px">
-                <label class="radio-option"
-                  ><input type="radio" name="alcohol" value="no" />
-                  <div class="rb"></div>
-                  No</label
-                >
-                <label class="radio-option"
-                  ><input type="radio" name="alcohol" value="occasional" />
-                  <div class="rb"></div>
-                  Occasionally</label
-                >
-                <label class="radio-option"
-                  ><input type="radio" name="alcohol" value="regular" />
-                  <div class="rb"></div>
-                  Regularly</label
-                >
-              </div>
-            </div>
-
-            <!-- APPOINTMENT PREFERENCE -->
             <p class="sub-section-label">Appointment Preference</p>
-
             <div class="field">
-              <label
-                >When would you like to come in?
-                <span class="req">*</span></label
+              <label>Date <span class="req">*</span></label
+              ><input type="date" id="apptDate" /><span class="err-msg"
+                >Please choose a date</span
               >
-              <div class="input-wrap">
-                <input type="date" id="apptDate" />
-                <span class="icon">
-                  <svg
-                    width="16"
-                    height="16"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <rect x="3" y="4" width="18" height="18" rx="2" />
-                    <line x1="16" y1="2" x2="16" y2="6" />
-                    <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                  </svg>
-                </span>
-              </div>
-              <span class="err-msg">Please choose a preferred date</span>
             </div>
-
             <div class="field">
-              <label>Preferred time of day</label>
-              <div class="radio-group" id="timeSlot" style="margin-top: 4px">
+              <label>Time Slot</label>
+              <div class="radio-group" id="timeSlot">
                 <label class="radio-option"
                   ><input type="radio" name="slot" value="Morning" />
                   <div class="rb"></div>
-                  Morning (9–12)</label
-                >
-                <label class="radio-option"
+                  Morning</label
+                ><label class="radio-option"
                   ><input type="radio" name="slot" value="Afternoon" checked />
                   <div class="rb"></div>
-                  Afternoon (12–4)</label
-                >
-                <label class="radio-option"
+                  Afternoon</label
+                ><label class="radio-option"
                   ><input type="radio" name="slot" value="Evening" />
                   <div class="rb"></div>
-                  Evening (4–7)</label
-                >
-              </div>
-            </div>
-
-            <div class="field col-span-2">
-              <label
-                >Would you prefer an in-person visit or a video
-                consultation?</label
-              >
-              <div class="radio-group" style="margin-top: 4px">
-                <label class="radio-option"
-                  ><input
-                    type="radio"
-                    name="visitType"
-                    value="in-person"
-                    checked
-                  />
-                  <div class="rb"></div>
-                  In-Person Visit</label
-                >
-                <label class="radio-option"
-                  ><input type="radio" name="visitType" value="video" />
-                  <div class="rb"></div>
-                  Video Consultation</label
-                >
-                <label class="radio-option"
-                  ><input type="radio" name="visitType" value="either" />
-                  <div class="rb"></div>
-                  Either is fine</label
-                >
-              </div>
-            </div>
-
-            <div class="field col-span-2">
-              <label
-                >Is there anything else you'd like your doctor to know before
-                the visit?</label
-              >
-              <textarea
-                id="extraNotes"
-                rows="2"
-                placeholder="Any concerns, recent tests, or special needs we should be aware of…"
-                style="resize: vertical"
-              ></textarea>
-            </div>
-
-            <div class="field col-span-2">
-              <label
-                >How would you like to be reminded about your
-                appointment?</label
-              >
-              <div class="check-group" style="margin-top: 4px">
-                <label class="check-option"
-                  ><input type="checkbox" id="chkSms" checked />
-                  <div class="cb"></div>
-                  SMS / WhatsApp</label
-                >
-                <label class="check-option"
-                  ><input type="checkbox" id="chkEmail" />
-                  <div class="cb"></div>
-                  Email</label
-                >
-                <label class="check-option"
-                  ><input type="checkbox" id="chkCall" />
-                  <div class="cb"></div>
-                  Phone Call</label
+                  Evening</label
                 >
               </div>
             </div>
           </div>
-          <!-- /form-grid -->
           <div class="actions">
-            <button class="btn btn-outline" onclick="goToStep(1)">
-              ← Back
-            </button>
-            <button class="btn btn-primary" onclick="goToStep(3)">
+            <button class="btn btn-outline" onclick="goToStep(1)">← Back</button
+            ><button class="btn btn-primary" onclick="goToStep(3)">
               Next →
             </button>
           </div>
         </div>
-
-        <!-- ─────────── STEP 3 — Confirm & Submit ─────────── -->
         <div class="step-panel" id="step-3">
-          <p class="section-label">Confirm &amp; Submit</p>
-
+          <p class="section-label">Confirm & Submit</p>
           <div class="pricing-box">
             <h3>Appointment Summary</h3>
-            <p class="sub">Your fee breakdown is shown below</p>
             <div class="pricing-row">
-              <span>Consultation Fee</span><span>₹800</span>
-            </div>
-            <div class="pricing-row">
-              <span>Registration Charges</span><span>₹200</span>
-            </div>
-            <div class="pricing-row total">
               <span>Total</span><span class="price-val">₹1,000</span>
             </div>
           </div>
-
-          <div class="subscribe-wrap">
-            <p>
-              I wish to receive health tips &amp; appointment reminders from
-              MediCare
-            </p>
-            <div class="radio-group">
-              <label class="radio-option"
-                ><input type="radio" name="subscribe" value="yes" checked />
-                <div class="rb"></div>
-                Yes, keep me informed</label
-              >
-              <label class="radio-option"
-                ><input type="radio" name="subscribe" value="no" />
-                <div class="rb"></div>
-                No thanks</label
-              >
-            </div>
-            <p class="note">
-              * By selecting 'Yes' you allow MediCare to send appointment
-              reminders, health tips, and updates via WhatsApp and email.
-            </p>
-          </div>
-
           <div class="actions">
-            <button class="btn btn-outline" onclick="goToStep(2)">
-              ← Back
-            </button>
-            <button class="btn btn-primary" onclick="submitForm()">
+            <button class="btn btn-outline" onclick="goToStep(2)">← Back</button
+            ><button class="btn btn-primary" onclick="submitForm()">
               Submit Registration
             </button>
           </div>
         </div>
-
-        <!-- ─────────── SUCCESS ─────────── -->
         <div class="step-panel" id="step-success">
           <div class="success-icon">
             <svg
+              width="36"
+              height="36"
               fill="none"
-              stroke="currentColor"
+              stroke="var(--teal)"
               stroke-width="2.5"
               viewBox="0 0 24 24"
             >
@@ -2022,18 +1621,16 @@
           </div>
           <h2>You're All Set!</h2>
           <p>
-            Your registration is complete. We've sent your appointment details
-            and a patient ID to your email.<br />We look forward to taking care
-            of you at MediCare. 💚
+            Your registration is complete. Please verify your email to activate
+            your account.
           </p>
-          <div class="actions" style="margin-top: 24px">
+          <div class="actions">
             <button class="btn btn-primary" onclick="resetForm()">
-              Register Another Patient
+              Register Another
             </button>
           </div>
         </div>
       </div>
-      <!-- /card -->
     </main>
 
     <section id="view-patient-dashboard">
@@ -2042,319 +1639,131 @@
           <div class="pt-brand"><i>+</i>Casto Health Care</div>
           <nav class="pt-nav">
             <button class="active">▦ Dashboard</button
-            ><button>◷ Appointments</button><button>▤ Medical History</button
-            ><button>💊 Prescriptions</button><button>🧪 Lab Reports</button
-            ><button>💳 Payments & Bills</button
-            ><button>🔔 Notifications</button><button>★ Doctor Reviews</button>
-            <button id="ptLogoutBtn" style="margin-top: 16px">⏻ Log Out</button>
+            ><button id="ptLogoutBtn" style="margin-top: 16px">
+              ⏻ Log Out
+            </button>
           </nav>
         </aside>
-        <div>
-          <header class="pt-top">
-            <button class="pt-btn" id="ptBell">🔔 4</button>
-            <div class="pt-profile">
-              <span class="pt-avatar" id="ptAvatar">PS</span
-              ><span id="ptName">Patient</span>
-            </div>
-          </header>
-          <main class="pt-main">
-            <h1>Patient Dashboard</h1>
-            <p class="pt-sub">
-              Manage your care, health records, appointments, and payments in
-              one place.
-            </p>
-            <div class="pt-grid">
-              <div class="pt-stack">
-                <section class="pt-card">
-                  <h2>Your Health at a Glance</h2>
-                  <div class="pt-stats">
-                    <div class="pt-stat">
-                      <span>Upcoming appointments</span><b id="ptStatUpcoming">0</b>
-                    </div>
-                    <div class="pt-stat">
-                      <span>Active prescriptions</span><b id="ptStatPrescriptions">0</b>
-                    </div>
-                    <div class="pt-stat">
-                      <span>Completed visits</span><b id="ptStatCompleted">0</b>
-                    </div>
-                  </div>
-                </section>
-                <section class="pt-card" id="ptNextApptCard" style="display: none">
-                  <h2>Your Next Appointment</h2>
-                  <div id="ptNextAppt"></div>
-                </section>
-                <section class="pt-card">
-                  <h2>Upcoming Appointments</h2>
-                  <div id="ptAppointmentsList">
-                  <div class="pt-row">
-                    <div>
-                      <b>Dr. Anya Sharma · Cardiology</b
-                      ><small
-                        >Tuesday, 28 July · 10:30 AM · Video consultation</small
-                      >
-                    </div>
-                    <button class="pt-btn" data-pt="Join video consultation">
-                      Join call
-                    </button>
-                  </div>
-                  <div class="pt-row">
-                    <div>
-                      <b>Dr. Rahul Mehta · General Medicine</b
-                      ><small>Friday, 31 July · 04:00 PM · In-person</small>
-                    </div>
-                    <button class="pt-btn" data-pt="Appointment details opened">
-                      Details
-                    </button>
-                  </div>
-                  </div>
-                </section>
-                <section class="pt-card">
-                  <h2>Recent Prescriptions</h2>
-                  <div id="ptPrescriptionsList">
-                  <div class="pt-row">
-                    <div>
-                      <b>Atorvastatin 10mg</b
-                      ><small
-                        >Dr. Anya Sharma · Take once daily after dinner</small
-                      >
-                    </div>
-                    <div>
-                      <button
-                        class="pt-btn"
-                        data-pt="Prescription downloaded as PDF"
-                      >
-                        Download
-                      </button>
-                      <button
-                        class="pt-btn"
-                        data-pt="Preparing prescription for print"
-                      >
-                        Print
-                      </button>
-                    </div>
-                  </div>
-                  <div class="pt-row">
-                    <div>
-                      <b>Vitamin D3</b
-                      ><small>Dr. Rahul Mehta · One tablet weekly</small>
-                    </div>
-                    <button class="pt-btn" data-pt="Prescription opened">
-                      View
-                    </button>
-                  </div>
-                  </div>
-                </section>
-                <section class="pt-card">
-                  <h2>Medical History</h2>
-                  <div class="pt-pills" id="ptHealthPills">
-                    <span class="pt-pill">Blood Group: O+</span
-                    ><span class="pt-pill">No known drug allergies</span
-                    ><span class="pt-pill">Last check-up: Jul 2026</span>
-                  </div>
-                </section>
-              </div>
-              <div class="pt-stack">
-                <section class="pt-card">
-                  <h2>Quick Actions</h2>
-                  <div class="pt-actions">
-                    <button
-                      class="pt-action"
-                      data-pt="Video consultation room created"
-                    >
-                      📹 Video call<span>Meet your doctor online</span></button
-                    ><button class="pt-action" data-pt="Audio call requested">
-                      ☎ Audio call<span>Request a call</span></button
-                    ><button class="pt-action" id="ptChat">
-                      💬 Chat<span>Secure patient messaging</span></button
-                    ><button class="pt-action" data-pt="Lab report list opened">
-                      🧪 Lab reports<span
-                        >Blood, X-ray, MRI, CT, ECG</span
-                      ></button
-                    ><button class="pt-action" id="ptPay">
-                      💳 Pay online<span
-                        >Appointments, lab fees, bills</span
-                      ></button
-                    ><button class="pt-action" id="ptReview">
-                      ★ Review doctor<span>Rate your experience</span>
-                    </button>
-                  </div>
-                </section>
-                <section class="pt-card">
-                  <h2>Lab Test Reports</h2>
-                  <div class="pt-row">
-                    <div>
-                      <b>Complete Blood Count</b
-                      ><small>Ready · 24 July 2026</small>
-                    </div>
-                    <button class="pt-btn" data-pt="Blood report downloaded">
-                      Download
-                    </button>
-                  </div>
-                  <div class="pt-row">
-                    <div>
-                      <b>ECG Report</b><small>Ready · 21 July 2026</small>
-                    </div>
-                    <button class="pt-btn" data-pt="ECG report downloaded">
-                      Download
-                    </button>
-                  </div>
-                  <div class="pt-row">
-                    <div>
-                      <b>MRI Scan</b><small>Ready · 17 July 2026</small>
-                    </div>
-                    <button class="pt-btn" data-pt="MRI report downloaded">
-                      Download
-                    </button>
-                  </div>
-                </section>
-                <section class="pt-card">
-                  <h2>Payments & Bills</h2>
-                  <div id="ptBillsList">
-                  <div class="pt-row">
-                    <div>
-                      <b>Payment options</b
-                      ><small
-                        >UPI · Credit Card · Debit Card · Net Banking</small
-                      >
-                    </div>
-                  </div>
-                  </div>
-                </section>
-                <section class="pt-card">
-                  <h2>Notifications</h2>
-                  <div class="pt-row">
-                    <div>
-                      <b>Medicine reminder</b
-                      ><small>Take Atorvastatin after dinner today.</small>
-                    </div>
-                  </div>
-                  <div class="pt-row">
-                    <div>
-                      <b>Vaccination reminder</b
-                      ><small>Flu vaccination is due next week.</small>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </main>
+        <div class="pt-main">
+          <h1>Patient Dashboard</h1>
+          <p class="pt-sub">Welcome back!</p>
+          <div id="ptContent">Loading...</div>
         </div>
       </div>
     </section>
-    <div class="pt-modal" id="ptModal">
-      <div class="pt-modal-box">
-        <h2 id="ptModalTitle">Online Payment</h2>
-        <div id="ptModalContent"></div>
-        <div class="pt-modal-actions">
-          <button class="pt-btn" id="ptClose">Cancel</button
-          ><button class="pt-btn primary" id="ptSubmit">Confirm</button>
+
+    <div class="modal-overlay" id="forgot-modal">
+      <div class="modal">
+        <h3>Reset Password</h3>
+        <p>Enter your registered email to receive a reset code.</p>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label
+          ><input type="email" id="forgot-email" /><span class="err-msg"
+            >Please enter a valid email</span
+          >
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" onclick="closeForgot()">Cancel</button
+          ><button class="btn btn-primary" onclick="sendReset()">
+            Send Reset Code
+          </button>
         </div>
       </div>
     </div>
-    <div class="pt-toast" id="ptToast"></div>
-    <script src="api.js?v=3"></script>
+
+    <div class="otp-modal-overlay" id="otpModal">
+      <div class="otp-modal-box">
+        <h3 id="otpModalTitle">Verify Code</h3>
+        <p class="otp-modal-hint" id="otpModalHint"></p>
+        <input
+          type="text"
+          id="otpModalInput"
+          maxlength="6"
+          placeholder="6-digit code"
+          class="otp-modal-input"
+        />
+        <div
+          class="otp-modal-error"
+          id="otpModalError"
+          style="display: none"
+        ></div>
+        <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
+        <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
+      </div>
+    </div>
+
+    <script src="api.js?v=4"></script>
     <script>
-      renderBackButton("backBtnHolder");
-
-      let currentStep = 1;
-
-      /* ── PAGE SWITCHING ── */
       function showPage(page) {
-        document.getElementById("view-register").classList.remove("active");
-        document.getElementById("view-signin").classList.remove("active");
         document
-          .getElementById("view-patient-dashboard")
-          .classList.remove("active");
+          .querySelectorAll(".page-view")
+          .forEach((p) => p.classList.remove("active"));
         document.body.classList.remove("patient-dashboard-active");
-        if (page === "signin") {
+        if (page === "signin")
           document.getElementById("view-signin").classList.add("active");
-        } else if (page === "dashboard") {
+        else if (page === "dashboard") {
           document
             .getElementById("view-patient-dashboard")
             .classList.add("active");
           document.body.classList.add("patient-dashboard-active");
-        } else {
-          document.getElementById("view-register").classList.add("active");
-        }
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        } else document.getElementById("view-register").classList.add("active");
       }
 
-      /* ── PAIN SCALE ── */
-      function selectPain(level) {
-        document
-          .querySelectorAll(".pain-btn")
-          .forEach((b) => b.classList.remove("selected"));
-        const btn = document.querySelector(`.pain-btn[data-level="${level}"]`);
-        if (btn) btn.classList.add("selected");
-        document.getElementById("painLevel").value = level;
-      }
-
-      /* ── SIGN IN ── */
       async function doSignIn() {
-        const email = document.getElementById("si-email");
-        const pw = document.getElementById("si-password");
+        const emailEl = document.getElementById("si-email");
+        const pwEl = document.getElementById("si-password");
+        const email = emailEl.value.trim();
+        const pw = pwEl.value.trim();
+
         let ok = true;
-        const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-        email.closest(".field").classList.toggle("has-error", !validEmail);
-        if (!validEmail) ok = false;
-        if (!pw.value.trim()) {
-          pw.closest(".field").classList.add("has-error");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          emailEl.closest(".field").classList.add("has-error");
           ok = false;
-        } else pw.closest(".field").classList.remove("has-error");
+        } else emailEl.closest(".field").classList.remove("has-error");
+
+        if (!pw) {
+          pwEl.closest(".field").classList.add("has-error");
+          ok = false;
+        } else pwEl.closest(".field").classList.remove("has-error");
         if (!ok) return;
 
         try {
-          const result = await login(email.value, pw.value);
-          // Password correct - now require the 2FA code before actually
-          // establishing the session.
+          const result = await login(email, pw);
+          // SUCCESS: Trigger 2FA Modal
           openOtpModal({
             title: "Verify it's you",
-            hint: result.devNote
-              ? result.devNote + "<br><b>Demo code: " + result.devTwoFactorCode + "</b>"
-              : "Enter the code sent to your email.",
+            hint: "Enter the 6-digit code sent to your email.",
             onVerify: async (code) => {
-              const final = await verifyLoginOtp(email.value, code);
-              if (final.data.role !== "PATIENT") {
-                alert(
-                  "This account is registered as " +
-                    final.data.role +
-                    ". Please use the correct sign-in page for that role."
-                );
-                await logout();
-                return;
-              }
-              document.getElementById("signin-form-wrap").style.display = "none";
+              const final = await verifyLoginOtp(email, code);
+              document.getElementById("signin-form-wrap").style.display =
+                "none";
               document.getElementById("signin-success").style.display = "block";
-              await loadPatientDashboard(final.data);
-              setTimeout(() => showPage("dashboard"), 900);
+              setTimeout(() => showPage("dashboard"), 1000);
             },
           });
         } catch (err) {
+          // Handle 403: Email Not Verified
           if (err.data && err.data.requiresVerification) {
             openOtpModal({
-              title: "Verify your email",
-              hint: "This account hasn't been verified yet. Enter the code sent when you registered.",
+              title: "Verify Email First",
+              hint: "Your account isn't verified. Enter the code sent during registration.",
               onVerify: async (code) => {
-                const final = await verifyEmail(email.value, code);
-                await loadPatientDashboard(final.data);
-                showPage("dashboard");
+                await verifyEmail(email, code);
+                alert("Email verified! Please sign in again.");
+                showPage("signin");
               },
             });
             return;
           }
-          pw.closest(".field").classList.add("has-error");
-          document.getElementById("si-pw-err").textContent = err.message;
-          document.getElementById("si-pw-err").style.display = "block";
+          // Handle 401: Invalid Credentials
+          pwEl.closest(".field").classList.add("has-error");
+          alert(err.message || "Invalid email or password");
         }
       }
 
       function togglePw() {
         const inp = document.getElementById("si-password");
-        const isText = inp.type === "text";
-        inp.type = isText ? "password" : "text";
-        document.getElementById("eye-icon").innerHTML = isText
-          ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
-          : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        inp.type = inp.type === "password" ? "text" : "password";
       }
 
       function openForgot() {
@@ -2363,490 +1772,85 @@
       function closeForgot() {
         document.getElementById("forgot-modal").classList.remove("open");
       }
-      function sendReset() {
-        const el = document.getElementById("forgot-email");
-        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value);
-        el.closest(".field").classList.toggle("has-error", !valid);
-        if (!valid) return;
-        closeForgot();
-        alert("✅ A password reset link has been sent to " + el.value);
-        el.value = "";
-      }
-      document
-        .getElementById("forgot-modal")
-        .addEventListener("click", function (e) {
-          if (e.target === this) closeForgot();
-        });
-
-      /* ── STEP NAVIGATION ── */
-      function goToStep(next) {
-        if (next > currentStep && !validateStep(currentStep)) return;
-        document
-          .getElementById("step-" + currentStep)
-          .classList.remove("active");
-        currentStep = next;
-        document.getElementById("step-" + currentStep).classList.add("active");
-        updateStepper();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      function updateStepper() {
-        for (let i = 1; i <= 3; i++) {
-          const s = document.getElementById("s" + i);
-          s.classList.remove("active", "complete");
-          if (i < currentStep) s.classList.add("complete");
-          else if (i === currentStep) s.classList.add("active");
-        }
-        for (let i = 1; i <= 2; i++) {
-          document
-            .getElementById("l" + i)
-            .classList.toggle("done", i < currentStep);
-        }
-      }
-
-      function validateStep(step) {
-        let ok = true;
-        function req(id, test) {
-          const el = document.getElementById(id);
-          const field = el.closest(".field");
-          const fail = test ? !test(el.value) : !el.value.trim();
-          field.classList.toggle("has-error", fail);
-          if (fail) ok = false;
-        }
-        if (step === 1) {
-          req("firstName");
-          req("gender");
-          req("dob");
-          req("guardianFirst");
-          req("email", (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
-          req("pinCode", (v) => /^\d{6}$/.test(v.trim()));
-          req("country");
-          req("phone");
-        }
-        if (step === 2) {
-          req("visitReason");
-          req("symptomDuration");
-          req("apptDate");
-        }
-        return ok;
-      }
-
-      async function submitForm() {
-        const first =
-          document.getElementById("firstName").value.trim() || "Patient";
-        const last = document.getElementById("lastName").value.trim();
-        const smoke = document.querySelector('input[name="smoke"]:checked');
-        const alcohol = document.querySelector('input[name="alcohol"]:checked');
-
-        const fields = {
-          fullName: first + (last ? " " + last : ""),
-          email: document.getElementById("email").value.trim(),
-          password: document.getElementById("regPassword").value,
-          phone: document.getElementById("phone").value.trim(),
-          firstName: first,
-          lastName: last,
-          gender: document.getElementById("gender").value || null,
-          dob: document.getElementById("dob").value || null,
-          bloodGroup: document.getElementById("bloodGroup").value || null,
-          guardianName:
-            document.getElementById("guardianFirst").value.trim() +
-            " " +
-            document.getElementById("guardianLast").value.trim(),
-          country: document.getElementById("country").value || null,
-          smokingStatus: smoke ? smoke.value : null,
-          alcoholStatus: alcohol ? alcohol.value : null,
-        };
-
-        if (!isStrongPassword(fields.password)) {
-          alert("Password too weak: " + passwordStrengthHint());
-          return;
-        }
-
+      async function sendReset() {
+        const email = document.getElementById("forgot-email").value;
+        if (!email) return;
         try {
-          const regResult = await registerPatient(fields);
-          openOtpModal({
-            title: "Verify your email",
-            hint: regResult.devNote
-              ? regResult.devNote + "<br><b>Demo code: " + regResult.devVerificationCode + "</b>"
-              : "Enter the code we sent to " + fields.email + ".",
-            onVerify: async (code) => {
-              const final = await verifyEmail(fields.email, code);
-              document
-                .querySelectorAll(".step-panel")
-                .forEach((p) => p.classList.remove("active"));
-              await loadPatientDashboard(final.data);
-              showPage("dashboard");
-            },
-          });
-        } catch (err) {
-          alert("Registration failed: " + err.message);
-        }
-      }
-
-      /* ── DASHBOARD DATA ── */
-      async function loadPatientDashboard(session) {
-        document.getElementById("ptName").textContent = session.fullName;
-        const parts = session.fullName.trim().split(/\s+/);
-        document.getElementById("ptAvatar").textContent = (
-          (parts[0]?.[0] || "") + (parts[1]?.[0] || "")
-        ).toUpperCase();
-
-        try {
-          const profileResult = await apiRequest("/patients?self=true", "GET");
-          const p = profileResult.data;
-          const pillsEl = document.getElementById("ptHealthPills");
-          const pills = [];
-          pills.push(
-            `<span class="pt-pill">Blood Group: ${p.blood_group || "Not provided"}</span>`
-          );
-          if (p.smoking_status)
-            pills.push(`<span class="pt-pill">Smoking: ${p.smoking_status}</span>`);
-          if (p.alcohol_status)
-            pills.push(`<span class="pt-pill">Alcohol: ${p.alcohol_status}</span>`);
-          pillsEl.innerHTML = pills.join("");
-        } catch (err) {
-          console.error("Could not load patient profile:", err.message);
-        }
-
-        try {
-          const apptResult = await listAppointments();
-          const list = document.getElementById("ptAppointmentsList");
-          const appts = apptResult.data;
-
-          document.getElementById("ptStatUpcoming").textContent = appts.filter(
-            (a) => a.status !== "Completed" && a.status !== "Cancelled"
-          ).length;
-          document.getElementById("ptStatCompleted").textContent = appts.filter(
-            (a) => a.status === "Completed"
-          ).length;
-
-          if (!appts.length) {
-            list.innerHTML =
-              '<div class="pt-row"><div><b>No appointments booked yet</b><small>Book one from the "Book Appointment" page.</small></div></div>';
-          } else {
-            list.innerHTML = appts
-              .map(
-                (a) => `
-              <div class="pt-row">
-                <div>
-                  <b>Dr. ${a.doctor_name}</b>
-                  <small>${a.appointment_date} · ${a.slot_time || "Time TBD"} · ${a.visit_type} · ${a.status}</small>
-                </div>
-              </div>`
-              )
-              .join("");
-          }
-
-          // Highlight the single soonest upcoming appointment, if any.
-          const todayStr = new Date().toISOString().slice(0, 10);
-          const upcoming = appts
-            .filter((a) => a.appointment_date >= todayStr && a.status !== "Cancelled")
-            .sort((a, b) => a.appointment_date.localeCompare(b.appointment_date));
-          const nextCard = document.getElementById("ptNextApptCard");
-          if (upcoming.length) {
-            document.getElementById("ptNextAppt").innerHTML = `
-              <div class="pt-row">
-                <div>
-                  <b>Dr. ${upcoming[0].doctor_name}</b>
-                  <small>${upcoming[0].appointment_date} · ${upcoming[0].slot_time || "Time TBD"} · ${upcoming[0].visit_type} · ${upcoming[0].status}</small>
-                </div>
-              </div>`;
-            nextCard.style.display = "";
-          } else {
-            nextCard.style.display = "none";
-          }
-        } catch (err) {
-          console.error("Could not load appointments:", err.message);
-        }
-
-        try {
-          const rxResult = await listPrescriptions();
-          const rx = rxResult.data;
-          document.getElementById("ptStatPrescriptions").textContent = rx.length;
-          const rxList = document.getElementById("ptPrescriptionsList");
-          if (!rx.length) {
-            rxList.innerHTML =
-              '<div class="pt-row"><div><b>No prescriptions yet</b><small>Medications your doctor prescribes will show up here.</small></div></div>';
-          } else {
-            rxList.innerHTML = rx
-              .map(
-                (r) => `
-              <div class="pt-row">
-                <div>
-                  <b>${r.medication_name}${r.dosage ? " · " + r.dosage : ""}</b>
-                  <small>Dr. ${r.doctor_name}${r.instructions ? " · " + r.instructions : ""}</small>
-                </div>
-              </div>`
-              )
-              .join("");
-          }
-        } catch (err) {
-          console.error("Could not load prescriptions:", err.message);
-        }
-
-        try {
-          const billResult = await listMyBills();
-          const bills = billResult.data;
-          const billsList = document.getElementById("ptBillsList");
-          if (!bills.length) {
-            billsList.innerHTML =
-              '<div class="pt-row"><div><b>No bills yet</b><small>Bills from the front desk will show up here.</small></div></div>';
-          } else {
-            billsList.innerHTML = bills
-              .map(
-                (b) => `
-              <div class="pt-row">
-                <div>
-                  <b>${b.description}</b>
-                  <small>₹${b.amount} · ${b.payment_status}${b.payment_method ? " · " + b.payment_method : ""}</small>
-                </div>
-                ${
-                  b.payment_status === "Pending"
-                    ? `<button class="pt-btn primary" data-pay-bill="${b.bill_id}" data-pay-amount="${b.amount}">Pay now</button>`
-                    : `<span class="pt-pill">Paid</span>`
-                }
-              </div>`
-              )
-              .join("");
-          }
-        } catch (err) {
-          console.error("Could not load bills:", err.message);
-        }
-      }
-
-      document.getElementById("ptLogoutBtn").addEventListener("click", () => {
-        confirmLogout(async () => {
-          await logout();
-          window.location.href = "login.html";
-        });
-      });
-
-      /* ── AUTO-ENTER DASHBOARD IF ALREADY LOGGED IN ── */
-      (async function checkExistingSession() {
-        try {
-          const result = await getCurrentUser();
-          if (result.data.role === "PATIENT") {
-            await loadPatientDashboard(result.data);
-            showPage("dashboard");
-          }
+          await forgotPassword(email);
+          alert("✅ A reset code has been sent to your email.");
+          closeForgot();
         } catch (e) {
-          // not logged in - default view (sign in / register) stays as-is
+          alert("Error sending code.");
         }
-      })();
+      }
 
-      function resetForm() {
-        document.querySelector(".stepper").style.opacity = "1";
+      function goToStep(n) {
         document
           .querySelectorAll(".step-panel")
           .forEach((p) => p.classList.remove("active"));
-        document.getElementById("step-1").classList.add("active");
-        document
-          .querySelectorAll(
-            "input:not([type=radio]):not([type=checkbox]), select, textarea",
-          )
-          .forEach((el) => (el.value = ""));
-        document
-          .querySelectorAll(".has-error")
-          .forEach((el) => el.classList.remove("has-error"));
-        document
-          .querySelectorAll(".pain-btn")
-          .forEach((b) => b.classList.remove("selected"));
-        currentStep = 1;
-        updateStepper();
+        document.getElementById("step-" + n).classList.add("active");
+        // Update stepper UI here...
       }
 
-      /* Patient dashboard interactions */
-      const ptToast = document.getElementById("ptToast");
-      function patientToast(message) {
-        ptToast.textContent = message;
-        ptToast.classList.add("show");
-        setTimeout(() => ptToast.classList.remove("show"), 2600);
-      }
-      function openPatientModal(title, content, action) {
-        document.getElementById("ptModalTitle").textContent = title;
-        document.getElementById("ptModalContent").innerHTML = content;
-        document.getElementById("ptSubmit").textContent = action;
-        document.getElementById("ptModal").classList.add("open");
-      }
-      document
-        .querySelectorAll("[data-pt]")
-        .forEach((button) =>
-          button.addEventListener("click", () =>
-            patientToast(button.dataset.pt),
-          ),
-        );
-      document.querySelectorAll(".pt-nav button").forEach(
-        (button) =>
-          (button.onclick = () => {
-            document
-              .querySelectorAll(".pt-nav button")
-              .forEach((item) => item.classList.remove("active"));
-            button.classList.add("active");
-            patientToast(button.textContent.trim() + " selected.");
-          }),
-      );
-      document.getElementById("ptBell").onclick = () =>
-        patientToast(
-          "4 notifications: appointment, medicine, vaccination, and bill reminders.",
-        );
-      document.getElementById("ptChat").onclick = () =>
-        openPatientModal(
-          "Secure Chat with Doctor",
-          '<textarea placeholder="Type your follow-up question for your doctor..."></textarea>',
-          "Send message",
-        );
+      async function submitForm() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("regPassword").value;
+        const fullName =
+          document.getElementById("firstName").value +
+          " " +
+          document.getElementById("lastName").value;
 
-      let activePayBillId = null;
+        const fields = {
+          fullName,
+          email,
+          password,
+          role: "PATIENT",
+          phone: document.getElementById("phone").value,
+        };
 
-      function openPayBillModal(billId, amount) {
-        activePayBillId = billId;
-        openPatientModal(
-          "Pay Hospital Bill",
-          '<select id="ptPayMethod"><option>UPI</option><option>Credit Card</option><option>Debit Card</option><option>Net Banking</option></select><input placeholder="Enter payment details (simulated - not a real charge)">',
-          `Pay ₹${amount}`,
-        );
-      }
-
-      // Sidebar "Pay Bills" shortcut just brings the Payments & Bills card
-      // into view - the actual payment happens per-bill (see below), since
-      // a bill has to be picked to know what's being paid.
-      document.getElementById("ptPay").onclick = () =>
-        document.getElementById("ptBillsList").scrollIntoView({ behavior: "smooth", block: "center" });
-
-      // Real per-bill "Pay now" buttons are rendered dynamically inside
-      // #ptBillsList (see loadPatientDashboard), so they're wired here via
-      // event delegation rather than a direct listener.
-      document.getElementById("ptBillsList").addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-pay-bill]");
-        if (!btn) return;
-        openPayBillModal(btn.dataset.payBill, btn.dataset.payAmount);
-      });
-
-      document.getElementById("ptReview").onclick = () =>
-        openPatientModal(
-          "Rate Your Doctor",
-          '<select><option>★★★★★ Excellent</option><option>★★★★ Good</option><option>★★★ Average</option><option>★★ Needs improvement</option></select><textarea placeholder="Share your experience (optional)"></textarea>',
-          "Submit review",
-        );
-      document.getElementById("ptClose").onclick = () =>
-        document.getElementById("ptModal").classList.remove("open");
-      document.getElementById("ptModal").onclick = (event) => {
-        if (event.target.id === "ptModal")
-          event.currentTarget.classList.remove("open");
-      };
-      document.getElementById("ptSubmit").onclick = async () => {
-        const title = document.getElementById("ptModalTitle").textContent;
-
-        if (title === "Pay Hospital Bill" && activePayBillId) {
-          const methodEl = document.getElementById("ptPayMethod");
-          const method = methodEl ? methodEl.value : "Online";
-          const submitBtn = document.getElementById("ptSubmit");
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Processing…";
-          try {
-            await payBill(activePayBillId, method);
-            document.getElementById("ptModal").classList.remove("open");
-            patientToast("Payment completed successfully.");
-            const me = await getCurrentUser();
-            await loadPatientDashboard(me.data);
-          } catch (err) {
-            alert("Payment failed: " + err.message);
-          } finally {
-            submitBtn.disabled = false;
-          }
-          return;
+        try {
+          const res = await registerPatient(fields);
+          openOtpModal({
+            title: "Verify Registration",
+            hint: "Enter the code sent to your email to activate your account.",
+            onVerify: async (code) => {
+              await verifyEmail(email, code);
+              document
+                .querySelectorAll(".step-panel")
+                .forEach((p) => p.classList.remove("active"));
+              document.getElementById("step-success").classList.add("active");
+            },
+          });
+        } catch (e) {
+          alert(e.message);
         }
+      }
 
-        document.getElementById("ptModal").classList.remove("open");
-        patientToast(
-          title === "Rate Your Doctor"
-            ? "Thank you for your review."
-            : "Message sent securely to your doctor.",
-        );
+      function openOtpModal({ title, hint, onVerify }) {
+        const modal = document.getElementById("otpModal");
+        document.getElementById("otpModalTitle").textContent = title;
+        document.getElementById("otpModalHint").innerHTML = hint;
+        modal.classList.add("open");
+
+        document.getElementById("otpModalSubmit").onclick = async () => {
+          const code = document.getElementById("otpModalInput").value;
+          try {
+            await onVerify(code);
+            modal.classList.remove("open");
+          } catch (e) {
+            const err = document.getElementById("otpModalError");
+            err.textContent = e.message || "Invalid code";
+            err.style.display = "block";
+          }
+        };
+        document.getElementById("otpModalCancel").onclick = () =>
+          modal.classList.remove("open");
+      }
+
+      document.getElementById("ptLogoutBtn").onclick = async () => {
+        await logout();
+        window.location.reload();
       };
     </script>
-    <!-- Shared verification/2FA code modal -->
-  <div class="otp-modal-overlay" id="otpModal">
-    <div class="otp-modal-box">
-      <h3 id="otpModalTitle">Enter verification code</h3>
-      <p class="otp-modal-hint" id="otpModalHint"></p>
-      <input
-        type="text"
-        id="otpModalInput"
-        maxlength="6"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        placeholder="6-digit code"
-        class="otp-modal-input"
-      />
-      <div class="otp-modal-error" id="otpModalError" style="display: none"></div>
-      <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
-      <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
-    </div>
-  </div>
-  <script>
-    // Opens the OTP modal. onVerify(code) is called each time the person
-    // submits - it should return a Promise that resolves on success (the
-    // modal is then closed automatically) or throws/rejects on a wrong
-    // code (the modal stays open with the error shown, so they can just
-    // retry instead of restarting the whole registration/login flow).
-    function openOtpModal({ title, hint, onVerify, onCancel }) {
-      const modal = document.getElementById("otpModal");
-      const input = document.getElementById("otpModalInput");
-      const errorEl = document.getElementById("otpModalError");
-      const submitBtn = document.getElementById("otpModalSubmit");
-      const cancelBtn = document.getElementById("otpModalCancel");
-
-      document.getElementById("otpModalTitle").textContent = title;
-      document.getElementById("otpModalHint").innerHTML = hint;
-      input.value = "";
-      errorEl.style.display = "none";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Verify";
-      modal.classList.add("open");
-      document.body.style.overflow = "hidden";
-      input.focus();
-
-      function cleanup() {
-        modal.classList.remove("open");
-        document.body.style.overflow = "";
-        submitBtn.removeEventListener("click", onSubmit);
-        cancelBtn.removeEventListener("click", onCancelClick);
-        input.removeEventListener("keydown", onKeydown);
-      }
-      async function onSubmit() {
-        const code = input.value.trim();
-        if (!/^\d{6}$/.test(code)) {
-          errorEl.textContent = "Enter the 6-digit code.";
-          errorEl.style.display = "block";
-          return;
-        }
-        errorEl.style.display = "none";
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Verifying…";
-        try {
-          await onVerify(code);
-          cleanup();
-        } catch (err) {
-          errorEl.textContent = err.message || "Incorrect code.";
-          errorEl.style.display = "block";
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Verify";
-        }
-      }
-      function onCancelClick() {
-        cleanup();
-        if (onCancel) onCancel();
-      }
-      function onKeydown(e) {
-        if (e.key === "Enter") onSubmit();
-      }
-
-      submitBtn.addEventListener("click", onSubmit);
-      cancelBtn.addEventListener("click", onCancelClick);
-      input.addEventListener("keydown", onKeydown);
-    }
-  </script>
-</body>
+  </body>
 </html>
