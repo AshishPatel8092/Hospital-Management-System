@@ -583,10 +583,10 @@ body.logged-in .guest-only {
   backdrop-filter: blur(3px);
   cursor: pointer;
 }
-.btn-secondary a {
-  text-decoration: none !important;
-  color: inherit;
-}
+/* .btn-secondary a { */
+/* text-decoration: none !important; */
+/* color: inherit; */
+/* } */
 .btn-primary:hover {
   transform: translateY(-1px);
 }
@@ -3790,6 +3790,7 @@ button {
 
 .hero-buttons > a {
   display: inline-flex;
+  text-decoration: none !important;
 }
 
 .btn-primary,
