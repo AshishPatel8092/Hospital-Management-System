@@ -652,32 +652,12 @@
 
       try {
         const result = await login(email, password);
-        // Password was correct - now require the 2FA code before actually
-        // signing them in.
-        openOtpModal({
-          title: 'Verify it\'s you',
-          hint: (result.devNote ? result.devNote + '<br><b>Demo code: ' + result.devTwoFactorCode + '</b>' : 'Enter the code sent to your email.'),
-          onVerify: async (code) => {
-            const final = await verifyLoginOtp(email, code);
-            document.getElementById('signin-form-wrap').style.display = 'none';
-            document.getElementById('signin-success').style.display = 'block';
-            setTimeout(() => {
-              window.location.href = destinationFor(final.data.role);
-            }, 900);
-          },
-        });
+        document.getElementById('signin-form-wrap').style.display = 'none';
+        document.getElementById('signin-success').style.display = 'block';
+        setTimeout(() => {
+          window.location.href = destinationFor(result.data.role);
+        }, 900);
       } catch (err) {
-        if (err.data && err.data.requiresVerification) {
-          openOtpModal({
-            title: 'Verify your email',
-            hint: 'This account hasn\'t been verified yet. Enter the code sent when you registered, or click Cancel and register again for a new code.',
-            onVerify: async (code) => {
-              await verifyEmail(email, code);
-              window.location.href = 'login.html';
-            },
-          });
-          return;
-        }
         errEl.textContent = err.message;
         errEl.style.display = 'block';
       }

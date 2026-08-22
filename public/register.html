@@ -2541,41 +2541,20 @@
 
         try {
           const result = await login(email.value, pw.value);
-          openOtpModal({
-            title: "Verify it's you",
-            hint: result.devNote
-              ? result.devNote + "<br><b>Demo code: " + result.devTwoFactorCode + "</b>"
-              : "Enter the code sent to your email.",
-            onVerify: async (code) => {
-              const final = await verifyLoginOtp(email.value, code);
-              if (final.data.role !== "DOCTOR") {
-                alert(
-                  "This account is registered as " +
-                    final.data.role +
-                    ". Please use the correct sign-in page for that role."
-                );
-                await logout();
-                return;
-              }
-              document.getElementById("signin-form-wrap").style.display = "none";
-              document.getElementById("signin-success").style.display = "block";
-              await loadDoctorDashboard(final.data);
-              setTimeout(() => showPage("dashboard"), 1500);
-            },
-          });
-        } catch (err) {
-          if (err.data && err.data.requiresVerification) {
-            openOtpModal({
-              title: "Verify your email",
-              hint: "This account hasn't been verified yet. Enter the code sent when you registered.",
-              onVerify: async (code) => {
-                const final = await verifyEmail(email.value, code);
-                await loadDoctorDashboard(final.data);
-                showPage("dashboard");
-              },
-            });
+          if (result.data.role !== "DOCTOR") {
+            alert(
+              "This account is registered as " +
+                result.data.role +
+                ". Please use the correct sign-in page for that role."
+            );
+            await logout();
             return;
           }
+          document.getElementById("signin-form-wrap").style.display = "none";
+          document.getElementById("signin-success").style.display = "block";
+          await loadDoctorDashboard(result.data);
+          setTimeout(() => showPage("dashboard"), 1500);
+        } catch (err) {
           document.getElementById("si-pw-err").textContent = err.message;
           document.getElementById("si-pw-err").style.display = "block";
           pwField.classList.add("has-error");
@@ -2773,21 +2752,12 @@
 
         try {
           const regResult = await registerDoctor(fields);
-          openOtpModal({
-            title: "Verify your email",
-            hint: regResult.devNote
-              ? regResult.devNote + "<br><b>Demo code: " + regResult.devVerificationCode + "</b>"
-              : "Enter the code we sent to " + fields.email + ".",
-            onVerify: async (code) => {
-              const final = await verifyEmail(fields.email, code);
-              const panels = document.querySelectorAll(".step-panel");
-              panels.forEach((p) => p.classList.remove("active"));
-              document.getElementById("step-success").classList.add("active");
-              document.querySelector(".stepper").style.opacity = "0";
-              await loadDoctorDashboard(final.data);
-              setTimeout(() => showPage("dashboard"), 1800);
-            },
-          });
+          const panels = document.querySelectorAll(".step-panel");
+          panels.forEach((p) => p.classList.remove("active"));
+          document.getElementById("step-success").classList.add("active");
+          document.querySelector(".stepper").style.opacity = "0";
+          await loadDoctorDashboard(regResult.data);
+          setTimeout(() => showPage("dashboard"), 1800);
         } catch (err) {
           alert("Registration failed: " + err.message);
         }

@@ -2302,43 +2302,20 @@
 
         try {
           const result = await login(email.value, pw.value);
-          // Password correct - now require the 2FA code before actually
-          // establishing the session.
-          openOtpModal({
-            title: "Verify it's you",
-            hint: result.devNote
-              ? result.devNote + "<br><b>Demo code: " + result.devTwoFactorCode + "</b>"
-              : "Enter the code sent to your email.",
-            onVerify: async (code) => {
-              const final = await verifyLoginOtp(email.value, code);
-              if (final.data.role !== "PATIENT") {
-                alert(
-                  "This account is registered as " +
-                    final.data.role +
-                    ". Please use the correct sign-in page for that role."
-                );
-                await logout();
-                return;
-              }
-              document.getElementById("signin-form-wrap").style.display = "none";
-              document.getElementById("signin-success").style.display = "block";
-              await loadPatientDashboard(final.data);
-              setTimeout(() => showPage("dashboard"), 900);
-            },
-          });
-        } catch (err) {
-          if (err.data && err.data.requiresVerification) {
-            openOtpModal({
-              title: "Verify your email",
-              hint: "This account hasn't been verified yet. Enter the code sent when you registered.",
-              onVerify: async (code) => {
-                const final = await verifyEmail(email.value, code);
-                await loadPatientDashboard(final.data);
-                showPage("dashboard");
-              },
-            });
+          if (result.data.role !== "PATIENT") {
+            alert(
+              "This account is registered as " +
+                result.data.role +
+                ". Please use the correct sign-in page for that role."
+            );
+            await logout();
             return;
           }
+          document.getElementById("signin-form-wrap").style.display = "none";
+          document.getElementById("signin-success").style.display = "block";
+          await loadPatientDashboard(result.data);
+          setTimeout(() => showPage("dashboard"), 900);
+        } catch (err) {
           pw.closest(".field").classList.add("has-error");
           document.getElementById("si-pw-err").textContent = err.message;
           document.getElementById("si-pw-err").style.display = "block";
@@ -2461,20 +2438,11 @@
 
         try {
           const regResult = await registerPatient(fields);
-          openOtpModal({
-            title: "Verify your email",
-            hint: regResult.devNote
-              ? regResult.devNote + "<br><b>Demo code: " + regResult.devVerificationCode + "</b>"
-              : "Enter the code we sent to " + fields.email + ".",
-            onVerify: async (code) => {
-              const final = await verifyEmail(fields.email, code);
-              document
-                .querySelectorAll(".step-panel")
-                .forEach((p) => p.classList.remove("active"));
-              await loadPatientDashboard(final.data);
-              showPage("dashboard");
-            },
-          });
+          document
+            .querySelectorAll(".step-panel")
+            .forEach((p) => p.classList.remove("active"));
+          await loadPatientDashboard(regResult.data);
+          showPage("dashboard");
         } catch (err) {
           alert("Registration failed: " + err.message);
         }

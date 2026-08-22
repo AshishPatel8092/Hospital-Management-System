@@ -21,23 +21,17 @@ async function apiRequest(path, method = 'GET', body = null) {
   return data;
 }
 
-// ----- Auth: registration + email verification -----
+// ----- Auth: registration -----
 function registerPatient(fields) {
   return apiRequest('/register', 'POST', { role: 'PATIENT', ...fields });
 }
 function registerDoctor(fields) {
   return apiRequest('/register', 'POST', { role: 'DOCTOR', ...fields });
 }
-function verifyEmail(email, code) {
-  return apiRequest('/verify-email', 'POST', { email, code });
-}
 
-// ----- Auth: login is now two steps - password, then a verification code -----
+// ----- Auth: login -----
 function login(email, password) {
   return apiRequest('/login', 'POST', { email, password });
-}
-function verifyLoginOtp(email, code) {
-  return apiRequest('/verify-login-otp', 'POST', { email, code });
 }
 
 // ----- Auth: forgot / reset password -----

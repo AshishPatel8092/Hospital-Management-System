@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking & Payment System</title>
+    <style>
+      :root {
+        --primary: #4f46e5;
+        --secondary: #f1f5f9;
+        --text: #1e293b;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f8fafc;
+        color: var(--text);
+        margin: 0;
+        padding: 20px;
+      }
+
+      /* Layout for Sections */
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+      .section-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      h2 {
+        color: #334155;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 10px;
+      }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+      .btn-confirm {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      /* THE PAYMENT MODAL */
+      #payment-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-container {
+        background: white;
+        width: 800px;
+        max-width: 90%;
+        border-radius: 20px;
+        display: flex;
+        overflow: hidden;
+        height: 500px;
+      }
+
+      /* Left Side: Payment Options */
+      .payment-side {
+        flex: 1.5;
+        padding: 40px;
+      }
+      .option-btn {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        background: white;
+        font-weight: 600;
+        text-align: left;
+        transition: 0.2s;
+      }
+      .option-btn:hover {
+        border-color: var(--primary);
+        background: #f5f3ff;
+      }
+      .option-btn img {
+        width: 30px;
+        margin-right: 15px;
+      }
+
+      /* Right Side: Summary */
+      .summary-side {
+        flex: 1;
+        background: #f8fafc;
+        padding: 40px;
+        border-left: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+      }
+      .summary-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #64748b;
+      }
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+      }
+      .summary-total {
+        margin-top: auto;
+        padding-top: 20px;
+        border-top: 2px solid #cbd5e1;
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 1.3rem;
+      }
+
+      .hidden {
+        display: none;
+      }
+      .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Services Section -->
+      <div class="section-card">
+        <h2>Our Services</h2>
+        <div class="item">
+          <div><b>Website Design</b><br /><small>₹2000</small></div>
+          <button
+            class="btn-confirm"
+            onclick="openPayment('Website Design', 2000)"
+          >
+            Confirm
+          </button>
+        </div>
+        <div class="item">
+          <div><b>SEO Optimization</b><br /><small>₹1000</small></div>
+          <button
+            class="btn-confirm"
+            onclick="openPayment('SEO Optimization', 1000)"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+
+      <!-- Doctors Section -->
+      <div class="section-card">
+        <h2>Book Doctor</h2>
+        <div class="item">
+          <div><b>Dr. Smith (Cardiologist)</b><br /><small>₹500</small></div>
+          <button
+            class="btn-confirm"
+            onclick="openPayment('Dr. Smith Consultation', 500)"
+          >
+            Confirm
+          </button>
+        </div>
+        <div class="item">
+          <div><b>Dr. Jane (Dentist)</b><br /><small>₹300</small></div>
+          <button
+            class="btn-confirm"
+            onclick="openPayment('Dr. Jane Consultation', 300)"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT MODAL -->
+    <div id="payment-overlay">
+      <div class="modal-container">
+        <button class="close-btn" onclick="closePayment()">×</button>
+
+        <!-- Left: Payment Methods -->
+        <div class="payment-side">
+          <h3>Select Payment Method</h3>
+          <p style="color: #64748b; margin-bottom: 20px">
+            Choose how you want to pay
+          </p>
+
+          <button class="option-btn" onclick="processPayment('Card')">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/633/633611.png"
+              alt="card"
+            />
+            Debit / Credit Card
+          </button>
+
+          <button class="option-btn" onclick="processPayment('UPI')">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/10122/10122241.png"
+              alt="upi"
+            />
+            UPI (PhonePe / GPay)
+          </button>
+
+          <button class="option-btn" onclick="processPayment('Wallet')">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/5968/5968533.png"
+              alt="wallet"
+            />
+            Digital Wallet
+          </button>
+        </div>
+
+        <!-- Right: Summary -->
+        <div class="summary-side">
+          <div class="summary-title">Order Summary</div>
+
+          <div class="summary-item">
+            <span>Item:</span>
+            <span id="sum-item">---</span>
+          </div>
+          <div class="summary-item">
+            <span>Tax (GST 0%):</span>
+            <span>₹0.00</span>
+          </div>
+          <div class="summary-item">
+            <span>Convenience Fee:</span>
+            <span>₹0.00</span>
+          </div>
+
+          <div class="summary-total">
+            <span>Total:</span>
+            <span id="sum-total">₹0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const overlay = document.getElementById("payment-overlay");
+      const sumItem = document.getElementById("sum-item");
+      const sumTotal = document.getElementById("sum-total");
+
+      // This function is called when user clicks "Confirm" in any section
+      function openPayment(itemName, price) {
+        // 1. Update the summary on the right side
+        sumItem.innerText = itemName;
+        sumTotal.innerText = "₹" + price;
+
+        // 2. Show the payment modal
+        overlay.style.display = "flex";
+      }
+
+      function closePayment() {
+        overlay.style.display = "none";
+      }
+
+      function processPayment(method) {
+        const amount = sumTotal.innerText;
+        const item = sumItem.innerText;
+
+        if (method === "UPI") {
+          // Dynamic UPI Link
+          const upiId = "yournumber@okaxis"; // Replace with your actual UPI ID
+          const upiUrl = `upi://pay?pa={upiId}&pn=Business&am={amount.replace('₹', '')}&cu=INR`;
+
+          alert(
+            `Redirecting to UPI App for item...\nAmount:{item}...\nAmount:item...\nAmount:{amount}`,
+          );
+          window.location.href = upiUrl;
+        } else {
+          alert(
+            `Processing methodpaymentfor{method} payment formethodpaymentfor{item} of ${amount}...`,
+          );
+        }
+      }
+    </script>
+  </body>
+</html>
