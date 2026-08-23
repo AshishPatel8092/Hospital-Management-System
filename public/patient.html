@@ -1,0 +1,1738 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Casto Health Care — Patient Dashboard</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@500;600&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --teal: #0f766e;
+        --teal-lt: #ccfbf1;
+        --teal-dk: #0d5c56;
+        --rose: #e11d48;
+        --slate-900: #0f172a;
+        --slate-700: #334155;
+        --slate-400: #94a3b8;
+        --slate-200: #e2e8f0;
+        --slate-50: #f8fafc;
+        --white: #ffffff;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #eef9f8 0%,
+          #f0f9ff 50%,
+          #fff7ed 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── NAV ── */
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 48px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--slate-200);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--teal);
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+      }
+      .logo-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+      }
+      .logo-text {
+        font-family: "Lora", serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--slate-900);
+      }
+      .nav-link {
+        font-size: 0.875rem;
+        color: var(--slate-700);
+      }
+      .nav-link a {
+        color: var(--teal);
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .nav-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── PAGE WRAPPER ── */
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 36px;
+      }
+      .page-header h1 {
+        font-family: "Lora", serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--slate-900);
+      }
+      .page-header p {
+        margin-top: 6px;
+        font-size: 0.95rem;
+        color: var(--slate-400);
+      }
+
+      /* ── STEPPER ── */
+      .stepper {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        margin-bottom: 40px;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--slate-400);
+        cursor: default;
+      }
+      .step.active {
+        color: var(--teal);
+      }
+      .step.complete {
+        color: var(--teal);
+      }
+      .step-num {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px solid var(--slate-200);
+        display: grid;
+        place-items: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        background: var(--white);
+        transition: all 0.3s;
+      }
+      .step.active .step-num {
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+      .step.complete .step-num {
+        border-color: var(--teal);
+        background: var(--teal);
+        color: white;
+      }
+      .step-line {
+        width: 80px;
+        height: 2px;
+        background: var(--slate-200);
+        margin: 0 4px;
+        transition: background 0.3s;
+      }
+      .step-line.done {
+        background: var(--teal);
+      }
+
+      /* ── CARD ── */
+      .card {
+        background: white;
+        border-radius: 20px;
+        box-shadow:
+          0 4px 24px rgba(15, 118, 110, 0.08),
+          0 1px 4px rgba(0, 0, 0, 0.04);
+        padding: 40px 48px;
+        width: 100%;
+        max-width: 780px;
+      }
+
+      /* ── FORM GRID ── */
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px 28px;
+      }
+      .col-span-2 {
+        grid-column: span 2;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .field label {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--slate-700);
+      }
+      .field label .req {
+        color: var(--rose);
+        margin-left: 2px;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid var(--slate-200);
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-family: inherit;
+        color: var(--slate-900);
+        background: var(--slate-50);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        appearance: none;
+      }
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: var(--teal);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+      }
+      .field .err-msg {
+        font-size: 0.75rem;
+        color: var(--rose);
+        margin-top: 2px;
+        display: none;
+      }
+      .field.has-error .err-msg {
+        display: block;
+      }
+      .field.has-error input,
+      .field.has-error select {
+        border-color: var(--rose);
+      }
+
+      .field .input-wrap {
+        position: relative;
+      }
+      .field .input-wrap input {
+        padding-right: 40px;
+      }
+      .field .input-wrap .icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--slate-400);
+        pointer-events: none;
+      }
+
+      select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 36px;
+      }
+
+      /* ── SECTION LABEL ── */
+      .section-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--teal);
+        border-bottom: 1px solid var(--slate-200);
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+      }
+
+      /* ── SUB-SECTION LABEL (inside step 2) ── */
+      .sub-section-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        margin-top: 8px;
+        margin-bottom: 4px;
+        grid-column: span 2;
+        padding-top: 14px;
+        border-top: 1px dashed var(--slate-200);
+      }
+      .sub-section-label:first-child {
+        border-top: none;
+        padding-top: 0;
+      }
+
+      /* ── RADIO & CHECKBOX ── */
+      .radio-group,
+      .check-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .radio-option,
+      .check-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.875rem;
+        color: var(--slate-700);
+        cursor: pointer;
+      }
+      .radio-option input[type="radio"],
+      .check-option input[type="checkbox"] {
+        display: none;
+      }
+      .radio-option .rb,
+      .check-option .cb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid var(--slate-200);
+        background: var(--slate-50);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        transition: all 0.2s;
+      }
+      .check-option .cb {
+        border-radius: 5px;
+      }
+      .radio-option input:checked ~ .rb {
+        border-color: var(--teal);
+      }
+      .radio-option input:checked ~ .rb::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--teal);
+      }
+      .check-option input:checked ~ .cb {
+        border-color: var(--teal);
+        background: var(--teal);
+      }
+      .check-option input:checked ~ .cb::after {
+        content: "";
+        width: 10px;
+        height: 7px;
+        border-left: 2px solid white;
+        border-bottom: 2px solid white;
+        transform: rotate(-45deg) translateY(-1px);
+      }
+
+      /* ── PAIN SCALE ── */
+      .pain-scale {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .pain-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 2px solid var(--slate-200);
+        background: var(--slate-50);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--slate-500);
+        cursor: pointer;
+        transition: all 0.18s;
+        display: grid;
+        place-items: center;
+        font-family: inherit;
+      }
+      .pain-btn:hover {
+        border-color: var(--teal);
+        color: var(--teal);
+        background: var(--teal-lt);
+      }
+      .pain-btn.selected {
+        background: var(--teal);
+        color: white;
+        border-color: var(--teal);
+      }
+      /* .pain-btn [data-level="8"],
+      .pain-btn [data-level="9"],
+      .pain-btn [data-level="10"] {
+      } */
+      .pain-btn.selected[data-level="8"],
+      .pain-btn.selected[data-level="9"],
+      .pain-btn.selected[data-level="10"] {
+        background: #e11d48;
+        border-color: #e11d48;
+      }
+      .pain-label-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: var(--slate-400);
+        margin-top: 4px;
+      }
+
+      /* ── STEP PANELS ── */
+      .step-panel {
+        display: none;
+      }
+      .step-panel.active {
+        display: block;
+      }
+
+      /* ── PRICING CARD ── */
+      .pricing-box {
+        background: var(--slate-50);
+        border: 1.5px solid var(--slate-200);
+        border-radius: 14px;
+        padding: 24px 28px;
+        margin-bottom: 28px;
+      }
+      .pricing-box h3 {
+        font-family: "Lora", serif;
+        font-size: 1.1rem;
+        color: var(--slate-900);
+        margin-bottom: 4px;
+      }
+      .pricing-box .sub {
+        font-size: 0.8rem;
+        color: var(--slate-400);
+        margin-bottom: 18px;
+      }
+      .pricing-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: var(--slate-700);
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--slate-200);
+      }
+      .pricing-row.total {
+        border-bottom: none;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--slate-900);
+        padding-top: 14px;
+      }
+      .pricing-row.total .price-val {
+        color: var(--teal);
+      }
+
+      /* ── SUBSCRIPTION ── */
+      .subscribe-wrap {
+        margin-bottom: 28px;
+      }
+      .subscribe-wrap p {
+        font-size: 0.875rem;
+        color: var(--slate-700);
+        margin-bottom: 10px;
+        font-weight: 500;
+      }
+      .subscribe-wrap .note {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        margin-top: 8px;
+        line-height: 1.5;
+      }
+
+      /* ── ACTIONS ── */
+      .actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 32px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 32px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: var(--teal);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--teal-dk);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--teal);
+        border: 1.5px solid var(--teal);
+      }
+      .btn-outline:hover {
+        background: var(--teal-lt);
+      }
+
+      /* ── SUCCESS ── */
+      #step-success {
+        text-align: center;
+        padding: 20px 0;
+      }
+      .success-icon {
+        width: 72px;
+        height: 72px;
+        background: var(--teal-lt);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 20px;
+      }
+      .success-icon svg {
+        width: 36px;
+        height: 36px;
+        stroke: var(--teal);
+      }
+      #step-success h2 {
+        font-family: "Lora", serif;
+        font-size: 1.6rem;
+        color: var(--slate-900);
+        margin-bottom: 8px;
+      }
+      #step-success p {
+        font-size: 0.9rem;
+        color: var(--slate-400);
+      }
+
+      /* ── PAGE VIEWS ── */
+      .page-view {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 16px 60px;
+        flex: 1;
+      }
+      .page-view.active {
+        display: flex;
+      }
+
+      /* ── SIGN IN CARD ── */
+      .signin-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow:
+          0 4px 24px rgba(15, 118, 110, 0.08),
+          0 1px 4px rgba(0, 0, 0, 0.04);
+        padding: 44px 48px;
+        width: 100%;
+        max-width: 460px;
+      }
+      .signin-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 10px;
+      }
+      .pw-wrap {
+        position: relative;
+      }
+      .pw-wrap input {
+        padding-right: 44px;
+      }
+      .pw-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--slate-400);
+        padding: 0;
+        display: grid;
+        place-items: center;
+      }
+      .pw-toggle:hover {
+        color: var(--teal);
+      }
+      .forgot-row {
+        text-align: right;
+        margin-bottom: 22px;
+      }
+      .forgot-row a {
+        font-size: 0.8125rem;
+        color: var(--teal);
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .forgot-row a:hover {
+        text-decoration: underline;
+      }
+      .btn-full {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 20px;
+        font-size: 0.95rem;
+      }
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 22px 0;
+        color: var(--slate-400);
+        font-size: 0.8rem;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--slate-200);
+      }
+      .social-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .btn-social {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 11px 20px;
+        border-radius: 10px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1.5px solid var(--slate-200);
+        background: white;
+        color: var(--slate-700);
+        transition: all 0.2s;
+      }
+      .btn-social:hover {
+        border-color: var(--teal);
+        background: var(--teal-lt);
+        color: var(--teal);
+      }
+      .btn-social svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+      .register-prompt {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 0.875rem;
+        color: var(--slate-400);
+      }
+      .register-prompt a {
+        color: var(--teal);
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .register-prompt a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── MODAL ── */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 200;
+        place-items: center;
+      }
+      .modal-overlay.open {
+        display: grid;
+      }
+      .modal {
+        background: white;
+        border-radius: 18px;
+        padding: 36px 40px;
+        width: 100%;
+        max-width: 420px;
+        margin: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        animation: popIn 0.25s ease;
+      }
+      @keyframes popIn {
+        from {
+          transform: scale(0.92);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .modal h3 {
+        font-family: "Lora", serif;
+        font-size: 1.25rem;
+        color: var(--slate-900);
+        margin-bottom: 6px;
+      }
+      .modal p {
+        font-size: 0.875rem;
+        color: var(--slate-400);
+        margin-bottom: 22px;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .modal-actions .btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* ── SIGN-IN SUCCESS ── */
+      .signin-success {
+        text-align: center;
+        padding: 16px 0;
+      }
+      .signin-success h2 {
+        font-family: "Lora", serif;
+        font-size: 1.5rem;
+        color: var(--slate-900);
+        margin-bottom: 8px;
+      }
+      .signin-success p {
+        font-size: 0.875rem;
+        color: var(--slate-400);
+      }
+
+      /* ── INFO CHIP (helper text under label) ── */
+      .field .hint {
+        font-size: 0.72rem;
+        color: var(--slate-400);
+        margin-top: -2px;
+      }
+
+      @media (max-width: 640px) {
+        nav {
+          padding: 14px 20px;
+        }
+        .card {
+          padding: 28px 20px;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .col-span-2 {
+          grid-column: span 1;
+        }
+        .sub-section-label {
+          grid-column: span 1;
+        }
+        .step-line {
+          width: 40px;
+        }
+        .step-label {
+          display: none;
+        }
+        .pain-btn {
+          width: 32px;
+          height: 32px;
+          font-size: 0.72rem;
+        }
+      }
+      /* Patient dashboard */
+      #view-patient-dashboard {
+        display: none;
+        background: #f4f8f8;
+        min-height: 100vh;
+        color: #18323b;
+        font-family: "Inter", sans-serif;
+      }
+      #view-patient-dashboard.active {
+        display: block;
+      }
+      body.patient-dashboard-active > nav,
+      body.patient-dashboard-active > #view-register,
+      body.patient-dashboard-active > #view-signin {
+        display: none;
+      }
+      .pt-shell {
+        display: grid;
+        grid-template-columns: 245px 1fr;
+      }
+      .pt-side {
+        background: #fff;
+        border-right: 1px solid #dce7e8;
+        padding: 24px 14px;
+        min-height: 100vh;
+      }
+      .pt-brand {
+        font-size: 26px;
+        font-weight: 800;
+        color: #005f78;
+        padding: 0 12px 28px;
+      }
+      .pt-brand i {
+        font-style: normal;
+        background: #005f78;
+        color: #fff;
+        border-radius: 9px;
+        padding: 4px;
+        margin-right: 8px;
+      }
+      .pt-nav {
+        display: block !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        position: static !important;
+        backdrop-filter: none !important;
+      }
+      .pt-nav button {
+        display: flex;
+        width: 100%;
+        gap: 12px;
+        border: 0;
+        background: transparent;
+        color: #5b6e73;
+        padding: 12px;
+        border-radius: 9px;
+        text-align: left;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .pt-nav button.active,
+      .pt-nav button:hover {
+        background: #e1f2f5;
+        color: #005f78;
+      }
+      .pt-top {
+        height: 82px;
+        background: #fff;
+        border-bottom: 1px solid #dce7e8;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 18px;
+        padding: 0 32px;
+      }
+      .pt-profile {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-weight: 700;
+      }
+      .pt-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #d6eef0;
+        color: #005f78;
+      }
+      .pt-main {
+        display: block !important;
+        align-items: stretch !important;
+        padding: 30px;
+        max-width: 1500px;
+      }
+      .pt-main h1 {
+        margin: 0 0 5px;
+        font-size: 28px;
+      }
+      .pt-sub {
+        color: #718287;
+        margin: 0 0 22px;
+        font-size: 14px;
+      }
+      .pt-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 20px;
+      }
+      .pt-stack {
+        display: grid;
+        gap: 20px;
+      }
+      .pt-card {
+        background: #fff;
+        border: 1px solid #dce7e8;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 2px 8px #1736420b;
+      }
+      .pt-card h2 {
+        font-size: 18px;
+        margin: 0 0 15px;
+      }
+      .pt-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .pt-stat {
+        background: #e1f2f5;
+        border-radius: 11px;
+        padding: 15px;
+      }
+      .pt-stat:nth-child(2) {
+        background: #edf7e9;
+      }
+      .pt-stat:nth-child(3) {
+        background: #fff1e7;
+      }
+      .pt-stat span {
+        display: block;
+        color: #64757a;
+        font-size: 12px;
+      }
+      .pt-stat b {
+        font-size: 25px;
+        margin-top: 5px;
+        display: block;
+        color: #005f78;
+      }
+      .pt-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #e7eeee;
+        padding: 13px 0;
+        gap: 10px;
+      }
+      .pt-row:first-of-type {
+        border-top: 0;
+      }
+      .pt-row b,
+      .pt-row small {
+        display: block;
+      }
+      .pt-row b {
+        font-size: 14px;
+      }
+      .pt-row small {
+        font-size: 12px;
+        color: #718287;
+        margin-top: 3px;
+      }
+      .pt-btn {
+        border: 1px solid #005f78;
+        color: #005f78;
+        background: #fff;
+        border-radius: 7px;
+        padding: 8px 11px;
+        font-weight: 700;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .pt-btn.primary {
+        background: #005f78;
+        color: #fff;
+      }
+      .pt-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .pt-action {
+        border: 1px solid #dce7e8;
+        background: #fff;
+        border-radius: 11px;
+        padding: 15px;
+        text-align: left;
+        color: #18323b;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .pt-action:hover {
+        border-color: #005f78;
+        color: #005f78;
+      }
+      .pt-action span {
+        display: block;
+        color: #718287;
+        font-size: 11px;
+        font-weight: 400;
+        margin-top: 4px;
+      }
+      .pt-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .pt-pill {
+        background: #e1f2f5;
+        color: #005f78;
+        border-radius: 20px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .pt-toast {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        background: #16333c;
+        color: #fff;
+        padding: 13px 16px;
+        border-radius: 8px;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: 0.25s;
+        z-index: 20;
+      }
+      .pt-toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .pt-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: #0d2a3355;
+        place-items: center;
+        z-index: 10;
+      }
+      .pt-modal.open {
+        display: grid;
+      }
+      .pt-modal-box {
+        background: #fff;
+        border-radius: 14px;
+        padding: 24px;
+        width: min(430px, 90vw);
+      }
+      .pt-modal-box h2 {
+        margin: 0 0 14px;
+      }
+      .pt-modal-box textarea,
+      .pt-modal-box input,
+      .pt-modal-box select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #dce7e8;
+        border-radius: 7px;
+        margin: 5px 0 12px;
+      }
+      .pt-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 9px;
+      }
+      @media (max-width: 900px) {
+        .pt-shell {
+          grid-template-columns: 1fr;
+        }
+        .pt-side {
+          min-height: 0;
+          padding: 12px;
+        }
+        .pt-nav {
+          display: flex !important;
+          overflow: auto;
+        }
+        .pt-nav button {
+          white-space: nowrap;
+          width: auto;
+        }
+        .pt-brand {
+          padding-bottom: 10px;
+        }
+        .pt-grid {
+          grid-template-columns: 1fr;
+        }
+        .pt-main {
+          padding: 20px;
+        }
+      }
+      @media (max-width: 560px) {
+        .pt-stats,
+        .pt-actions {
+          grid-template-columns: 1fr;
+        }
+        .pt-top {
+          padding: 0 15px;
+        }
+        .pt-main {
+          padding: 16px;
+        }
+      }
+      .otp-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .otp-modal-overlay.open {
+        display: flex;
+      }
+      .otp-modal-box {
+        background: #fff;
+        border-radius: 14px;
+        padding: 28px 24px;
+        width: 100%;
+        max-width: 360px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      }
+      .otp-modal-box h3 {
+        margin: 0 0 8px;
+        font-size: 19px;
+      }
+      .otp-modal-hint {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.5;
+        margin: 0 0 16px;
+      }
+      .otp-modal-hint b {
+        color: #222;
+      }
+      .otp-modal-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        font-size: 20px;
+        letter-spacing: 6px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+      .otp-modal-error {
+        color: #d33;
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+      .otp-modal-submit {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #16a085;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        margin-bottom: 8px;
+      }
+      .otp-modal-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .otp-modal-cancel {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background: none;
+        color: #888;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      @media (max-width: 480px) {
+        .otp-modal-box {
+          padding: 22px 18px;
+        }
+      }
+      /* ── Standalone dashboard page nav (patient.html) ── */
+      #pt-page-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 32px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--slate-200, #e2e8f0);
+        position: sticky;
+        top: 0;
+        z-index: 500;
+      }
+      #pt-page-nav .pt-page-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--teal, #0f766e);
+        font-weight: 700;
+        font-size: 1.05rem;
+      }
+      #pt-page-nav .pt-page-links {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      #pt-page-nav .pt-page-links a,
+      #pt-page-nav .pt-page-links button {
+        color: var(--teal-dk, #0d5c56);
+        text-decoration: none;
+        background: none;
+        border: none;
+        font: inherit;
+        cursor: pointer;
+      }
+      #pt-page-nav .pt-page-links button {
+        color: var(--rose, #e11d48);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav id="pt-page-nav">
+      <a class="pt-page-logo" href="index.html">
+        <span>✚</span>
+        <span>Casto Health Care</span>
+      </a>
+      <div class="pt-page-links">
+        <a href="index.html">🏠 Home</a>
+        <a href="appointment.html">📅 Appointments</a>
+        <button type="button" id="ptPageLogoutBtn">⏻ Log Out</button>
+      </div>
+    </nav>
+
+    <section id="view-patient-dashboard" class="active">
+      <div class="pt-shell">
+        <aside class="pt-side">
+          <div class="pt-brand"><i>+</i>Casto Health Care</div>
+          <!-- <nav class="pt-nav"> -->
+          <!-- <button class="active">▦ Dashboard</button -->
+          <!-- ><button>◷ Appointments</button><button>▤ Medical History</button -->
+          <!-- ><button>💊 Prescriptions</button><button>🧪 Lab Reports</button -->
+          <!-- ><button>💳 Payments & Bills</button -->
+          <!-- ><button>🔔 Notifications</button><button>★ Doctor Reviews</button> -->
+          <!-- <button id="ptLogoutBtn" style="margin-top: 16px">⏻ Log Out</button> -->
+          <!-- </nav> -->
+        </aside>
+        <div>
+          <header class="pt-top">
+            <button class="pt-btn" id="ptBell">🔔 4</button>
+            <div class="pt-profile">
+              <span class="pt-avatar" id="ptAvatar">PS</span
+              ><span id="ptName">Patient</span>
+            </div>
+          </header>
+          <main class="pt-main">
+            <h1>Patient Dashboard</h1>
+            <p class="pt-sub">
+              Manage your care, health records, appointments, and payments in
+              one place.
+            </p>
+            <div class="pt-grid">
+              <div class="pt-stack">
+                <section class="pt-card">
+                  <h2>Your Health at a Glance</h2>
+                  <div class="pt-stats">
+                    <div class="pt-stat">
+                      <span>Upcoming appointments</span
+                      ><b id="ptStatUpcoming">0</b>
+                    </div>
+                    <div class="pt-stat">
+                      <span>Active prescriptions</span
+                      ><b id="ptStatPrescriptions">0</b>
+                    </div>
+                    <div class="pt-stat">
+                      <span>Completed visits</span><b id="ptStatCompleted">0</b>
+                    </div>
+                  </div>
+                </section>
+                <section
+                  class="pt-card"
+                  id="ptNextApptCard"
+                  style="display: none"
+                >
+                  <h2>Your Next Appointment</h2>
+                  <div id="ptNextAppt"></div>
+                </section>
+                <section class="pt-card">
+                  <h2>Upcoming Appointments</h2>
+                  <div id="ptAppointmentsList">
+                    <div class="pt-row">
+                      <div>
+                        <b>Dr. Anya Sharma · Cardiology</b
+                        ><small
+                          >Tuesday, 28 July · 10:30 AM · Video
+                          consultation</small
+                        >
+                      </div>
+                      <button class="pt-btn" data-pt="Join video consultation">
+                        Join call
+                      </button>
+                    </div>
+                    <div class="pt-row">
+                      <div>
+                        <b>Dr. Rahul Mehta · General Medicine</b
+                        ><small>Friday, 31 July · 04:00 PM · In-person</small>
+                      </div>
+                      <button
+                        class="pt-btn"
+                        data-pt="Appointment details opened"
+                      >
+                        Details
+                      </button>
+                    </div>
+                  </div>
+                </section>
+                <section class="pt-card">
+                  <h2>Recent Prescriptions</h2>
+                  <div id="ptPrescriptionsList">
+                    <div class="pt-row">
+                      <div>
+                        <b>Atorvastatin 10mg</b
+                        ><small
+                          >Dr. Anya Sharma · Take once daily after dinner</small
+                        >
+                      </div>
+                      <div>
+                        <button
+                          class="pt-btn"
+                          data-pt="Prescription downloaded as PDF"
+                        >
+                          Download
+                        </button>
+                        <button
+                          class="pt-btn"
+                          data-pt="Preparing prescription for print"
+                        >
+                          Print
+                        </button>
+                      </div>
+                    </div>
+                    <div class="pt-row">
+                      <div>
+                        <b>Vitamin D3</b
+                        ><small>Dr. Rahul Mehta · One tablet weekly</small>
+                      </div>
+                      <button class="pt-btn" data-pt="Prescription opened">
+                        View
+                      </button>
+                    </div>
+                  </div>
+                </section>
+                <section class="pt-card">
+                  <h2>Medical History</h2>
+                  <div class="pt-pills" id="ptHealthPills">
+                    <span class="pt-pill">Blood Group: O+</span
+                    ><span class="pt-pill">No known drug allergies</span
+                    ><span class="pt-pill">Last check-up: Jul 2026</span>
+                  </div>
+                </section>
+              </div>
+              <div class="pt-stack">
+                <section class="pt-card">
+                  <h2>Quick Actions</h2>
+                  <div class="pt-actions">
+                    <button
+                      class="pt-action"
+                      data-pt="Video consultation room created"
+                    >
+                      📹 Video call<span>Meet your doctor online</span></button
+                    ><button class="pt-action" data-pt="Audio call requested">
+                      ☎ Audio call<span>Request a call</span></button
+                    ><button class="pt-action" id="ptChat">
+                      💬 Chat<span>Secure patient messaging</span></button
+                    ><button class="pt-action" data-pt="Lab report list opened">
+                      🧪 Lab reports<span
+                        >Blood, X-ray, MRI, CT, ECG</span
+                      ></button
+                    ><button class="pt-action" id="ptPay">
+                      💳 Pay online<span
+                        >Appointments, lab fees, bills</span
+                      ></button
+                    ><button class="pt-action" id="ptReview">
+                      ★ Review doctor<span>Rate your experience</span>
+                    </button>
+                  </div>
+                </section>
+                <section class="pt-card">
+                  <h2>Lab Test Reports</h2>
+                  <div class="pt-row">
+                    <div>
+                      <b>Complete Blood Count</b
+                      ><small>Ready · 24 July 2026</small>
+                    </div>
+                    <button class="pt-btn" data-pt="Blood report downloaded">
+                      Download
+                    </button>
+                  </div>
+                  <div class="pt-row">
+                    <div>
+                      <b>ECG Report</b><small>Ready · 21 July 2026</small>
+                    </div>
+                    <button class="pt-btn" data-pt="ECG report downloaded">
+                      Download
+                    </button>
+                  </div>
+                  <div class="pt-row">
+                    <div>
+                      <b>MRI Scan</b><small>Ready · 17 July 2026</small>
+                    </div>
+                    <button class="pt-btn" data-pt="MRI report downloaded">
+                      Download
+                    </button>
+                  </div>
+                </section>
+                <section class="pt-card">
+                  <h2>Payments & Bills</h2>
+                  <div id="ptBillsList">
+                    <div class="pt-row">
+                      <div>
+                        <b>Payment options</b
+                        ><small
+                          >UPI · Credit Card · Debit Card · Net Banking</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="pt-card">
+                  <h2>Notifications</h2>
+                  <div class="pt-row">
+                    <div>
+                      <b>Medicine reminder</b
+                      ><small>Take Atorvastatin after dinner today.</small>
+                    </div>
+                  </div>
+                  <div class="pt-row">
+                    <div>
+                      <b>Vaccination reminder</b
+                      ><small>Flu vaccination is due next week.</small>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+    <div class="pt-modal" id="ptModal">
+      <div class="pt-modal-box">
+        <h2 id="ptModalTitle">Online Payment</h2>
+        <div id="ptModalContent"></div>
+        <div class="pt-modal-actions">
+          <button class="pt-btn" id="ptClose">Cancel</button
+          ><button class="pt-btn primary" id="ptSubmit">Confirm</button>
+        </div>
+      </div>
+    </div>
+    <div class="pt-toast" id="ptToast"></div>
+
+    <script src="api.js?v=3"></script>
+    <script>
+      /* ── AUTH GUARD: only signed-in patients may view this page ── */
+      (async function guardAndLoad() {
+        try {
+          const result = await getCurrentUser();
+          if (result.data.role !== "PATIENT") {
+            window.location.href = "login.html";
+            return;
+          }
+          await loadPatientDashboard(result.data);
+        } catch (e) {
+          window.location.href = "login.html";
+        }
+      })();
+
+      document.getElementById("ptPageLogoutBtn").addEventListener("click", () => {
+        confirmLogout(async () => {
+          await logout();
+          window.location.href = "login.html";
+        });
+      });
+
+      /* ── DASHBOARD DATA ── */
+      async function loadPatientDashboard(session) {
+        document.getElementById("ptName").textContent = session.fullName;
+        const parts = session.fullName.trim().split(/\s+/);
+        document.getElementById("ptAvatar").textContent = (
+          (parts[0]?.[0] || "") + (parts[1]?.[0] || "")
+        ).toUpperCase();
+
+        try {
+          const profileResult = await apiRequest("/patients?self=true", "GET");
+          const p = profileResult.data;
+          const pillsEl = document.getElementById("ptHealthPills");
+          const pills = [];
+          pills.push(
+            `<span class="pt-pill">Blood Group: ${p.blood_group || "Not provided"}</span>`,
+          );
+          if (p.smoking_status)
+            pills.push(
+              `<span class="pt-pill">Smoking: ${p.smoking_status}</span>`,
+            );
+          if (p.alcohol_status)
+            pills.push(
+              `<span class="pt-pill">Alcohol: ${p.alcohol_status}</span>`,
+            );
+          pillsEl.innerHTML = pills.join("");
+        } catch (err) {
+          console.error("Could not load patient profile:", err.message);
+        }
+
+        try {
+          const apptResult = await listAppointments();
+          const list = document.getElementById("ptAppointmentsList");
+          const appts = apptResult.data;
+
+          document.getElementById("ptStatUpcoming").textContent = appts.filter(
+            (a) => a.status !== "Completed" && a.status !== "Cancelled",
+          ).length;
+          document.getElementById("ptStatCompleted").textContent = appts.filter(
+            (a) => a.status === "Completed",
+          ).length;
+
+          if (!appts.length) {
+            list.innerHTML =
+              '<div class="pt-row"><div><b>No appointments booked yet</b><small>Book one from the "Book Appointment" page.</small></div></div>';
+          } else {
+            list.innerHTML = appts
+              .map(
+                (a) => `
+              <div class="pt-row">
+                <div>
+                  <b>Dr. ${a.doctor_name}</b>
+                  <small>${a.appointment_date} · ${a.slot_time || "Time TBD"} · ${a.visit_type} · ${a.status}</small>
+                </div>
+              </div>`,
+              )
+              .join("");
+          }
+
+          // Highlight the single soonest upcoming appointment, if any.
+          const todayStr = new Date().toISOString().slice(0, 10);
+          const upcoming = appts
+            .filter(
+              (a) => a.appointment_date >= todayStr && a.status !== "Cancelled",
+            )
+            .sort((a, b) =>
+              a.appointment_date.localeCompare(b.appointment_date),
+            );
+          const nextCard = document.getElementById("ptNextApptCard");
+          if (upcoming.length) {
+            document.getElementById("ptNextAppt").innerHTML = `
+              <div class="pt-row">
+                <div>
+                  <b>Dr. ${upcoming[0].doctor_name}</b>
+                  <small>${upcoming[0].appointment_date} · ${upcoming[0].slot_time || "Time TBD"} · ${upcoming[0].visit_type} · ${upcoming[0].status}</small>
+                </div>
+              </div>`;
+            nextCard.style.display = "";
+          } else {
+            nextCard.style.display = "none";
+          }
+        } catch (err) {
+          console.error("Could not load appointments:", err.message);
+        }
+
+        try {
+          const rxResult = await listPrescriptions();
+          const rx = rxResult.data;
+          document.getElementById("ptStatPrescriptions").textContent =
+            rx.length;
+          const rxList = document.getElementById("ptPrescriptionsList");
+          if (!rx.length) {
+            rxList.innerHTML =
+              '<div class="pt-row"><div><b>No prescriptions yet</b><small>Medications your doctor prescribes will show up here.</small></div></div>';
+          } else {
+            rxList.innerHTML = rx
+              .map(
+                (r) => `
+              <div class="pt-row">
+                <div>
+                  <b>${r.medication_name}${r.dosage ? " · " + r.dosage : ""}</b>
+                  <small>Dr. ${r.doctor_name}${r.instructions ? " · " + r.instructions : ""}</small>
+                </div>
+              </div>`,
+              )
+              .join("");
+          }
+        } catch (err) {
+          console.error("Could not load prescriptions:", err.message);
+        }
+
+        try {
+          const billResult = await listMyBills();
+          const bills = billResult.data;
+          const billsList = document.getElementById("ptBillsList");
+          if (!bills.length) {
+            billsList.innerHTML =
+              '<div class="pt-row"><div><b>No bills yet</b><small>Bills from the front desk will show up here.</small></div></div>';
+          } else {
+            billsList.innerHTML = bills
+              .map(
+                (b) => `
+              <div class="pt-row">
+                <div>
+                  <b>${b.description}</b>
+                  <small>₹${b.amount} · ${b.payment_status}${b.payment_method ? " · " + b.payment_method : ""}</small>
+                </div>
+                ${
+                  b.payment_status === "Pending"
+                    ? `<button class="pt-btn primary" data-pay-bill="${b.bill_id}" data-pay-amount="${b.amount}">Pay now</button>`
+                    : `<span class="pt-pill">Paid</span>`
+                }
+              </div>`,
+              )
+              .join("");
+          }
+        } catch (err) {
+          console.error("Could not load bills:", err.message);
+        }
+      }
+
+      /* Patient dashboard interactions */
+      const ptToast = document.getElementById("ptToast");
+      function patientToast(message) {
+        ptToast.textContent = message;
+        ptToast.classList.add("show");
+        setTimeout(() => ptToast.classList.remove("show"), 2600);
+      }
+      function openPatientModal(title, content, action) {
+        document.getElementById("ptModalTitle").textContent = title;
+        document.getElementById("ptModalContent").innerHTML = content;
+        document.getElementById("ptSubmit").textContent = action;
+        document.getElementById("ptModal").classList.add("open");
+      }
+      document
+        .querySelectorAll("[data-pt]")
+        .forEach((button) =>
+          button.addEventListener("click", () =>
+            patientToast(button.dataset.pt),
+          ),
+        );
+      document.querySelectorAll(".pt-nav button").forEach(
+        (button) =>
+          (button.onclick = () => {
+            document
+              .querySelectorAll(".pt-nav button")
+              .forEach((item) => item.classList.remove("active"));
+            button.classList.add("active");
+            patientToast(button.textContent.trim() + " selected.");
+          }),
+      );
+      document.getElementById("ptBell").onclick = () =>
+        patientToast(
+          "4 notifications: appointment, medicine, vaccination, and bill reminders.",
+        );
+      document.getElementById("ptChat").onclick = () =>
+        openPatientModal(
+          "Secure Chat with Doctor",
+          '<textarea placeholder="Type your follow-up question for your doctor..."></textarea>',
+          "Send message",
+        );
+
+      let activePayBillId = null;
+
+      function openPayBillModal(billId, amount) {
+        activePayBillId = billId;
+        openPatientModal(
+          "Pay Hospital Bill",
+          '<select id="ptPayMethod"><option>UPI</option><option>Credit Card</option><option>Debit Card</option><option>Net Banking</option></select><input placeholder="Enter payment details (simulated - not a real charge)">',
+          `Pay ₹${amount}`,
+        );
+      }
+
+      // Sidebar "Pay Bills" shortcut just brings the Payments & Bills card
+      // into view - the actual payment happens per-bill (see below), since
+      // a bill has to be picked to know what's being paid.
+      document.getElementById("ptPay").onclick = () =>
+        document
+          .getElementById("ptBillsList")
+          .scrollIntoView({ behavior: "smooth", block: "center" });
+
+      // Real per-bill "Pay now" buttons are rendered dynamically inside
+      // #ptBillsList (see loadPatientDashboard), so they're wired here via
+      // event delegation rather than a direct listener.
+      document.getElementById("ptBillsList").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-pay-bill]");
+        if (!btn) return;
+        openPayBillModal(btn.dataset.payBill, btn.dataset.payAmount);
+      });
+
+      document.getElementById("ptReview").onclick = () =>
+        openPatientModal(
+          "Rate Your Doctor",
+          '<select><option>★★★★★ Excellent</option><option>★★★★ Good</option><option>★★★ Average</option><option>★★ Needs improvement</option></select><textarea placeholder="Share your experience (optional)"></textarea>',
+          "Submit review",
+        );
+      document.getElementById("ptClose").onclick = () =>
+        document.getElementById("ptModal").classList.remove("open");
+      document.getElementById("ptModal").onclick = (event) => {
+        if (event.target.id === "ptModal")
+          event.currentTarget.classList.remove("open");
+      };
+      document.getElementById("ptSubmit").onclick = async () => {
+        const title = document.getElementById("ptModalTitle").textContent;
+
+        if (title === "Pay Hospital Bill" && activePayBillId) {
+          const methodEl = document.getElementById("ptPayMethod");
+          const method = methodEl ? methodEl.value : "Online";
+          const submitBtn = document.getElementById("ptSubmit");
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Processing…";
+          try {
+            await payBill(activePayBillId, method);
+            document.getElementById("ptModal").classList.remove("open");
+            patientToast("Payment completed successfully.");
+            const me = await getCurrentUser();
+            await loadPatientDashboard(me.data);
+          } catch (err) {
+            alert("Payment failed: " + err.message);
+          } finally {
+            submitBtn.disabled = false;
+          }
+          return;
+        }
+
+        document.getElementById("ptModal").classList.remove("open");
+        patientToast(
+          title === "Rate Your Doctor"
+            ? "Thank you for your review."
+            : "Message sent securely to your doctor.",
+        );
+      };
+
+    </script>
+  </body>
+</html>

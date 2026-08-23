@@ -134,13 +134,13 @@ const SITE_FAQ = [
     keywords: ["bill", "bills", "invoice", "how much does it cost", "consultation fee amount", "billing", "my bills", "unpaid bill", "pending bill"],
     question: "Where do I see my bills?",
     answer: "Log in and open your Patient Dashboard - the \"Payments & Bills\" card shows every bill and lets you pay any that are still pending.",
-    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+    action: { type: "link", href: "patient.html", label: "Go to my dashboard" },
   },
   {
     keywords: ["prescription", "medication", "medicine", "what did the doctor prescribe", "my medicines"],
     question: "Where do I see my prescriptions?",
     answer: "Your Patient Dashboard has a \"Recent Prescriptions\" card listing everything a doctor has prescribed you.",
-    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+    action: { type: "link", href: "patient.html", label: "Go to my dashboard" },
   },
   {
     // Deliberately specific phrasing here (not bare "my appointment", which
@@ -152,7 +152,7 @@ const SITE_FAQ = [
     ],
     question: "How do I see my upcoming appointments?",
     answer: "Your Patient Dashboard highlights your next appointment at the top, with the full list below it.",
-    action: { type: "link", href: "register-p.html", label: "Go to my dashboard" },
+    action: { type: "link", href: "patient.html", label: "Go to my dashboard" },
   },
   {
     keywords: ["emergency", "urgent", "ambulance", "emergency contact"],
@@ -1192,7 +1192,7 @@ document.addEventListener("DOMContentLoaded", () => {
       : session.role;
     document.getElementById("menuProfileRole").textContent = roleLabel;
 
-    const dashboardFor = { PATIENT: "register-p.html", DOCTOR: "register.html" };
+    const dashboardFor = { PATIENT: "patient.html", DOCTOR: "doctor.html" };
     const destination = dashboardFor[session.role];
 
     const gotoEl = document.getElementById("menuProfileGoto");
