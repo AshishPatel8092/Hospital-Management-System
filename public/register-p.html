@@ -1094,7 +1094,7 @@
           padding: 16px;
         }
       }
-          .otp-modal-overlay {
+      .otp-modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
@@ -1174,10 +1174,9 @@
           padding: 22px 18px;
         }
       }
-</style>
+    </style>
   </head>
   <body>
-
     <!-- NAV -->
     <nav>
       <a class="logo" href="#">
@@ -1200,7 +1199,7 @@
     <div class="page-view" id="view-signin">
       <div class="page-header">
         <h1>Welcome Back</h1>
-        <p>Sign in to your MediCare account</p>
+        <p>Sign in to your HealthCare account</p>
       </div>
 
       <div class="signin-card">
@@ -1461,8 +1460,8 @@
                 placeholder="e.g. Casto@2026"
               />
               <span class="err-msg" style="display: block; color: #888"
-                >8+ characters, with an uppercase letter, a lowercase
-                letter, a number, and a special character.</span
+                >8+ characters, with an uppercase letter, a lowercase letter, a
+                number, and a special character.</span
               >
             </div>
 
@@ -2037,14 +2036,14 @@
       <div class="pt-shell">
         <aside class="pt-side">
           <div class="pt-brand"><i>+</i>Casto Health Care</div>
-          <nav class="pt-nav">
-            <button class="active">▦ Dashboard</button
-            ><button>◷ Appointments</button><button>▤ Medical History</button
-            ><button>💊 Prescriptions</button><button>🧪 Lab Reports</button
-            ><button>💳 Payments & Bills</button
-            ><button>🔔 Notifications</button><button>★ Doctor Reviews</button>
-            <button id="ptLogoutBtn" style="margin-top: 16px">⏻ Log Out</button>
-          </nav>
+          <!-- <nav class="pt-nav"> -->
+          <!-- <button class="active">▦ Dashboard</button -->
+          <!-- ><button>◷ Appointments</button><button>▤ Medical History</button -->
+          <!-- ><button>💊 Prescriptions</button><button>🧪 Lab Reports</button -->
+          <!-- ><button>💳 Payments & Bills</button -->
+          <!-- ><button>🔔 Notifications</button><button>★ Doctor Reviews</button> -->
+          <!-- <button id="ptLogoutBtn" style="margin-top: 16px">⏻ Log Out</button> -->
+          <!-- </nav> -->
         </aside>
         <div>
           <header class="pt-top">
@@ -2066,79 +2065,89 @@
                   <h2>Your Health at a Glance</h2>
                   <div class="pt-stats">
                     <div class="pt-stat">
-                      <span>Upcoming appointments</span><b id="ptStatUpcoming">0</b>
+                      <span>Upcoming appointments</span
+                      ><b id="ptStatUpcoming">0</b>
                     </div>
                     <div class="pt-stat">
-                      <span>Active prescriptions</span><b id="ptStatPrescriptions">0</b>
+                      <span>Active prescriptions</span
+                      ><b id="ptStatPrescriptions">0</b>
                     </div>
                     <div class="pt-stat">
                       <span>Completed visits</span><b id="ptStatCompleted">0</b>
                     </div>
                   </div>
                 </section>
-                <section class="pt-card" id="ptNextApptCard" style="display: none">
+                <section
+                  class="pt-card"
+                  id="ptNextApptCard"
+                  style="display: none"
+                >
                   <h2>Your Next Appointment</h2>
                   <div id="ptNextAppt"></div>
                 </section>
                 <section class="pt-card">
                   <h2>Upcoming Appointments</h2>
                   <div id="ptAppointmentsList">
-                  <div class="pt-row">
-                    <div>
-                      <b>Dr. Anya Sharma · Cardiology</b
-                      ><small
-                        >Tuesday, 28 July · 10:30 AM · Video consultation</small
+                    <div class="pt-row">
+                      <div>
+                        <b>Dr. Anya Sharma · Cardiology</b
+                        ><small
+                          >Tuesday, 28 July · 10:30 AM · Video
+                          consultation</small
+                        >
+                      </div>
+                      <button class="pt-btn" data-pt="Join video consultation">
+                        Join call
+                      </button>
+                    </div>
+                    <div class="pt-row">
+                      <div>
+                        <b>Dr. Rahul Mehta · General Medicine</b
+                        ><small>Friday, 31 July · 04:00 PM · In-person</small>
+                      </div>
+                      <button
+                        class="pt-btn"
+                        data-pt="Appointment details opened"
                       >
+                        Details
+                      </button>
                     </div>
-                    <button class="pt-btn" data-pt="Join video consultation">
-                      Join call
-                    </button>
-                  </div>
-                  <div class="pt-row">
-                    <div>
-                      <b>Dr. Rahul Mehta · General Medicine</b
-                      ><small>Friday, 31 July · 04:00 PM · In-person</small>
-                    </div>
-                    <button class="pt-btn" data-pt="Appointment details opened">
-                      Details
-                    </button>
-                  </div>
                   </div>
                 </section>
                 <section class="pt-card">
                   <h2>Recent Prescriptions</h2>
                   <div id="ptPrescriptionsList">
-                  <div class="pt-row">
-                    <div>
-                      <b>Atorvastatin 10mg</b
-                      ><small
-                        >Dr. Anya Sharma · Take once daily after dinner</small
-                      >
+                    <div class="pt-row">
+                      <div>
+                        <b>Atorvastatin 10mg</b
+                        ><small
+                          >Dr. Anya Sharma · Take once daily after dinner</small
+                        >
+                      </div>
+                      <div>
+                        <button
+                          class="pt-btn"
+                          data-pt="Prescription downloaded as PDF"
+                        >
+                          Download
+                        </button>
+                        <button
+                          class="pt-btn"
+                          data-pt="Preparing prescription for print"
+                        >
+                          Print
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <button
-                        class="pt-btn"
-                        data-pt="Prescription downloaded as PDF"
-                      >
-                        Download
+                    <div class="pt-row">
+                      <div>
+                        <b>Vitamin D3</b
+                        ><small>Dr. Rahul Mehta · One tablet weekly</small>
+                      </div>
+                      <button class="pt-btn" data-pt="Prescription opened">
+                        View
                       </button>
-                      <button
-                        class="pt-btn"
-                        data-pt="Preparing prescription for print"
-                      >
-                        Print
-                      </button>
                     </div>
-                  </div>
-                  <div class="pt-row">
-                    <div>
-                      <b>Vitamin D3</b
-                      ><small>Dr. Rahul Mehta · One tablet weekly</small>
-                    </div>
-                    <button class="pt-btn" data-pt="Prescription opened">
-                      View
-                    </button>
-                  </div>
                   </div>
                 </section>
                 <section class="pt-card">
@@ -2207,14 +2216,14 @@
                 <section class="pt-card">
                   <h2>Payments & Bills</h2>
                   <div id="ptBillsList">
-                  <div class="pt-row">
-                    <div>
-                      <b>Payment options</b
-                      ><small
-                        >UPI · Credit Card · Debit Card · Net Banking</small
-                      >
+                    <div class="pt-row">
+                      <div>
+                        <b>Payment options</b
+                        ><small
+                          >UPI · Credit Card · Debit Card · Net Banking</small
+                        >
+                      </div>
                     </div>
-                  </div>
                   </div>
                 </section>
                 <section class="pt-card">
@@ -2306,7 +2315,7 @@
             alert(
               "This account is registered as " +
                 result.data.role +
-                ". Please use the correct sign-in page for that role."
+                ". Please use the correct sign-in page for that role.",
             );
             await logout();
             return;
@@ -2462,12 +2471,16 @@
           const pillsEl = document.getElementById("ptHealthPills");
           const pills = [];
           pills.push(
-            `<span class="pt-pill">Blood Group: ${p.blood_group || "Not provided"}</span>`
+            `<span class="pt-pill">Blood Group: ${p.blood_group || "Not provided"}</span>`,
           );
           if (p.smoking_status)
-            pills.push(`<span class="pt-pill">Smoking: ${p.smoking_status}</span>`);
+            pills.push(
+              `<span class="pt-pill">Smoking: ${p.smoking_status}</span>`,
+            );
           if (p.alcohol_status)
-            pills.push(`<span class="pt-pill">Alcohol: ${p.alcohol_status}</span>`);
+            pills.push(
+              `<span class="pt-pill">Alcohol: ${p.alcohol_status}</span>`,
+            );
           pillsEl.innerHTML = pills.join("");
         } catch (err) {
           console.error("Could not load patient profile:", err.message);
@@ -2479,10 +2492,10 @@
           const appts = apptResult.data;
 
           document.getElementById("ptStatUpcoming").textContent = appts.filter(
-            (a) => a.status !== "Completed" && a.status !== "Cancelled"
+            (a) => a.status !== "Completed" && a.status !== "Cancelled",
           ).length;
           document.getElementById("ptStatCompleted").textContent = appts.filter(
-            (a) => a.status === "Completed"
+            (a) => a.status === "Completed",
           ).length;
 
           if (!appts.length) {
@@ -2497,7 +2510,7 @@
                   <b>Dr. ${a.doctor_name}</b>
                   <small>${a.appointment_date} · ${a.slot_time || "Time TBD"} · ${a.visit_type} · ${a.status}</small>
                 </div>
-              </div>`
+              </div>`,
               )
               .join("");
           }
@@ -2505,8 +2518,12 @@
           // Highlight the single soonest upcoming appointment, if any.
           const todayStr = new Date().toISOString().slice(0, 10);
           const upcoming = appts
-            .filter((a) => a.appointment_date >= todayStr && a.status !== "Cancelled")
-            .sort((a, b) => a.appointment_date.localeCompare(b.appointment_date));
+            .filter(
+              (a) => a.appointment_date >= todayStr && a.status !== "Cancelled",
+            )
+            .sort((a, b) =>
+              a.appointment_date.localeCompare(b.appointment_date),
+            );
           const nextCard = document.getElementById("ptNextApptCard");
           if (upcoming.length) {
             document.getElementById("ptNextAppt").innerHTML = `
@@ -2527,7 +2544,8 @@
         try {
           const rxResult = await listPrescriptions();
           const rx = rxResult.data;
-          document.getElementById("ptStatPrescriptions").textContent = rx.length;
+          document.getElementById("ptStatPrescriptions").textContent =
+            rx.length;
           const rxList = document.getElementById("ptPrescriptionsList");
           if (!rx.length) {
             rxList.innerHTML =
@@ -2541,7 +2559,7 @@
                   <b>${r.medication_name}${r.dosage ? " · " + r.dosage : ""}</b>
                   <small>Dr. ${r.doctor_name}${r.instructions ? " · " + r.instructions : ""}</small>
                 </div>
-              </div>`
+              </div>`,
               )
               .join("");
           }
@@ -2570,7 +2588,7 @@
                     ? `<button class="pt-btn primary" data-pay-bill="${b.bill_id}" data-pay-amount="${b.amount}">Pay now</button>`
                     : `<span class="pt-pill">Paid</span>`
                 }
-              </div>`
+              </div>`,
               )
               .join("");
           }
@@ -2676,7 +2694,9 @@
       // into view - the actual payment happens per-bill (see below), since
       // a bill has to be picked to know what's being paid.
       document.getElementById("ptPay").onclick = () =>
-        document.getElementById("ptBillsList").scrollIntoView({ behavior: "smooth", block: "center" });
+        document
+          .getElementById("ptBillsList")
+          .scrollIntoView({ behavior: "smooth", block: "center" });
 
       // Real per-bill "Pay now" buttons are rendered dynamically inside
       // #ptBillsList (see loadPatientDashboard), so they're wired here via
@@ -2731,87 +2751,91 @@
       };
     </script>
     <!-- Shared verification/2FA code modal -->
-  <div class="otp-modal-overlay" id="otpModal">
-    <div class="otp-modal-box">
-      <h3 id="otpModalTitle">Enter verification code</h3>
-      <p class="otp-modal-hint" id="otpModalHint"></p>
-      <input
-        type="text"
-        id="otpModalInput"
-        maxlength="6"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        placeholder="6-digit code"
-        class="otp-modal-input"
-      />
-      <div class="otp-modal-error" id="otpModalError" style="display: none"></div>
-      <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
-      <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
+    <div class="otp-modal-overlay" id="otpModal">
+      <div class="otp-modal-box">
+        <h3 id="otpModalTitle">Enter verification code</h3>
+        <p class="otp-modal-hint" id="otpModalHint"></p>
+        <input
+          type="text"
+          id="otpModalInput"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="6-digit code"
+          class="otp-modal-input"
+        />
+        <div
+          class="otp-modal-error"
+          id="otpModalError"
+          style="display: none"
+        ></div>
+        <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
+        <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
+      </div>
     </div>
-  </div>
-  <script>
-    // Opens the OTP modal. onVerify(code) is called each time the person
-    // submits - it should return a Promise that resolves on success (the
-    // modal is then closed automatically) or throws/rejects on a wrong
-    // code (the modal stays open with the error shown, so they can just
-    // retry instead of restarting the whole registration/login flow).
-    function openOtpModal({ title, hint, onVerify, onCancel }) {
-      const modal = document.getElementById("otpModal");
-      const input = document.getElementById("otpModalInput");
-      const errorEl = document.getElementById("otpModalError");
-      const submitBtn = document.getElementById("otpModalSubmit");
-      const cancelBtn = document.getElementById("otpModalCancel");
+    <script>
+      // Opens the OTP modal. onVerify(code) is called each time the person
+      // submits - it should return a Promise that resolves on success (the
+      // modal is then closed automatically) or throws/rejects on a wrong
+      // code (the modal stays open with the error shown, so they can just
+      // retry instead of restarting the whole registration/login flow).
+      function openOtpModal({ title, hint, onVerify, onCancel }) {
+        const modal = document.getElementById("otpModal");
+        const input = document.getElementById("otpModalInput");
+        const errorEl = document.getElementById("otpModalError");
+        const submitBtn = document.getElementById("otpModalSubmit");
+        const cancelBtn = document.getElementById("otpModalCancel");
 
-      document.getElementById("otpModalTitle").textContent = title;
-      document.getElementById("otpModalHint").innerHTML = hint;
-      input.value = "";
-      errorEl.style.display = "none";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Verify";
-      modal.classList.add("open");
-      document.body.style.overflow = "hidden";
-      input.focus();
-
-      function cleanup() {
-        modal.classList.remove("open");
-        document.body.style.overflow = "";
-        submitBtn.removeEventListener("click", onSubmit);
-        cancelBtn.removeEventListener("click", onCancelClick);
-        input.removeEventListener("keydown", onKeydown);
-      }
-      async function onSubmit() {
-        const code = input.value.trim();
-        if (!/^\d{6}$/.test(code)) {
-          errorEl.textContent = "Enter the 6-digit code.";
-          errorEl.style.display = "block";
-          return;
-        }
+        document.getElementById("otpModalTitle").textContent = title;
+        document.getElementById("otpModalHint").innerHTML = hint;
+        input.value = "";
         errorEl.style.display = "none";
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Verifying…";
-        try {
-          await onVerify(code);
-          cleanup();
-        } catch (err) {
-          errorEl.textContent = err.message || "Incorrect code.";
-          errorEl.style.display = "block";
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Verify";
-        }
-      }
-      function onCancelClick() {
-        cleanup();
-        if (onCancel) onCancel();
-      }
-      function onKeydown(e) {
-        if (e.key === "Enter") onSubmit();
-      }
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Verify";
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+        input.focus();
 
-      submitBtn.addEventListener("click", onSubmit);
-      cancelBtn.addEventListener("click", onCancelClick);
-      input.addEventListener("keydown", onKeydown);
-    }
-  </script>
-</body>
+        function cleanup() {
+          modal.classList.remove("open");
+          document.body.style.overflow = "";
+          submitBtn.removeEventListener("click", onSubmit);
+          cancelBtn.removeEventListener("click", onCancelClick);
+          input.removeEventListener("keydown", onKeydown);
+        }
+        async function onSubmit() {
+          const code = input.value.trim();
+          if (!/^\d{6}$/.test(code)) {
+            errorEl.textContent = "Enter the 6-digit code.";
+            errorEl.style.display = "block";
+            return;
+          }
+          errorEl.style.display = "none";
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Verifying…";
+          try {
+            await onVerify(code);
+            cleanup();
+          } catch (err) {
+            errorEl.textContent = err.message || "Incorrect code.";
+            errorEl.style.display = "block";
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Verify";
+          }
+        }
+        function onCancelClick() {
+          cleanup();
+          if (onCancel) onCancel();
+        }
+        function onKeydown(e) {
+          if (e.key === "Enter") onSubmit();
+        }
+
+        submitBtn.addEventListener("click", onSubmit);
+        cancelBtn.addEventListener("click", onCancelClick);
+        input.addEventListener("keydown", onKeydown);
+      }
+    </script>
+  </body>
 </html>
