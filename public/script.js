@@ -1638,3 +1638,18 @@ function toggleFAQ(button) {
     answer.style.maxHeight = null;
   }
 }
+
+// hamburger close after navigation
+// --- ADD THIS CODE TO THE BOTTOM OF script.js ---
+
+// 1. Select the navigation menu and all the links inside it
+const navMenu = document.querySelector(".nav-links");
+const navLinks = document.querySelectorAll(".nav-links a");
+
+// 2. Loop through every link in the hamburger menu
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    // 3. Remove the 'active' class to hide the menu automatically after click
+    navMenu.classList.remove("active");
+  });
+});
