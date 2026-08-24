@@ -36,6 +36,15 @@ function toggleMenu() {
   overlay.classList.toggle("show");
   document.body.style.overflow = opening ? "hidden" : "";
 }
+
+function closeMenu() {
+  const menu = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+  menu.classList.remove("show");
+  overlay.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
 document.addEventListener("click", function (event) {
   const menu = document.getElementById("menu");
   const hamburger = document.querySelector(".hamburger");
@@ -51,6 +60,14 @@ document.getElementById("overlay").addEventListener("click", function () {
   document.getElementById("menu").classList.remove("show");
   document.getElementById("overlay").classList.remove("show");
   document.body.style.overflow = "";
+});
+
+// Close the hamburger menu whenever a real navigation/action link inside it
+// is clicked (page links, anchor jumps like #doctors, register/appointment
+// links, logout, etc). The "expandable" cards (Doctors/Patients/Appointments
+// toggles) are excluded since clicking them should only expand/collapse.
+document.querySelectorAll("#menu a").forEach((link) => {
+  link.addEventListener("click", closeMenu);
 });
 
 // Search Bar
@@ -1617,7 +1634,6 @@ if (feedbackSubmitBtn) {
     }
   });
 }
-
 // FAQ
 function toggleFAQ(button) {
   const item = button.parentElement;
@@ -1638,18 +1654,3 @@ function toggleFAQ(button) {
     answer.style.maxHeight = null;
   }
 }
-
-// hamburger close after navigation
-// --- ADD THIS CODE TO THE BOTTOM OF script.js ---
-
-// 1. Select the navigation menu and all the links inside it
-const navMenu = document.querySelector(".nav-links");
-const navLinks = document.querySelectorAll(".nav-links a");
-
-// 2. Loop through every link in the hamburger menu
-navLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    // 3. Remove the 'active' class to hide the menu automatically after click
-    navMenu.classList.remove("active");
-  });
-});
