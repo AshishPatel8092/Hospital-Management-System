@@ -681,6 +681,52 @@
         border: 1px solid #eee;
         border-radius: 10px;
       }
+      .upi-id-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin: 16px auto 0;
+        max-width: 280px;
+      }
+      .upi-id-row code {
+        flex: 1;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #1e293b;
+      }
+      .copy-btn {
+        border: none;
+        background: #005f78;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .copy-btn:hover {
+        background: #00475a;
+      }
+      .upi-app-link {
+        display: inline-block;
+        width: 100%;
+        max-width: 280px;
+        padding: 12px;
+        background: #005f78;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        border-radius: 10px;
+        margin-top: 14px;
+        font-size: 0.92rem;
+      }
+      .upi-app-link:hover {
+        background: #00475a;
+      }
 
       /* Responsive Design */
       @media (max-width: 768px) {
@@ -826,7 +872,7 @@
           <div class="checkout-header">
             <div>
               <h2>Billing &amp; Payment</h2>
-              <p class="checkout-subtitle">Review your appointment and complete payment</p>
+              <p class="checkout-subtitle">Review your appointment and pay via UPI</p>
             </div>
             <span class="secure-badge">🔒 100% Secure Checkout</span>
           </div>
@@ -871,73 +917,18 @@
 
             <!-- RIGHT: payment method selection -->
             <div class="checkout-col-right">
-              <div class="checkout-card-title">Select Payment Method</div>
+              <div class="checkout-card-title">Pay via UPI</div>
 
-              <div class="pay-method-grid" id="payMethodTabs">
-                <div class="pay-method-row selected" data-method="Cash" onclick="selectPaymentMethod('Cash')">
-                  <span class="pay-method-icon">💵</span>
-                  <span class="pay-method-label">Cash at Hospital</span>
-                  <span class="pay-method-check"></span>
-                </div>
-                <div class="pay-method-row" data-method="Card" onclick="selectPaymentMethod('Card')">
-                  <span class="pay-method-icon">💳</span>
-                  <span class="pay-method-label">Debit / Credit Card</span>
-                  <span class="pay-method-check"></span>
-                </div>
-                <div class="pay-method-row" data-method="UPI" onclick="selectPaymentMethod('UPI')">
-                  <span class="pay-method-icon">🏦</span>
-                  <span class="pay-method-label">UPI</span>
-                  <span class="pay-method-check"></span>
-                </div>
-                <div class="pay-method-row" data-method="PhonePe" onclick="selectPaymentMethod('PhonePe')">
-                  <span class="pay-method-icon">📱</span>
-                  <span class="pay-method-label">PhonePe / Google Pay</span>
-                  <span class="pay-method-check"></span>
-                </div>
-              </div>
-
-              <div id="payMethodPanel" class="pay-method-detail">
-                <div class="pay-panel active" data-panel="Cash">
-                  <p class="pay-hint">Pay ₹<span class="panel-fee"></span> at the hospital reception during your visit. No online payment needed.</p>
-                </div>
-
-                <div class="pay-panel" data-panel="Card">
-                  <div class="card-brands">VISA &nbsp;•&nbsp; Mastercard &nbsp;•&nbsp; RuPay</div>
-                  <div class="card-form">
-                    <label>Card Number
-                      <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" />
-                    </label>
-                    <div class="card-form-row">
-                      <label>Expiry
-                        <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" />
-                      </label>
-                      <label>CVV
-                        <input type="password" id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric" />
-                      </label>
-                    </div>
-                    <label>Name on Card
-                      <input type="text" id="cardName" placeholder="As printed on the card" />
-                    </label>
-                    <label class="checkout-checkbox-row">
-                      <input type="checkbox" /> Save this card for future billing
-                    </label>
-                    <p class="pay-hint">Simulated payment form for this project - no real card processing happens, and nothing here is sent to or stored on the server.</p>
-                  </div>
-                </div>
-
-                <div class="pay-panel" data-panel="UPI">
-                  <div class="card-form">
-                    <label>UPI ID
-                      <input type="text" id="upiId" placeholder="yourname@upi" />
-                    </label>
-                    <p class="pay-hint">Simulated for this project - enter any UPI ID format, nothing is actually charged.</p>
-                  </div>
-                </div>
-
-                <div class="pay-panel" data-panel="PhonePe">
+              <div class="pay-method-detail" id="payMethodPanel">
+                <div class="pay-panel active" data-panel="UPI">
                   <div class="qr-panel">
                     <div id="qrcodeBox"></div>
-                    <p class="pay-hint">Scan with PhonePe, Google Pay, or Paytm.<br />Simulated QR for this project - scanning it won't actually charge anyone.</p>
+                    <div class="upi-id-row">
+                      <code id="upiIdText">8092341577-2@ybl</code>
+                      <button type="button" class="copy-btn" id="copyUpiIdBtn">Copy</button>
+                    </div>
+                    <a href="#" id="upiAppLink" class="upi-app-link">Pay via UPI App</a>
+                    <p class="pay-hint">Scan the QR code with any UPI app (Google Pay, PhonePe, Paytm, etc.) or tap "Pay via UPI App" on your phone, then confirm below once you've paid.</p>
                   </div>
                 </div>
               </div>
@@ -946,7 +937,7 @@
 
           <div class="checkout-footer">
             <button class="confirm-btn" id="confirmBtn" onclick="confirmBooking()">
-              Proceed to Secure Payment
+              I've Paid — Confirm Booking
             </button>
           </div>
         </div>
@@ -1036,7 +1027,7 @@
       let selectedDoctor = null;
       let selectedDate = null;
       let selectedTime = null;
-      let selectedPayment = "Cash";
+      let selectedPayment = "UPI";
 
       // Initialize doctor selection
       function initializeDoctors() {
@@ -1149,33 +1140,50 @@
         updateSummary();
       }
 
-      // Select payment method (step 2)
-      function selectPaymentMethod(method) {
-        selectedPayment = method;
-        document.querySelectorAll(".pay-method-row").forEach((row) => {
-          row.classList.toggle("selected", row.dataset.method === method);
-        });
-        document.querySelectorAll(".pay-panel").forEach((panel) => {
-          panel.classList.toggle("active", panel.dataset.panel === method);
-        });
+      // Payment is UPI-only now - this just (re)renders the QR + wires the
+      // "Pay via UPI App" deep link and the copy-to-clipboard button.
+      const CASTO_UPI_ID = "8092341577-2@ybl";
 
-        if (method === "PhonePe") {
-          renderPaymentQR();
+      function buildUpiString(amount, note) {
+        const amt = Number(amount) > 0 ? Number(amount) : 500;
+        return `upi://pay?pa=${encodeURIComponent(CASTO_UPI_ID)}&pn=${encodeURIComponent(
+          "Casto Healthcare",
+        )}&am=${amt}&cu=INR&tn=${encodeURIComponent(note || "Consultation")}`;
+      }
+
+      function setupUpiPayment() {
+        selectedPayment = "UPI";
+        const amount = selectedDoctor && selectedDoctor.fee ? selectedDoctor.fee : 500;
+        const note = selectedDoctor ? `Consultation with ${selectedDoctor.name}` : "Consultation";
+        renderPaymentQR(amount, note);
+
+        const appLink = document.getElementById("upiAppLink");
+        if (appLink) appLink.href = buildUpiString(amount, note);
+
+        const copyBtn = document.getElementById("copyUpiIdBtn");
+        if (copyBtn && !copyBtn.dataset.wired) {
+          copyBtn.dataset.wired = "true";
+          copyBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText(CASTO_UPI_ID).then(() => {
+              const original = copyBtn.textContent;
+              copyBtn.textContent = "Copied!";
+              setTimeout(() => (copyBtn.textContent = original), 1500);
+            });
+          });
         }
       }
 
-      // Renders a QR code encoding a (simulated, non-functional) UPI payment
-      // string for the currently selected doctor/fee. Regenerated each time
-      // the PhonePe tab is opened, since the amount can change per doctor.
-      function renderPaymentQR() {
+      // Renders a QR code encoding a real UPI payment string (your UPI ID)
+      // for the currently selected doctor/fee. Regenerated whenever the
+      // payment step is (re)shown, since the amount can change per doctor.
+      function renderPaymentQR(amount, note) {
         const box = document.getElementById("qrcodeBox");
         box.innerHTML = "";
-        const amount = selectedDoctor && selectedDoctor.fee ? selectedDoctor.fee : 500;
-        const upiString = `upi://pay?pa=castohealthcare@upi&pn=CastoHealthcare&am=${amount}&cu=INR&tn=Consultation`;
+        const upiString = buildUpiString(amount, note);
         if (window.QRCode) {
           new QRCode(box, { text: upiString, width: 170, height: 170 });
         } else {
-          box.textContent = "QR code unavailable - use another payment method.";
+          box.textContent = "QR code unavailable - use the UPI ID below.";
         }
       }
 
@@ -1270,7 +1278,6 @@
         const feeText = selectedDoctor.fee ? `₹${selectedDoctor.fee}` : "Payable at hospital";
         document.getElementById("paySummaryFee").textContent = feeText;
         document.getElementById("paySummarySubtotal").textContent = feeText;
-        document.querySelectorAll(".panel-fee").forEach((el) => (el.textContent = selectedDoctor.fee || "500"));
 
         const recapEl = document.getElementById("paySummaryPatient");
         if (currentPatient) {
@@ -1280,7 +1287,7 @@
           `;
         }
 
-        selectPaymentMethod("Cash");
+        setupUpiPayment();
 
         document.getElementById("selectionStep").style.display = "none";
         document.getElementById("paymentStep").style.display = "block";
@@ -1293,26 +1300,9 @@
         window.scrollTo(0, 0);
       }
 
-      // Light, simulated validation for the currently selected online
-      // payment method - nothing here is ever sent to the server, it's
-      // purely so the demo flow feels real before "processing" it.
+      // Payment is UPI-only now - there's nothing to validate client-side
+      // before proceeding (no card/UPI-ID text fields left to check).
       function validatePaymentMethodInputs() {
-        if (selectedPayment === "Card") {
-          const num = document.getElementById("cardNumber").value.replace(/\s/g, "");
-          const expiry = document.getElementById("cardExpiry").value.trim();
-          const cvv = document.getElementById("cardCvv").value.trim();
-          if (num.length < 12 || !expiry.includes("/") || cvv.length < 3) {
-            alert("Please enter a valid card number, expiry (MM/YY), and CVV.");
-            return false;
-          }
-        } else if (selectedPayment === "UPI") {
-          const upi = document.getElementById("upiId").value.trim();
-          if (!upi.includes("@")) {
-            alert("Please enter a valid UPI ID, e.g. yourname@upi.");
-            return false;
-          }
-        }
-        // Cash and PhonePe (QR-based) need no extra input to proceed.
         return true;
       }
 
@@ -1333,8 +1323,7 @@
 
         const confirmBtn = document.getElementById("confirmBtn");
         confirmBtn.disabled = true;
-        confirmBtn.textContent =
-          selectedPayment === "Cash" ? "Booking…" : "Processing payment…";
+        confirmBtn.textContent = "Processing payment…";
 
         try {
           const result = await bookAppointment({
@@ -1361,7 +1350,7 @@
         } catch (err) {
           alert("Booking failed: " + err.message);
           confirmBtn.disabled = false;
-          confirmBtn.textContent = "Proceed to Secure Payment";
+          confirmBtn.textContent = "I've Paid — Confirm Booking";
         }
       }
 
@@ -1375,7 +1364,7 @@
         await checkLoginAndPrefill();
 
         // Support deep-linking from a doctor card elsewhere on the site,
-        // e.g. appointment.html?doctorId=3&payment=Online
+        // e.g. appointment.html?doctorId=3
         const params = new URLSearchParams(window.location.search);
         const preselectId = Number(params.get("doctorId"));
         if (preselectId) {
@@ -1387,12 +1376,8 @@
             selectDoctor(preselectId);
           }
         }
-        const preselectPayment = params.get("payment");
-        if (preselectPayment === "Cash") {
-          selectPaymentMethod("Cash");
-        } else if (preselectPayment === "Online") {
-          selectPaymentMethod("Card"); // "Online" is a legacy param value; Card is a reasonable default online method
-        }
+        // Payment is UPI-only now, so there's nothing left to preselect -
+        // setupUpiPayment() always runs once Step 2 is reached.
       });
     </script>
   </body>

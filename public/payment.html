@@ -3,304 +3,502 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Booking & Payment System</title>
+    <title>Casto Health Care — Payment</title>
     <style>
       :root {
-        --primary: #4f46e5;
-        --secondary: #f1f5f9;
-        --text: #1e293b;
+        --primary: #1a7a8a;
+        --primary-dk: #135e6b;
+        --ink: #1e293b;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --bg: #f4f8f8;
+        --green: #16a34a;
+      }
+      * {
+        box-sizing: border-box;
       }
       body {
-        font-family: "Inter", sans-serif;
-        background: #f8fafc;
-        color: var(--text);
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
         margin: 0;
-        padding: 20px;
+        padding: 40px 20px;
+        min-height: 100vh;
       }
-
-      /* Layout for Sections */
-      .container {
-        max-width: 1000px;
+      .pay-page {
+        max-width: 960px;
         margin: 0 auto;
+      }
+      .pay-header {
+        text-align: center;
+        margin-bottom: 28px;
+      }
+      .pay-header h1 {
+        font-size: 1.7rem;
+        margin: 0 0 6px;
+        color: var(--ink);
+      }
+      .pay-header p {
+        color: var(--muted);
+        margin: 0;
+        font-size: 0.95rem;
+      }
+      .pay-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 30px;
-      }
-      .section-card {
-        background: white;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      }
-      h2 {
-        color: #334155;
-        border-bottom: 2px solid #e2e8f0;
-        padding-bottom: 10px;
-      }
-
-      .item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        margin-bottom: 10px;
-      }
-      .btn-confirm {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-      }
-
-      /* THE PAYMENT MODAL */
-      #payment-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-      }
-      .modal-container {
-        background: white;
-        width: 800px;
-        max-width: 90%;
-        border-radius: 20px;
-        display: flex;
+        gap: 0;
+        background: #fff;
+        border-radius: 18px;
         overflow: hidden;
-        height: 500px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      }
+      @media (max-width: 760px) {
+        .pay-container {
+          grid-template-columns: 1fr;
+        }
       }
 
-      /* Left Side: Payment Options */
-      .payment-side {
-        flex: 1.5;
-        padding: 40px;
-      }
-      .option-btn {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        padding: 15px;
-        margin-bottom: 15px;
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        cursor: pointer;
-        background: white;
-        font-weight: 600;
-        text-align: left;
-        transition: 0.2s;
-      }
-      .option-btn:hover {
-        border-color: var(--primary);
-        background: #f5f3ff;
-      }
-      .option-btn img {
-        width: 30px;
-        margin-right: 15px;
-      }
-
-      /* Right Side: Summary */
+      /* LEFT: order / booking summary */
       .summary-side {
-        flex: 1;
-        background: #f8fafc;
-        padding: 40px;
-        border-left: 1px solid #e2e8f0;
+        padding: 36px 34px;
+        border-right: 1px solid var(--line);
         display: flex;
         flex-direction: column;
       }
-      .summary-title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #64748b;
+      @media (max-width: 760px) {
+        .summary-side {
+          border-right: none;
+          border-bottom: 1px solid var(--line);
+        }
       }
-      .summary-item {
+      .summary-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 20px;
+      }
+      .summary-line {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 15px;
-        font-size: 0.95rem;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--line);
+        font-size: 0.92rem;
+      }
+      .summary-line span:first-child {
+        color: var(--muted);
+      }
+      .summary-line span:last-child {
+        font-weight: 600;
+        text-align: right;
       }
       .summary-total {
-        margin-top: auto;
-        padding-top: 20px;
-        border-top: 2px solid #cbd5e1;
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 2px solid var(--line);
         display: flex;
         justify-content: space-between;
-        font-weight: bold;
-        font-size: 1.3rem;
+        align-items: center;
+      }
+      .summary-total span:first-child {
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .summary-total span:last-child {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .secure-note {
+        margin-top: auto;
+        padding-top: 24px;
+        font-size: 12.5px;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
 
-      .hidden {
-        display: none;
+      /* RIGHT: UPI / QR payment */
+      .pay-side {
+        padding: 36px 34px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
       }
-      .close-btn {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        cursor: pointer;
-        font-size: 1.5rem;
-        background: none;
+      .pay-side h3 {
+        margin: 0 0 6px;
+        font-size: 1.05rem;
+      }
+      .pay-side .pay-sub {
+        color: var(--muted);
+        font-size: 0.88rem;
+        margin: 0 0 22px;
+      }
+      #qrcodeBox {
+        padding: 14px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        margin-bottom: 18px;
+        min-height: 190px;
+        min-width: 190px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .upi-id-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        width: 100%;
+        max-width: 300px;
+      }
+      .upi-id-row code {
+        flex: 1;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: 0.2px;
+      }
+      .copy-btn {
         border: none;
+        background: var(--primary);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .copy-btn:hover {
+        background: var(--primary-dk);
+      }
+      .upi-app-btn {
+        display: inline-block;
+        width: 100%;
+        max-width: 300px;
+        padding: 13px;
+        background: var(--primary);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        border-radius: 10px;
+        margin-bottom: 22px;
+        font-size: 0.95rem;
+      }
+      .upi-app-btn:hover {
+        background: var(--primary-dk);
+      }
+      .pay-hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 22px;
+        max-width: 320px;
+      }
+      .confirm-pay-btn {
+        width: 100%;
+        max-width: 300px;
+        padding: 14px;
+        background: var(--green);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .confirm-pay-btn:hover {
+        background: #128a3e;
+      }
+      .confirm-pay-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      /* Success state */
+      .pay-success {
+        text-align: center;
+        padding: 60px 30px;
+      }
+      .pay-success .check-circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: #dcfce7;
+        color: var(--green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        margin: 0 auto 18px;
+      }
+      .pay-success h2 {
+        margin: 0 0 10px;
+      }
+      .pay-success p {
+        color: var(--muted);
+        margin: 0 0 26px;
+      }
+      .pay-success .home-btn {
+        display: inline-block;
+        padding: 12px 26px;
+        background: var(--primary);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 700;
+      }
+
+      .pay-error-box {
+        max-width: 520px;
+        margin: 60px auto;
+        text-align: center;
+        background: #fff;
+        border-radius: 16px;
+        padding: 40px 30px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      }
+      .pay-error-box a {
+        color: var(--primary);
+        font-weight: 700;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <!-- Services Section -->
-      <div class="section-card">
-        <h2>Our Services</h2>
-        <div class="item">
-          <div><b>Website Design</b><br /><small>₹2000</small></div>
-          <button
-            class="btn-confirm"
-            onclick="openPayment('Website Design', 2000)"
-          >
-            Confirm
-          </button>
-        </div>
-        <div class="item">
-          <div><b>SEO Optimization</b><br /><small>₹1000</small></div>
-          <button
-            class="btn-confirm"
-            onclick="openPayment('SEO Optimization', 1000)"
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
-
-      <!-- Doctors Section -->
-      <div class="section-card">
-        <h2>Book Doctor</h2>
-        <div class="item">
-          <div><b>Dr. Smith (Cardiologist)</b><br /><small>₹500</small></div>
-          <button
-            class="btn-confirm"
-            onclick="openPayment('Dr. Smith Consultation', 500)"
-          >
-            Confirm
-          </button>
-        </div>
-        <div class="item">
-          <div><b>Dr. Jane (Dentist)</b><br /><small>₹300</small></div>
-          <button
-            class="btn-confirm"
-            onclick="openPayment('Dr. Jane Consultation', 300)"
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
+    <div class="pay-page" id="payPage">
+      <!-- Content is rendered by JS below, based on the booking mode -->
     </div>
 
-    <!-- PAYMENT MODAL -->
-    <div id="payment-overlay">
-      <div class="modal-container">
-        <button class="close-btn" onclick="closePayment()">×</button>
-
-        <!-- Left: Payment Methods -->
-        <div class="payment-side">
-          <h3>Select Payment Method</h3>
-          <p style="color: #64748b; margin-bottom: 20px">
-            Choose how you want to pay
-          </p>
-
-          <button class="option-btn" onclick="processPayment('Card')">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/633/633611.png"
-              alt="card"
-            />
-            Debit / Credit Card
-          </button>
-
-          <button class="option-btn" onclick="processPayment('UPI')">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/10122/10122241.png"
-              alt="upi"
-            />
-            UPI (PhonePe / GPay)
-          </button>
-
-          <button class="option-btn" onclick="processPayment('Wallet')">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/5968/5968533.png"
-              alt="wallet"
-            />
-            Digital Wallet
-          </button>
-        </div>
-
-        <!-- Right: Summary -->
-        <div class="summary-side">
-          <div class="summary-title">Order Summary</div>
-
-          <div class="summary-item">
-            <span>Item:</span>
-            <span id="sum-item">---</span>
-          </div>
-          <div class="summary-item">
-            <span>Tax (GST 0%):</span>
-            <span>₹0.00</span>
-          </div>
-          <div class="summary-item">
-            <span>Convenience Fee:</span>
-            <span>₹0.00</span>
-          </div>
-
-          <div class="summary-total">
-            <span>Total:</span>
-            <span id="sum-total">₹0</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="api.js?v=3"></script>
     <script>
-      const overlay = document.getElementById("payment-overlay");
-      const sumItem = document.getElementById("sum-item");
-      const sumTotal = document.getElementById("sum-total");
+      const UPI_ID = "8092341577-2@ybl";
+      const UPI_PAYEE_NAME = "Casto Healthcare";
 
-      // This function is called when user clicks "Confirm" in any section
-      function openPayment(itemName, price) {
-        // 1. Update the summary on the right side
-        sumItem.innerText = itemName;
-        sumTotal.innerText = "₹" + price;
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get("mode"); // "doctor" | "service"
+      const payPage = document.getElementById("payPage");
 
-        // 2. Show the payment modal
-        overlay.style.display = "flex";
+      function buildUpiString(amount, note) {
+        const amt = Number(amount) > 0 ? Number(amount) : 1;
+        return `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+          UPI_PAYEE_NAME,
+        )}&am=${amt}&cu=INR&tn=${encodeURIComponent(note || "Payment")}`;
       }
 
-      function closePayment() {
-        overlay.style.display = "none";
+      function renderErrorPage(message, linkHref, linkLabel) {
+        payPage.innerHTML = `
+          <div class="pay-error-box">
+            <h2>Nothing to pay for yet</h2>
+            <p>${message}</p>
+            <a href="${linkHref}">${linkLabel}</a>
+          </div>
+        `;
       }
 
-      function processPayment(method) {
-        const amount = sumTotal.innerText;
-        const item = sumItem.innerText;
-
-        if (method === "UPI") {
-          // Dynamic UPI Link
-          const upiId = "yournumber@okaxis"; // Replace with your actual UPI ID
-          const upiUrl = `upi://pay?pa={upiId}&pn=Business&am={amount.replace('₹', '')}&cu=INR`;
-
-          alert(
-            `Redirecting to UPI App for item...\nAmount:{item}...\nAmount:item...\nAmount:{amount}`,
-          );
-          window.location.href = upiUrl;
+      function renderQR(amount, note) {
+        const box = document.getElementById("qrcodeBox");
+        box.innerHTML = "";
+        if (window.QRCode) {
+          new QRCode(box, { text: buildUpiString(amount, note), width: 180, height: 180 });
         } else {
-          alert(
-            `Processing methodpaymentfor{method} payment formethodpaymentfor{item} of ${amount}...`,
-          );
+          box.textContent = "QR unavailable — use the UPI ID below.";
         }
+      }
+
+      function wireCommonPayRightSide(amount, note) {
+        renderQR(amount, note);
+        document.getElementById("upiAppBtn").href = buildUpiString(amount, note);
+        document.getElementById("copyUpiBtn").addEventListener("click", () => {
+          navigator.clipboard.writeText(UPI_ID).then(() => {
+            const btn = document.getElementById("copyUpiBtn");
+            const original = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(() => (btn.textContent = original), 1500);
+          });
+        });
+      }
+
+      function payRightSideHtml(confirmLabel) {
+        return `
+          <div class="pay-side">
+            <h3>Scan &amp; Pay via UPI</h3>
+            <p class="pay-sub">Use any UPI app — Google Pay, PhonePe, Paytm, etc.</p>
+            <div id="qrcodeBox"></div>
+            <div class="upi-id-row">
+              <code>${UPI_ID}</code>
+              <button type="button" class="copy-btn" id="copyUpiBtn">Copy</button>
+            </div>
+            <a href="#" id="upiAppBtn" class="upi-app-btn">Pay via UPI App</a>
+            <p class="pay-hint">Scan the QR code or tap the button above on your phone, complete the payment in your UPI app, then confirm below.</p>
+            <button type="button" class="confirm-pay-btn" id="confirmPayBtn">${confirmLabel}</button>
+          </div>
+        `;
+      }
+
+      function renderSuccess(title, message, homeHref, homeLabel) {
+        payPage.innerHTML = `
+          <div class="pay-container" style="grid-template-columns: 1fr;">
+            <div class="pay-success">
+              <div class="check-circle">✓</div>
+              <h2>${title}</h2>
+              <p>${message}</p>
+              <a class="home-btn" href="${homeHref}">${homeLabel}</a>
+            </div>
+          </div>
+        `;
+      }
+
+      /* ================= DOCTOR APPOINTMENT MODE ================= */
+      /* Requires a logged-in patient. Carries doctorId/date/time from the
+         doctor-profile overlay on the homepage, and on confirmation makes
+         the same real booking call appointment.html would - so this page
+         creates a real appointment + bill just like the full booking flow. */
+      async function initDoctorMode() {
+        const doctorId = params.get("doctorId");
+        const doctorName = params.get("doctorName") || "Selected Doctor";
+        const speciality = params.get("speciality") || "";
+        const fee = params.get("fee") || "";
+        const date = params.get("date"); // YYYY-MM-DD
+        const dateLabel = params.get("dateLabel") || date;
+        const time = params.get("time");
+
+        if (!doctorId || !date || !time) {
+          renderErrorPage(
+            "We couldn't find your appointment details. Please pick a doctor, date, and time first.",
+            "appointment.html",
+            "Go to Book Appointment →",
+          );
+          return;
+        }
+
+        let session;
+        try {
+          const me = await getCurrentUser();
+          if (me.data.role !== "PATIENT") throw new Error("not a patient");
+          session = me.data;
+        } catch (e) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        const amount = fee || "500";
+
+        payPage.innerHTML = `
+          <div class="pay-header">
+            <h1>Confirm &amp; Pay for Your Appointment</h1>
+            <p>Complete your payment to lock in your appointment slot.</p>
+          </div>
+          <div class="pay-container">
+            <div class="summary-side">
+              <div class="summary-title">Appointment Summary</div>
+              <div class="summary-line"><span>Doctor</span><span>${doctorName}</span></div>
+              <div class="summary-line"><span>Speciality</span><span>${speciality || "—"}</span></div>
+              <div class="summary-line"><span>Date</span><span>${dateLabel}</span></div>
+              <div class="summary-line"><span>Time</span><span>${time}</span></div>
+              <div class="summary-line"><span>Patient</span><span>${session.fullName}</span></div>
+              <div class="summary-total"><span>Total Due</span><span>₹${amount}</span></div>
+              <div class="secure-note">🔒 100% secure — nothing is charged until you confirm.</div>
+            </div>
+            ${payRightSideHtml("I've Paid — Confirm Booking")}
+          </div>
+        `;
+
+        wireCommonPayRightSide(amount, `Consultation with ${doctorName}`);
+
+        document.getElementById("confirmPayBtn").addEventListener("click", async (e) => {
+          const btn = e.currentTarget;
+          btn.disabled = true;
+          btn.textContent = "Booking…";
+          try {
+            const result = await bookAppointment({
+              doctorId: Number(doctorId),
+              appointmentDate: date,
+              slotTime: time,
+              visitType: "In-person",
+              reason: null,
+              paymentMethod: "UPI",
+            });
+            const bill = result.data.bill;
+            renderSuccess(
+              "Payment received & appointment booked!",
+              `₹${bill.amount} paid via UPI. Your appointment with ${doctorName} on ${dateLabel} at ${time} is confirmed.`,
+              "patient.html",
+              "Go to my dashboard →",
+            );
+          } catch (err) {
+            alert("Booking failed: " + err.message);
+            btn.disabled = false;
+            btn.textContent = "I've Paid — Confirm Booking";
+          }
+        });
+      }
+
+      /* ================= SERVICE PAYMENT MODE ================= */
+      /* Used by the homepage "Our Services" booking modal. This is a
+         marketing/preview flow, not backed by a real appointment record -
+         it simply shows the UPI/QR payment screen, matching how it
+         behaved before (no database write). */
+      function initServiceMode() {
+        const item = params.get("item");
+        const amount = params.get("amount");
+
+        if (!item || !amount) {
+          renderErrorPage(
+            "We couldn't find any service details to pay for.",
+            "index.html#services",
+            "Browse our services →",
+          );
+          return;
+        }
+
+        payPage.innerHTML = `
+          <div class="pay-header">
+            <h1>Complete Your Payment</h1>
+            <p>Scan the QR code or use the UPI ID to pay for your selected service.</p>
+          </div>
+          <div class="pay-container">
+            <div class="summary-side">
+              <div class="summary-title">Order Summary</div>
+              <div class="summary-line"><span>Service</span><span>${item}</span></div>
+              <div class="summary-line"><span>Tax (GST)</span><span>₹0</span></div>
+              <div class="summary-line"><span>Convenience Fee</span><span>₹0</span></div>
+              <div class="summary-total"><span>Total</span><span>₹${amount}</span></div>
+              <div class="secure-note">🔒 100% secure checkout.</div>
+            </div>
+            ${payRightSideHtml("I've Paid")}
+          </div>
+        `;
+
+        wireCommonPayRightSide(amount, item);
+
+        document.getElementById("confirmPayBtn").addEventListener("click", (e) => {
+          renderSuccess(
+            "Payment received!",
+            `Thanks — we've received your payment of ₹${amount} for ${item}. Our team will be in touch shortly.`,
+            "index.html",
+            "Back to Home →",
+          );
+        });
+      }
+
+      if (mode === "doctor") {
+        initDoctorMode();
+      } else if (mode === "service") {
+        initServiceMode();
+      } else {
+        renderErrorPage(
+          "Please start from a doctor's profile or a service on the homepage.",
+          "index.html",
+          "Back to Home →",
+        );
       }
     </script>
   </body>

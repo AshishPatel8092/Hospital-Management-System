@@ -759,9 +759,16 @@ editDetailsBtn.addEventListener("click", () => {
 confirmBookingBtn.addEventListener("click", () => {
   // This modal books a service package rather than a specific doctor, and
   // the cards here are marketing content, not records from the database.
-  // Real bookings go through appointment.html, which talks to the backend.
+  // Payment happens on the dedicated UPI/QR payment page - no backend
+  // booking is created for these (unlike real doctor appointments).
+  const data = serviceData[currentServiceKey];
+  const amount = data ? data.price : 0;
   closeBooking();
-  window.location.href = "appointment.html";
+  const params = new URLSearchParams();
+  params.set("mode", "service");
+  params.set("item", currentServiceKey);
+  params.set("amount", amount);
+  window.location.href = "payment.html?" + params.toString();
 });
 
 function closeBooking() {
@@ -871,15 +878,12 @@ doctorBackBtn.addEventListener("click", () => {
 const datePills = document.getElementById("datePills");
 const timeSlotsMsg = document.getElementById("timeSlotsMsg");
 const timeSlotsContainer = document.getElementById("timeSlotsContainer");
-const payCashBtn = document.getElementById("payCashBtn");
-const payOnlineBtn = document.getElementById("payOnlineBtn");
 const confirmDoctorBookingBtn = document.getElementById(
   "confirmDoctorBookingBtn",
 );
 
 let selectedDate = null;
 let selectedTime = null;
-let selectedPayment = "Cash";
 let currentDoctorName = "";
 let currentDoctorFee = 0;
 let currentDoctorId = null;
@@ -993,9 +997,6 @@ function openDoctorProfile(doctor) {
 
   selectedDate = null;
   selectedTime = null;
-  selectedPayment = "Cash";
-  payCashBtn.classList.add("active");
-  payOnlineBtn.classList.remove("active");
 
   document.getElementById("patName").value = "";
   document.getElementById("patAge").value = "";
@@ -1075,28 +1076,41 @@ doctorBackBtn.addEventListener("click", () => {
   document.body.style.overflow = "";
 });
 
-payCashBtn.addEventListener("click", () => {
-  selectedPayment = "Cash";
-  payCashBtn.classList.add("active");
-  payOnlineBtn.classList.remove("active");
-});
-payOnlineBtn.addEventListener("click", () => {
-  selectedPayment = "Online";
-  payOnlineBtn.classList.add("active");
-  payCashBtn.classList.remove("active");
-});
+// Payment method is now chosen on the dedicated UPI/QR payment page
+// (payment.html), not in this preview overlay.
 
 confirmDoctorBookingBtn.addEventListener("click", () => {
-  // The overlay is a browsing/preview experience; the actual booking (and
-  // the doctor's dashboard being updated) happens on appointment.html,
-  // which talks to the real backend. Passing doctorId + the payment choice
-  // already made here carries both into that real booking flow.
+  // Payment now happens on a dedicated UPI/QR payment page, which also
+  // makes the real booking call once the person confirms they've paid -
+  // so this just hands off doctor + date + time to that page.
+  if (!selectedDate || !selectedTime) {
+    alert("Please select a date and time slot first.");
+    return;
+  }
+
   doctorProfileOverlay.classList.remove("active");
   document.body.style.overflow = "";
+
+  const dateObj = new Date(selectedDate + "T00:00:00");
+  const dateLabel = dateObj.toLocaleDateString("en-IN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
   const params = new URLSearchParams();
+  params.set("mode", "doctor");
   if (currentDoctorId) params.set("doctorId", currentDoctorId);
-  params.set("payment", selectedPayment === "Online" ? "Online" : "Cash");
-  window.location.href = "appointment.html?" + params.toString();
+  params.set("doctorName", currentDoctorName || "");
+  params.set(
+    "speciality",
+    document.getElementById("docSpeciality")?.textContent || "",
+  );
+  params.set("fee", currentDoctorFee || "");
+  params.set("date", selectedDate);
+  params.set("dateLabel", dateLabel);
+  params.set("time", selectedTime);
+  window.location.href = "payment.html?" + params.toString();
 });
 
 // Duplicate badges for seamless infinite scroll
