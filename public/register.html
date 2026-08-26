@@ -728,11 +728,9 @@
         font-size: 0.875rem;
         color: var(--slate-400);
       }
-
-</style>
+    </style>
   </head>
   <body>
-
     <!-- NAV -->
     <nav id="site-nav">
       <a class="logo" href="#">
@@ -880,7 +878,7 @@
           <button
             class="btn btn-outline btn-full"
             style="margin-top: 24px"
-            onclick="window.location.href='doctor.html'"
+            onclick="window.location.href = 'doctor.html'"
           >
             Continue to Dashboard →
           </button>
@@ -1035,8 +1033,8 @@
                 placeholder="e.g. Casto@2026"
               />
               <span class="err-msg" style="display: block; color: #888"
-                >8+ characters, with an uppercase letter, a lowercase
-                letter, a number, and a special character.</span
+                >8+ characters, with an uppercase letter, a lowercase letter, a
+                number, and a special character.</span
               >
             </div>
 
@@ -1138,9 +1136,8 @@
                 placeholder="e.g. MCI-2024-10234"
               />
               <span class="err-msg" style="display: block; color: #888"
-                >Registration is limited to pre-verified doctors - contact
-                the hospital administrator if you don't have a
-                number.</span
+                >Registration is limited to pre-verified doctors - contact the
+                hospital administrator if you don't have a number.</span
               >
             </div>
 
@@ -1361,7 +1358,10 @@
             has been sent to your professional email address.
           </p>
           <div class="actions" style="margin-top: 24px">
-            <button class="btn btn-primary" onclick="window.location.href='doctor.html'">
+            <button
+              class="btn btn-primary"
+              onclick="window.location.href = 'doctor.html'"
+            >
               Go to Dashboard →
             </button>
             <button class="btn btn-outline" onclick="resetForm()">
@@ -1432,7 +1432,7 @@
             alert(
               "This account is registered as " +
                 result.data.role +
-                ". Please use the correct sign-in page for that role."
+                ". Please use the correct sign-in page for that role.",
             );
             await logout();
             return;
@@ -1603,7 +1603,8 @@
       }
 
       async function submitForm() {
-        const first = document.getElementById("firstName").value.trim() || "Doctor";
+        const first =
+          document.getElementById("firstName").value.trim() || "Doctor";
         const last = document.getElementById("lastName").value.trim();
         const fields = {
           fullName: "Dr. " + first + (last ? " " + last : ""),
@@ -1614,21 +1615,28 @@
           lastName: last,
           gender: document.getElementById("gender").value || null,
           department: document.getElementById("department").value || null,
-          specialization: document.getElementById("specialization").value || null,
-          medicalRegistrationNumber: document.getElementById("medicalRegistrationNumber").value.trim(),
+          specialization:
+            document.getElementById("specialization").value || null,
+          medicalRegistrationNumber: document
+            .getElementById("medicalRegistrationNumber")
+            .value.trim(),
           // These three reuse fields whose labels were already updated for a
           // doctor form but whose element ids are leftovers from the
           // original patient-form template ("apptDate", "bloodGroup",
           // "insurance", "notes") - reading them by id still works fine.
           experienceYears: document.getElementById("apptDate").value || null,
           qualifications: document.getElementById("bloodGroup").value || null,
-          clinicLocation: document.getElementById("insurance").value.trim() || null,
+          clinicLocation:
+            document.getElementById("insurance").value.trim() || null,
           bio: document.getElementById("notes").value.trim() || null,
-          consultationFee: document.getElementById("consultationFee").value || null,
+          consultationFee:
+            document.getElementById("consultationFee").value || null,
         };
 
         if (!fields.medicalRegistrationNumber) {
-          alert("A medical registration number is required to register as a doctor.");
+          alert(
+            "A medical registration number is required to register as a doctor.",
+          );
           return;
         }
         if (!isStrongPassword(fields.password)) {
@@ -1665,10 +1673,9 @@
         currentStep = 1;
         updateStepper();
       }
-
     </script>
     <!-- Shared verification/2FA code modal -->
-  <div class="otp-modal-overlay" id="otpModal">
+    <!-- <div class="otp-modal-overlay" id="otpModal">
     <div class="otp-modal-box">
       <h3 id="otpModalTitle">Enter verification code</h3>
       <p class="otp-modal-hint" id="otpModalHint"></p>
@@ -1685,70 +1692,70 @@
       <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
       <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
     </div>
-  </div>
-  <script>
-    // Opens the OTP modal. onVerify(code) is called each time the person
-    // submits - it should return a Promise that resolves on success (the
-    // modal is then closed automatically) or throws/rejects on a wrong
-    // code (the modal stays open with the error shown, so they can just
-    // retry instead of restarting the whole registration/login flow).
-    function openOtpModal({ title, hint, onVerify, onCancel }) {
-      const modal = document.getElementById("otpModal");
-      const input = document.getElementById("otpModalInput");
-      const errorEl = document.getElementById("otpModalError");
-      const submitBtn = document.getElementById("otpModalSubmit");
-      const cancelBtn = document.getElementById("otpModalCancel");
+  </div> -->
+    <script>
+      // Opens the OTP modal. onVerify(code) is called each time the person
+      // submits - it should return a Promise that resolves on success (the
+      // modal is then closed automatically) or throws/rejects on a wrong
+      // code (the modal stays open with the error shown, so they can just
+      // retry instead of restarting the whole registration/login flow).
+      function openOtpModal({ title, hint, onVerify, onCancel }) {
+        const modal = document.getElementById("otpModal");
+        const input = document.getElementById("otpModalInput");
+        const errorEl = document.getElementById("otpModalError");
+        const submitBtn = document.getElementById("otpModalSubmit");
+        const cancelBtn = document.getElementById("otpModalCancel");
 
-      document.getElementById("otpModalTitle").textContent = title;
-      document.getElementById("otpModalHint").innerHTML = hint;
-      input.value = "";
-      errorEl.style.display = "none";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Verify";
-      modal.classList.add("open");
-      document.body.style.overflow = "hidden";
-      input.focus();
-
-      function cleanup() {
-        modal.classList.remove("open");
-        document.body.style.overflow = "";
-        submitBtn.removeEventListener("click", onSubmit);
-        cancelBtn.removeEventListener("click", onCancelClick);
-        input.removeEventListener("keydown", onKeydown);
-      }
-      async function onSubmit() {
-        const code = input.value.trim();
-        if (!/^\d{6}$/.test(code)) {
-          errorEl.textContent = "Enter the 6-digit code.";
-          errorEl.style.display = "block";
-          return;
-        }
+        document.getElementById("otpModalTitle").textContent = title;
+        document.getElementById("otpModalHint").innerHTML = hint;
+        input.value = "";
         errorEl.style.display = "none";
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Verifying…";
-        try {
-          await onVerify(code);
-          cleanup();
-        } catch (err) {
-          errorEl.textContent = err.message || "Incorrect code.";
-          errorEl.style.display = "block";
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Verify";
-        }
-      }
-      function onCancelClick() {
-        cleanup();
-        if (onCancel) onCancel();
-      }
-      function onKeydown(e) {
-        if (e.key === "Enter") onSubmit();
-      }
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Verify";
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+        input.focus();
 
-      submitBtn.addEventListener("click", onSubmit);
-      cancelBtn.addEventListener("click", onCancelClick);
-      input.addEventListener("keydown", onKeydown);
-    }
-  </script>
-</body>
+        function cleanup() {
+          modal.classList.remove("open");
+          document.body.style.overflow = "";
+          submitBtn.removeEventListener("click", onSubmit);
+          cancelBtn.removeEventListener("click", onCancelClick);
+          input.removeEventListener("keydown", onKeydown);
+        }
+        async function onSubmit() {
+          const code = input.value.trim();
+          if (!/^\d{6}$/.test(code)) {
+            errorEl.textContent = "Enter the 6-digit code.";
+            errorEl.style.display = "block";
+            return;
+          }
+          errorEl.style.display = "none";
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Verifying…";
+          try {
+            await onVerify(code);
+            cleanup();
+          } catch (err) {
+            errorEl.textContent = err.message || "Incorrect code.";
+            errorEl.style.display = "block";
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Verify";
+          }
+        }
+        function onCancelClick() {
+          cleanup();
+          if (onCancel) onCancel();
+        }
+        function onKeydown(e) {
+          if (e.key === "Enter") onSubmit();
+        }
+
+        submitBtn.addEventListener("click", onSubmit);
+        cancelBtn.addEventListener("click", onCancelClick);
+        input.addEventListener("keydown", onKeydown);
+      }
+    </script>
+  </body>
 </html>

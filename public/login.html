@@ -9,6 +9,13 @@
    SIGN IN PAGE
 ========================= */
 
+      /* Prevent inputs from becoming wider than their containers */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
       /* =========================
    SIGN IN PAGE
 ========================= */
@@ -97,9 +104,12 @@
 
       .pw-wrap {
         position: relative;
+        width: 100%;
       }
 
       .pw-wrap input {
+        width: 100%;
+        box-sizing: border-box;
         padding-right: 45px;
       }
 
@@ -299,7 +309,7 @@
           font-size: 1.8rem;
         }
       }
-          .otp-modal-overlay {
+      .otp-modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
@@ -379,7 +389,7 @@
           padding: 22px 18px;
         }
       }
-</style>
+    </style>
   </head>
   <body>
     <!-- SIGN IN PAGE VIEW -->
@@ -525,7 +535,9 @@
     <div class="modal-overlay" id="forgot-modal">
       <div class="modal">
         <h3 id="forgot-title">Reset Password</h3>
-        <p id="forgot-desc">Enter your registered email and we'll send you a reset code.</p>
+        <p id="forgot-desc">
+          Enter your registered email and we'll send you a reset code.
+        </p>
         <div class="field" id="forgot-email-field">
           <label>Email Address <span class="req">*</span></label>
           <input
@@ -539,212 +551,243 @@
         </div>
         <div class="field" id="forgot-code-field" style="display: none">
           <label>Reset Code <span class="req">*</span></label>
-          <input type="text" id="forgot-code" maxlength="6" placeholder="6-digit code" />
+          <input
+            type="text"
+            id="forgot-code"
+            maxlength="6"
+            placeholder="6-digit code"
+          />
         </div>
         <div class="field" id="forgot-newpw-field" style="display: none">
           <label>New Password <span class="req">*</span></label>
-          <input type="password" id="forgot-newpw" placeholder="At least 8 characters" />
-          <span class="err-msg" id="forgot-newpw-hint" style="display: block; color: #888"
-            >At least 8 characters, with an uppercase, lowercase, number, and special character.</span
+          <input
+            type="password"
+            id="forgot-newpw"
+            placeholder="At least 8 characters"
+          />
+          <span
+            class="err-msg"
+            id="forgot-newpw-hint"
+            style="display: block; color: #888"
+            >At least 8 characters, with an uppercase, lowercase, number, and
+            special character.</span
           >
         </div>
         <div class="modal-actions">
           <button class="btn btn-outline" onclick="closeForgot()">
             Cancel
           </button>
-          <button class="btn btn-primary" id="forgot-action-btn" onclick="sendReset()">
+          <button
+            class="btn btn-primary"
+            id="forgot-action-btn"
+            onclick="sendReset()"
+          >
             Send Reset Code
           </button>
         </div>
       </div>
     </div>
-  <script src="api.js?v=3"></script>
-  <script>
+    <script src="api.js?v=3"></script>
+    <script>
       renderBackButton(16);
 
-    function destinationFor(role) {
-      if (role === 'PATIENT') return 'patient.html';
-      if (role === 'DOCTOR') return 'doctor.html';
-      return 'index.html';
-    }
+      function destinationFor(role) {
+        if (role === "PATIENT") return "patient.html";
+        if (role === "DOCTOR") return "doctor.html";
+        return "index.html";
+      }
 
-    let forgotStep = 'request'; // 'request' -> 'reset'
+      let forgotStep = "request"; // 'request' -> 'reset'
 
-    function openForgot() {
-      forgotStep = 'request';
-      document.getElementById('forgot-title').textContent = 'Reset Password';
-      document.getElementById('forgot-desc').textContent = "Enter your registered email and we'll send you a reset code.";
-      document.getElementById('forgot-email-field').style.display = 'block';
-      document.getElementById('forgot-code-field').style.display = 'none';
-      document.getElementById('forgot-newpw-field').style.display = 'none';
-      document.getElementById('forgot-action-btn').textContent = 'Send Reset Code';
-      document.getElementById('forgot-err').style.display = 'none';
-      document.getElementById('forgot-modal').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeForgot() {
-      document.getElementById('forgot-modal').classList.remove('open');
-      document.body.style.overflow = '';
-    }
+      function openForgot() {
+        forgotStep = "request";
+        document.getElementById("forgot-title").textContent = "Reset Password";
+        document.getElementById("forgot-desc").textContent =
+          "Enter your registered email and we'll send you a reset code.";
+        document.getElementById("forgot-email-field").style.display = "block";
+        document.getElementById("forgot-code-field").style.display = "none";
+        document.getElementById("forgot-newpw-field").style.display = "none";
+        document.getElementById("forgot-action-btn").textContent =
+          "Send Reset Code";
+        document.getElementById("forgot-err").style.display = "none";
+        document.getElementById("forgot-modal").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+      function closeForgot() {
+        document.getElementById("forgot-modal").classList.remove("open");
+        document.body.style.overflow = "";
+      }
 
-    async function sendReset() {
-      const errEl = document.getElementById('forgot-err');
-      errEl.style.display = 'none';
+      async function sendReset() {
+        const errEl = document.getElementById("forgot-err");
+        errEl.style.display = "none";
 
-      if (forgotStep === 'request') {
-        const email = document.getElementById('forgot-email').value.trim();
-        if (!isValidEmail(email)) {
-          errEl.textContent = 'Please enter a valid email';
-          errEl.style.display = 'block';
+        if (forgotStep === "request") {
+          const email = document.getElementById("forgot-email").value.trim();
+          if (!isValidEmail(email)) {
+            errEl.textContent = "Please enter a valid email";
+            errEl.style.display = "block";
+            return;
+          }
+          try {
+            const result = await forgotPassword(email);
+            forgotStep = "reset";
+            document.getElementById("forgot-desc").innerHTML = result.devNote
+              ? result.devNote +
+                "<br><b>Demo code: " +
+                result.devResetCode +
+                "</b>"
+              : "Enter the code we sent you, along with a new password.";
+            document.getElementById("forgot-email-field").style.display =
+              "none";
+            document.getElementById("forgot-code-field").style.display =
+              "block";
+            document.getElementById("forgot-newpw-field").style.display =
+              "block";
+            document.getElementById("forgot-action-btn").textContent =
+              "Reset Password";
+          } catch (err) {
+            errEl.textContent = err.message;
+            errEl.style.display = "block";
+          }
+          return;
+        }
+
+        // forgotStep === 'reset'
+        const email = document.getElementById("forgot-email").value.trim();
+        const code = document.getElementById("forgot-code").value.trim();
+        const newPw = document.getElementById("forgot-newpw").value;
+        if (!isStrongPassword(newPw)) {
+          errEl.textContent = passwordStrengthHint();
+          errEl.style.display = "block";
           return;
         }
         try {
-          const result = await forgotPassword(email);
-          forgotStep = 'reset';
-          document.getElementById('forgot-desc').innerHTML =
-            (result.devNote ? result.devNote + '<br><b>Demo code: ' + result.devResetCode + '</b>' : 'Enter the code we sent you, along with a new password.');
-          document.getElementById('forgot-email-field').style.display = 'none';
-          document.getElementById('forgot-code-field').style.display = 'block';
-          document.getElementById('forgot-newpw-field').style.display = 'block';
-          document.getElementById('forgot-action-btn').textContent = 'Reset Password';
+          await resetPassword(email, code, newPw);
+          closeForgot();
+          alert("Password updated. You can now log in with your new password.");
         } catch (err) {
           errEl.textContent = err.message;
-          errEl.style.display = 'block';
+          errEl.style.display = "block";
         }
-        return;
       }
 
-      // forgotStep === 'reset'
-      const email = document.getElementById('forgot-email').value.trim();
-      const code = document.getElementById('forgot-code').value.trim();
-      const newPw = document.getElementById('forgot-newpw').value;
-      if (!isStrongPassword(newPw)) {
-        errEl.textContent = passwordStrengthHint();
-        errEl.style.display = 'block';
-        return;
-      }
-      try {
-        await resetPassword(email, code, newPw);
-        closeForgot();
-        alert('Password updated. You can now log in with your new password.');
-      } catch (err) {
-        errEl.textContent = err.message;
-        errEl.style.display = 'block';
-      }
-    }
-
-    // If a session already exists (e.g. the user hit "back" to this page,
-    // or bookmarked it), skip the login form entirely and go straight in.
-    (async function checkExistingSession() {
-      try {
-        const result = await getCurrentUser();
-        window.location.href = destinationFor(result.data.role);
-      } catch (e) {
-        // not logged in - show the login form as normal
-      }
-    })();
-
-    async function doSignIn() {
-      const email = document.getElementById('si-email').value;
-      const password = document.getElementById('si-password').value;
-      const errEl = document.getElementById('si-pw-err');
-      errEl.style.display = 'none';
-
-      try {
-        const result = await login(email, password);
-        document.getElementById('signin-form-wrap').style.display = 'none';
-        document.getElementById('signin-success').style.display = 'block';
-        setTimeout(() => {
-          window.location.href = destinationFor(result.data.role);
-        }, 900);
-      } catch (err) {
-        errEl.textContent = err.message;
-        errEl.style.display = 'block';
-      }
-    }
-  </script>
-    <!-- Shared verification/2FA code modal -->
-  <div class="otp-modal-overlay" id="otpModal">
-    <div class="otp-modal-box">
-      <h3 id="otpModalTitle">Enter verification code</h3>
-      <p class="otp-modal-hint" id="otpModalHint"></p>
-      <input
-        type="text"
-        id="otpModalInput"
-        maxlength="6"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        placeholder="6-digit code"
-        class="otp-modal-input"
-      />
-      <div class="otp-modal-error" id="otpModalError" style="display: none"></div>
-      <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
-      <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
-    </div>
-  </div>
-  <script>
-    // Opens the OTP modal. onVerify(code) is called each time the person
-    // submits - it should return a Promise that resolves on success (the
-    // modal is then closed automatically) or throws/rejects on a wrong
-    // code (the modal stays open with the error shown, so they can just
-    // retry instead of restarting the whole registration/login flow).
-    function openOtpModal({ title, hint, onVerify, onCancel }) {
-      const modal = document.getElementById("otpModal");
-      const input = document.getElementById("otpModalInput");
-      const errorEl = document.getElementById("otpModalError");
-      const submitBtn = document.getElementById("otpModalSubmit");
-      const cancelBtn = document.getElementById("otpModalCancel");
-
-      document.getElementById("otpModalTitle").textContent = title;
-      document.getElementById("otpModalHint").innerHTML = hint;
-      input.value = "";
-      errorEl.style.display = "none";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Verify";
-      modal.classList.add("open");
-      document.body.style.overflow = "hidden";
-      input.focus();
-
-      function cleanup() {
-        modal.classList.remove("open");
-        document.body.style.overflow = "";
-        submitBtn.removeEventListener("click", onSubmit);
-        cancelBtn.removeEventListener("click", onCancelClick);
-        input.removeEventListener("keydown", onKeydown);
-      }
-      async function onSubmit() {
-        const code = input.value.trim();
-        if (!/^\d{6}$/.test(code)) {
-          errorEl.textContent = "Enter the 6-digit code.";
-          errorEl.style.display = "block";
-          return;
-        }
-        errorEl.style.display = "none";
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Verifying…";
+      // If a session already exists (e.g. the user hit "back" to this page,
+      // or bookmarked it), skip the login form entirely and go straight in.
+      (async function checkExistingSession() {
         try {
-          await onVerify(code);
-          cleanup();
+          const result = await getCurrentUser();
+          window.location.href = destinationFor(result.data.role);
+        } catch (e) {
+          // not logged in - show the login form as normal
+        }
+      })();
+
+      async function doSignIn() {
+        const email = document.getElementById("si-email").value;
+        const password = document.getElementById("si-password").value;
+        const errEl = document.getElementById("si-pw-err");
+        errEl.style.display = "none";
+
+        try {
+          const result = await login(email, password);
+          document.getElementById("signin-form-wrap").style.display = "none";
+          document.getElementById("signin-success").style.display = "block";
+          setTimeout(() => {
+            window.location.href = destinationFor(result.data.role);
+          }, 900);
         } catch (err) {
-          errorEl.textContent = err.message || "Incorrect code.";
-          errorEl.style.display = "block";
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Verify";
+          errEl.textContent = err.message;
+          errEl.style.display = "block";
         }
       }
-      function onCancelClick() {
-        cleanup();
-        if (onCancel) onCancel();
-      }
-      function onKeydown(e) {
-        if (e.key === "Enter") onSubmit();
-      }
+    </script>
+    <!-- Shared verification/2FA code modal -->
+    <div class="otp-modal-overlay" id="otpModal">
+      <div class="otp-modal-box">
+        <h3 id="otpModalTitle">Enter verification code</h3>
+        <p class="otp-modal-hint" id="otpModalHint"></p>
+        <input
+          type="text"
+          id="otpModalInput"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="6-digit code"
+          class="otp-modal-input"
+        />
+        <div
+          class="otp-modal-error"
+          id="otpModalError"
+          style="display: none"
+        ></div>
+        <button class="otp-modal-submit" id="otpModalSubmit">Verify</button>
+        <button class="otp-modal-cancel" id="otpModalCancel">Cancel</button>
+      </div>
+    </div>
+    <script>
+      // Opens the OTP modal. onVerify(code) is called each time the person
+      // submits - it should return a Promise that resolves on success (the
+      // modal is then closed automatically) or throws/rejects on a wrong
+      // code (the modal stays open with the error shown, so they can just
+      // retry instead of restarting the whole registration/login flow).
+      function openOtpModal({ title, hint, onVerify, onCancel }) {
+        const modal = document.getElementById("otpModal");
+        const input = document.getElementById("otpModalInput");
+        const errorEl = document.getElementById("otpModalError");
+        const submitBtn = document.getElementById("otpModalSubmit");
+        const cancelBtn = document.getElementById("otpModalCancel");
 
-      submitBtn.addEventListener("click", onSubmit);
-      cancelBtn.addEventListener("click", onCancelClick);
-      input.addEventListener("keydown", onKeydown);
-    }
-  </script>
-</body>
+        document.getElementById("otpModalTitle").textContent = title;
+        document.getElementById("otpModalHint").innerHTML = hint;
+        input.value = "";
+        errorEl.style.display = "none";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Verify";
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+        input.focus();
+
+        function cleanup() {
+          modal.classList.remove("open");
+          document.body.style.overflow = "";
+          submitBtn.removeEventListener("click", onSubmit);
+          cancelBtn.removeEventListener("click", onCancelClick);
+          input.removeEventListener("keydown", onKeydown);
+        }
+        async function onSubmit() {
+          const code = input.value.trim();
+          if (!/^\d{6}$/.test(code)) {
+            errorEl.textContent = "Enter the 6-digit code.";
+            errorEl.style.display = "block";
+            return;
+          }
+          errorEl.style.display = "none";
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Verifying…";
+          try {
+            await onVerify(code);
+            cleanup();
+          } catch (err) {
+            errorEl.textContent = err.message || "Incorrect code.";
+            errorEl.style.display = "block";
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Verify";
+          }
+        }
+        function onCancelClick() {
+          cleanup();
+          if (onCancel) onCancel();
+        }
+        function onKeydown(e) {
+          if (e.key === "Enter") onSubmit();
+        }
+
+        submitBtn.addEventListener("click", onSubmit);
+        cancelBtn.addEventListener("click", onCancelClick);
+        input.addEventListener("keydown", onKeydown);
+      }
+    </script>
+  </body>
 </html>
