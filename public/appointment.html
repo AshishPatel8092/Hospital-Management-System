@@ -220,6 +220,17 @@
         font-weight: 500;
       }
 
+      .time-slot.slot-taken {
+        background-color: #f1f1f1;
+        color: #b0b0b0;
+        text-decoration: line-through;
+        cursor: not-allowed;
+      }
+      .time-slot.slot-taken:hover {
+        background-color: #f1f1f1;
+        color: #b0b0b0;
+      }
+
       .no-slots {
         padding: 16px 12px;
         text-align: center;
@@ -1071,7 +1082,7 @@
       }
 
       // Initialize time slots
-      function initializeTimeSlots() {
+      async function initializeTimeSlots() {
         const container = document.getElementById("timeSlots");
         container.innerHTML = "";
         if (!selectedDate) {
@@ -1079,11 +1090,34 @@
             '<div class="no-slots">No time slots for this date.</div>';
           return;
         }
+
+        // Grey out slots already booked for this doctor on this date, so
+        // it's obvious before someone tries to pick one.
+        let bookedSlots = [];
+        if (selectedDoctor) {
+          try {
+            const result = await getBookedDoctorSlots(
+              selectedDoctor.id,
+              toLocalDateString(selectedDate.date),
+            );
+            bookedSlots = result.data || [];
+          } catch (e) {
+            // Don't block booking attempts if this check fails - the real
+            // protection is server-side, this is just a helpful hint.
+          }
+        }
+
         timeSlots.forEach((slot) => {
           const btn = document.createElement("button");
           btn.className = "time-slot";
           btn.textContent = slot;
-          btn.onclick = () => selectTime(slot);
+          if (bookedSlots.includes(slot)) {
+            btn.classList.add("slot-taken");
+            btn.disabled = true;
+            btn.title = "Already booked - please choose another time";
+          } else {
+            btn.onclick = () => selectTime(slot);
+          }
           container.appendChild(btn);
         });
       }

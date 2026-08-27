@@ -34,6 +34,8 @@ app.use('/api', require('./routes/auth'));
 app.use('/api/doctors', require('./routes/doctors'));
 app.use('/api/patients', require('./routes/patients'));
 app.use('/api/appointments', require('./routes/appointments'));
+app.use('/api/service-bookings', require('./routes/serviceBookings'));
+app.use('/api/availability', require('./routes/availability'));
 app.use('/api/billing', require('./routes/billing'));
 app.use('/api/pharmacy', require('./routes/pharmacy'));
 app.use('/api/contact', require('./routes/contact'));

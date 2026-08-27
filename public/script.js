@@ -719,6 +719,7 @@ document.querySelectorAll(".service-card").forEach((card) => {
 });
 
 // Form submit → show summary instead of alert
+let lastServiceBooking = null;
 bookingForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -726,10 +727,13 @@ bookingForm.addEventListener("submit", (e) => {
 
   const name = document.getElementById("fieldName").value.trim();
   const phone = document.getElementById("fieldPhone").value.trim();
+  const email = document.getElementById("fieldEmail").value.trim();
   const age = document.getElementById("fieldAge").value.trim();
   const gender = document.getElementById("fieldGender").value;
   const date = document.getElementById("fieldDate").value;
   const time = document.getElementById("fieldTime").value;
+
+  lastServiceBooking = { name, phone, email, date, time };
 
   document.getElementById("summaryServiceName").textContent = currentServiceKey;
   document.getElementById("summaryAbout").textContent = data.about;
@@ -759,8 +763,9 @@ editDetailsBtn.addEventListener("click", () => {
 confirmBookingBtn.addEventListener("click", () => {
   // This modal books a service package rather than a specific doctor, and
   // the cards here are marketing content, not records from the database.
-  // Payment happens on the dedicated UPI/QR payment page - no backend
-  // booking is created for these (unlike real doctor appointments).
+  // Payment happens on the dedicated UPI/QR payment page, which also
+  // checks (and reserves) the date+time slot so two people can't book the
+  // same service at the same date and time.
   const data = serviceData[currentServiceKey];
   const amount = data ? data.price : 0;
   closeBooking();
@@ -768,6 +773,13 @@ confirmBookingBtn.addEventListener("click", () => {
   params.set("mode", "service");
   params.set("item", currentServiceKey);
   params.set("amount", amount);
+  if (lastServiceBooking) {
+    params.set("date", lastServiceBooking.date);
+    params.set("time", lastServiceBooking.time);
+    params.set("guestName", lastServiceBooking.name);
+    params.set("guestPhone", lastServiceBooking.phone);
+    params.set("guestEmail", lastServiceBooking.email);
+  }
   window.location.href = "payment.html?" + params.toString();
 });
 
@@ -944,9 +956,12 @@ function renderDatePills() {
   });
 }
 
-function renderTimeSlots() {
+async function renderTimeSlots() {
   const slots = ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM", "5:00 PM"];
   timeSlotsMsg.style.display = "none";
+  selectedTime = null;
+  document.getElementById("sumSelectedTime").textContent = "Not selected";
+
   timeSlotsContainer.innerHTML = slots
     .map(
       (t) =>
@@ -954,7 +969,26 @@ function renderTimeSlots() {
     )
     .join("");
 
+  // Grey out slots that are already booked for this doctor on this date,
+  // so a person can see it's taken before even trying to pick it.
+  let bookedSlots = [];
+  if (currentDoctorId && selectedDate) {
+    try {
+      const result = await getBookedDoctorSlots(currentDoctorId, selectedDate);
+      bookedSlots = result.data || [];
+    } catch (e) {
+      // If the availability check fails, don't block the person from
+      // trying - the booking itself is still protected server-side.
+    }
+  }
+
   timeSlotsContainer.querySelectorAll(".time-slot-btn").forEach((btn) => {
+    if (bookedSlots.includes(btn.dataset.time)) {
+      btn.classList.add("slot-taken");
+      btn.disabled = true;
+      btn.title = "Already booked - please choose another time";
+      return;
+    }
     btn.addEventListener("click", () => {
       timeSlotsContainer
         .querySelectorAll(".time-slot-btn")

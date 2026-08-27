@@ -442,13 +442,18 @@
       }
 
       /* ================= SERVICE PAYMENT MODE ================= */
-      /* Used by the homepage "Our Services" booking modal. This is a
-         marketing/preview flow, not backed by a real appointment record -
-         it simply shows the UPI/QR payment screen, matching how it
-         behaved before (no database write). */
+      /* Used by the homepage "Our Services" booking modal. On confirm this
+         reserves the service+date+time slot via the backend, so a second
+         person can't book the exact same service at the exact same time -
+         they'll get a clear alert instead. */
       function initServiceMode() {
         const item = params.get("item");
         const amount = params.get("amount");
+        const date = params.get("date");
+        const time = params.get("time");
+        const guestName = params.get("guestName") || "";
+        const guestPhone = params.get("guestPhone") || "";
+        const guestEmail = params.get("guestEmail") || "";
 
         if (!item || !amount) {
           renderErrorPage(
@@ -468,6 +473,8 @@
             <div class="summary-side">
               <div class="summary-title">Order Summary</div>
               <div class="summary-line"><span>Service</span><span>${item}</span></div>
+              ${date ? `<div class="summary-line"><span>Date</span><span>${date}</span></div>` : ""}
+              ${time ? `<div class="summary-line"><span>Time</span><span>${time}</span></div>` : ""}
               <div class="summary-line"><span>Tax (GST)</span><span>₹0</span></div>
               <div class="summary-line"><span>Convenience Fee</span><span>₹0</span></div>
               <div class="summary-total"><span>Total</span><span>₹${amount}</span></div>
@@ -479,13 +486,45 @@
 
         wireCommonPayRightSide(amount, item);
 
-        document.getElementById("confirmPayBtn").addEventListener("click", (e) => {
-          renderSuccess(
-            "Payment received!",
-            `Thanks — we've received your payment of ₹${amount} for ${item}. Our team will be in touch shortly.`,
-            "index.html",
-            "Back to Home →",
-          );
+        document.getElementById("confirmPayBtn").addEventListener("click", async (e) => {
+          const btn = e.currentTarget;
+
+          // No date/time was captured (shouldn't normally happen, since the
+          // booking form requires both) - fall back to the old no-backend
+          // success screen rather than blocking payment entirely.
+          if (!date || !time) {
+            renderSuccess(
+              "Payment received!",
+              `Thanks — we've received your payment of ₹${amount} for ${item}. Our team will be in touch shortly.`,
+              "index.html",
+              "Back to Home →",
+            );
+            return;
+          }
+
+          btn.disabled = true;
+          btn.textContent = "Reserving your slot…";
+          try {
+            await bookServiceSlot({
+              serviceName: item,
+              bookingDate: date,
+              slotTime: time,
+              guestName,
+              guestPhone,
+              guestEmail,
+            });
+            renderSuccess(
+              "Payment received & slot reserved!",
+              `Thanks — your ${item} appointment on ${date} at ${time} is confirmed. Our team will be in touch shortly.`,
+              "index.html",
+              "Back to Home →",
+            );
+          } catch (err) {
+            // 409 = someone already booked this exact service+date+time.
+            alert(err.message);
+            btn.disabled = false;
+            btn.textContent = "I've Paid";
+          }
         });
       }
 

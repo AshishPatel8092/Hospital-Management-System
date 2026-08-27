@@ -73,6 +73,20 @@ router.post('/', async (req, res) => {
   }
 
   try {
+    // Prevent two patients booking the same doctor for the same date+time.
+    // (Cancelled slots free up again, so they're excluded.)
+    const [conflicts] = await pool.execute(
+      `SELECT appointment_id FROM appointments
+       WHERE doctor_id = ? AND appointment_date = ? AND slot_time = ? AND status != 'Cancelled'`,
+      [doctorId, appointmentDate, slotTime || null]
+    );
+    if (conflicts.length > 0) {
+      return res.status(409).json({
+        success: false,
+        message: 'That doctor is already booked for the selected date and time. Please choose a different slot.',
+      });
+    }
+
     const [result] = await pool.execute(
       `INSERT INTO appointments (patient_id, doctor_id, appointment_date, slot_time, visit_type, reason, created_by)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,

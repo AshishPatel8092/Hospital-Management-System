@@ -121,6 +121,25 @@ CREATE TABLE billing (
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- SERVICE BOOKINGS (homepage "Services" section - Full Body Checkup,
+-- Website Design, etc. Guest-bookable, no patient login required, but
+-- still slot-locked so two people can't book the same service at the
+-- same date+time.)
+-- ---------------------------------------------------------------------
+CREATE TABLE service_bookings (
+    service_booking_id  INT AUTO_INCREMENT PRIMARY KEY,
+    service_name         VARCHAR(150) NOT NULL,
+    booking_date          DATE NOT NULL,
+    slot_time              VARCHAR(50) NOT NULL,
+    guest_name             VARCHAR(150) NULL,
+    guest_phone             VARCHAR(20) NULL,
+    guest_email              VARCHAR(150) NULL,
+    status                    ENUM('Confirmed','Cancelled') DEFAULT 'Confirmed',
+    created_at                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_service_slot (service_name, booking_date, slot_time)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- PHARMACY INVENTORY
 -- ---------------------------------------------------------------------
 CREATE TABLE pharmacy_inventory (

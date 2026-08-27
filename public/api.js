@@ -55,6 +55,17 @@ function listDoctors(department) {
 function bookAppointment(fields) {
   return apiRequest('/appointments', 'POST', fields);
 }
+function bookServiceSlot(fields) {
+  return apiRequest('/service-bookings', 'POST', fields);
+}
+function getBookedServiceSlots(serviceName, date) {
+  const q = `?serviceName=${encodeURIComponent(serviceName)}&date=${encodeURIComponent(date)}`;
+  return apiRequest(`/service-bookings${q}`, 'GET');
+}
+function getBookedDoctorSlots(doctorId, date) {
+  const q = `?doctorId=${encodeURIComponent(doctorId)}&date=${encodeURIComponent(date)}`;
+  return apiRequest(`/availability/doctor${q}`, 'GET');
+}
 function listAppointments() {
   return apiRequest('/appointments', 'GET');
 }

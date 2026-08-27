@@ -2213,6 +2213,16 @@ body.logged-in .guest-only {
   color: white;
   border-color: #0d5c67;
 }
+.time-slot-btn.slot-taken {
+  background: #f1f1f1;
+  color: #9aa0a6;
+  border-color: #e2e2e2;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+.time-slot-btn.slot-taken:hover {
+  border-color: #e2e2e2;
+}
 
 .booking-summary-card {
   background: #eaf7f0;
