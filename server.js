@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const { runMigrations } = require('./migrate');
 
 process.on('unhandledRejection', (err) => {
   console.error('UNHANDLED PROMISE REJECTION - this would otherwise fail silently:', err);
@@ -66,4 +67,13 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`HMS server running on http://localhost:${PORT}`));
+
+// Applies every pending schema migration before accepting traffic, so a
+// fresh deploy (or a restart) never serves requests against an
+// out-of-date database - this is what was missing before, and why the
+// feedback table / new billing column needed to be run by hand.
+runMigrations()
+  .catch((err) => console.error('[migrate] Unexpected error while migrating:', err))
+  .finally(() => {
+    app.listen(PORT, () => console.log(`HMS server running on http://localhost:${PORT}`));
+  });

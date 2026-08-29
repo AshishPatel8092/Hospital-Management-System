@@ -930,23 +930,59 @@
     <!-- FORGOT PASSWORD MODAL -->
     <div class="modal-overlay" id="forgot-modal">
       <div class="modal">
-        <h3>Reset Password</h3>
-        <p>Enter your registered email and we'll send you a reset link.</p>
-        <div class="field">
+        <h3 id="forgot-title">Reset Password</h3>
+        <p id="forgot-desc">
+          Enter your registered email and we'll send you a reset code.
+        </p>
+        <div class="field" id="forgot-email-field">
           <label>Email Address <span class="req">*</span></label>
           <input
             type="email"
             id="forgot-email"
             placeholder="patient@example.com"
           />
-          <span class="err-msg">Please enter a valid email</span>
+          <span class="err-msg" id="forgot-err" style="display: none"
+            >Please enter a valid email</span
+          >
+        </div>
+        <div class="field" id="forgot-code-field" style="display: none">
+          <label>Reset Code (OTP) <span class="req">*</span></label>
+          <input
+            type="text"
+            id="forgot-code"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="6-digit code"
+          />
+          <span
+            class="err-msg"
+            id="forgot-resend"
+            style="display: block; color: #0f766e; cursor: pointer; text-decoration: underline"
+            onclick="resendCode()"
+            >Resend code</span
+          >
+        </div>
+        <div class="field" id="forgot-newpw-field" style="display: none">
+          <label>New Password <span class="req">*</span></label>
+          <input
+            type="password"
+            id="forgot-newpw"
+            placeholder="At least 8 characters"
+          />
+          <span
+            class="err-msg"
+            id="forgot-newpw-hint"
+            style="display: block; color: #888"
+            >At least 8 characters, with an uppercase, lowercase, number, and
+            special character.</span
+          >
         </div>
         <div class="modal-actions">
           <button class="btn btn-outline" onclick="closeForgot()">
             Cancel
           </button>
-          <button class="btn btn-primary" onclick="sendReset()">
-            Send Reset Link
+          <button class="btn btn-primary" id="forgot-action-btn" onclick="sendReset()">
+            Send Reset Code
           </button>
         </div>
       </div>
@@ -1720,20 +1756,141 @@
           : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
       }
 
+      let forgotStep = "request"; // 'request' -> 'reset'
+      let resendCooldownTimer = null;
+
       function openForgot() {
+        forgotStep = "request";
+        clearInterval(resendCooldownTimer);
+        document.getElementById("forgot-title").textContent = "Reset Password";
+        document.getElementById("forgot-desc").textContent =
+          "Enter your registered email and we'll send you a reset code.";
+        document.getElementById("forgot-email-field").style.display = "block";
+        document.getElementById("forgot-code-field").style.display = "none";
+        document.getElementById("forgot-newpw-field").style.display = "none";
+        document.getElementById("forgot-action-btn").textContent =
+          "Send Reset Code";
+        document.getElementById("forgot-err").style.display = "none";
+        document.getElementById("forgot-code").value = "";
+        document.getElementById("forgot-newpw").value = "";
         document.getElementById("forgot-modal").classList.add("open");
       }
       function closeForgot() {
         document.getElementById("forgot-modal").classList.remove("open");
       }
-      function sendReset() {
-        const el = document.getElementById("forgot-email");
-        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value);
-        el.closest(".field").classList.toggle("has-error", !valid);
-        if (!valid) return;
-        closeForgot();
-        alert("✅ A password reset link has been sent to " + el.value);
-        el.value = "";
+
+      function startResendCooldown() {
+        const el = document.getElementById("forgot-resend");
+        let seconds = 30;
+        el.style.pointerEvents = "none";
+        el.style.color = "#999";
+        el.style.textDecoration = "none";
+        el.textContent = `Resend code in ${seconds}s`;
+        clearInterval(resendCooldownTimer);
+        resendCooldownTimer = setInterval(() => {
+          seconds -= 1;
+          if (seconds <= 0) {
+            clearInterval(resendCooldownTimer);
+            el.style.pointerEvents = "auto";
+            el.style.color = "#0f766e";
+            el.style.textDecoration = "underline";
+            el.textContent = "Resend code";
+          } else {
+            el.textContent = `Resend code in ${seconds}s`;
+          }
+        }, 1000);
+      }
+
+      async function resendCode() {
+        const email = document.getElementById("forgot-email").value.trim();
+        const errEl = document.getElementById("forgot-err");
+        try {
+          const result = await forgotPassword(email);
+          if (result.devResetCode) {
+            console.log(
+              "%c🔐 Casto Health Care — Password Reset OTP (resent)",
+              "font-size:14px;font-weight:bold;color:#0f766e;"
+            );
+            console.log(
+              `%cYour OTP for ${email} is: ${result.devResetCode}`,
+              "font-size:16px;font-weight:bold;color:#111;"
+            );
+          }
+          startResendCooldown();
+        } catch (err) {
+          errEl.textContent = err.message;
+          errEl.style.display = "block";
+        }
+      }
+
+      async function sendReset() {
+        const errEl = document.getElementById("forgot-err");
+        errEl.style.display = "none";
+
+        if (forgotStep === "request") {
+          const email = document.getElementById("forgot-email").value.trim();
+          const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          if (!valid) {
+            errEl.textContent = "Please enter a valid email";
+            errEl.style.display = "block";
+            return;
+          }
+          try {
+            const result = await forgotPassword(email);
+            forgotStep = "reset";
+
+            // No real email/SMS provider is configured for this project,
+            // so the OTP is logged to the browser console instead of
+            // being emailed - open DevTools (F12) to see it.
+            if (result.devResetCode) {
+              console.log(
+                "%c🔐 Casto Health Care — Password Reset OTP",
+                "font-size:14px;font-weight:bold;color:#0f766e;"
+              );
+              console.log(
+                `%cYour OTP for ${email} is: ${result.devResetCode}`,
+                "font-size:16px;font-weight:bold;color:#111;"
+              );
+              console.log("%cThis code expires in 10 minutes.", "color:#666;");
+            }
+
+            document.getElementById("forgot-desc").textContent =
+              "We've sent a 6-digit code to " +
+              email +
+              ". Enter it below along with your new password. (No email service is configured for this demo — check your browser console, press F12, for the code.)";
+            document.getElementById("forgot-email-field").style.display =
+              "none";
+            document.getElementById("forgot-code-field").style.display =
+              "block";
+            document.getElementById("forgot-newpw-field").style.display =
+              "block";
+            document.getElementById("forgot-action-btn").textContent =
+              "Reset Password";
+            startResendCooldown();
+          } catch (err) {
+            errEl.textContent = err.message;
+            errEl.style.display = "block";
+          }
+          return;
+        }
+
+        // forgotStep === 'reset'
+        const email = document.getElementById("forgot-email").value.trim();
+        const code = document.getElementById("forgot-code").value.trim();
+        const newPw = document.getElementById("forgot-newpw").value;
+        if (!isStrongPassword(newPw)) {
+          errEl.textContent = passwordStrengthHint();
+          errEl.style.display = "block";
+          return;
+        }
+        try {
+          await resetPassword(email, code, newPw);
+          closeForgot();
+          alert("Password updated. You can now sign in with your new password.");
+        } catch (err) {
+          errEl.textContent = err.message;
+          errEl.style.display = "block";
+        }
       }
       document
         .getElementById("forgot-modal")
