@@ -1613,6 +1613,10 @@ const feedbackCancelBtn = document.getElementById("feedbackCancelBtn");
 if (feedbackCancelBtn)
   feedbackCancelBtn.addEventListener("click", closeFeedbackModal);
 
+const feedbackCloseBtn = document.getElementById("feedbackCloseBtn");
+if (feedbackCloseBtn)
+  feedbackCloseBtn.addEventListener("click", closeFeedbackModal);
+
 const feedbackComments = document.getElementById("feedbackComments");
 if (feedbackComments) {
   feedbackComments.addEventListener("input", () => {

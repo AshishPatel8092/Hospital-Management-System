@@ -1215,6 +1215,103 @@
       #pt-page-nav .pt-page-links button {
         color: var(--rose, #e11d48);
       }
+      /* ---- Real UPI/QR payment widget inside the Pay Now modal ---- */
+      .hms-upi-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+      }
+      .hms-upi-qr {
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 14px;
+        min-height: 170px;
+        min-width: 170px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hms-upi-id-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg, #f4f8f8);
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 9px 12px;
+        margin-bottom: 12px;
+        width: 100%;
+        max-width: 280px;
+      }
+      .hms-upi-id-row code {
+        flex: 1;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1e293b;
+      }
+      .hms-upi-copy-btn {
+        border: none;
+        background: var(--teal, #0f766e);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .hms-upi-app-btn {
+        display: inline-block;
+        width: 100%;
+        max-width: 280px;
+        padding: 11px;
+        background: var(--teal, #0f766e);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        border-radius: 10px;
+        margin-bottom: 14px;
+        font-size: 0.9rem;
+      }
+      .hms-upi-hint {
+        font-size: 12px;
+        color: #64748b;
+        margin: 0 0 14px;
+        max-width: 300px;
+        line-height: 1.5;
+      }
+      .hms-utr-label {
+        align-self: flex-start;
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 6px;
+      }
+      .hms-utr-input {
+        width: 100%;
+        max-width: 280px;
+        padding: 11px 12px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 6px;
+      }
+      .hms-utr-input:focus {
+        outline: none;
+        border-color: var(--teal, #0f766e);
+      }
+      .hms-utr-error {
+        color: #dc2626;
+        font-size: 12.5px;
+        max-width: 300px;
+        margin-bottom: 6px;
+      }
     </style>
   </head>
   <body>
@@ -1458,6 +1555,7 @@
     </div>
     <div class="pt-toast" id="ptToast"></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="api.js?v=3"></script>
     <script>
       /* ── AUTH GUARD: only signed-in patients may view this page ── */
@@ -1666,11 +1764,11 @@
 
       function openPayBillModal(billId, amount) {
         activePayBillId = billId;
-        openPatientModal(
-          "Pay Hospital Bill",
-          '<select id="ptPayMethod"><option>UPI</option><option>Credit Card</option><option>Debit Card</option><option>Net Banking</option></select><input placeholder="Enter payment details (simulated - not a real charge)">',
-          `Pay ₹${amount}`,
-        );
+        // Payment is UPI/QR-only - real QR + UPI ID, with a required
+        // 12-digit UPI transaction ID (UTR) to actually verify the
+        // payment before the bill can be marked Paid.
+        openPatientModal("Pay Hospital Bill", '<div id="ptUpiPayArea"></div>', `Pay ₹${amount}`);
+        renderUpiPayBlock(document.getElementById("ptUpiPayArea"), amount, "Hospital bill payment");
       }
 
       // Sidebar "Pay Bills" shortcut just brings the Payments & Bills card
@@ -1706,21 +1804,29 @@
         const title = document.getElementById("ptModalTitle").textContent;
 
         if (title === "Pay Hospital Bill" && activePayBillId) {
-          const methodEl = document.getElementById("ptPayMethod");
-          const method = methodEl ? methodEl.value : "Online";
+          // Blocks (with a clear alert) unless a valid 12-digit UPI
+          // transaction ID has actually been entered - this is what
+          // prevents "clicked Paid without paying".
+          const utr = readAndValidateUtr();
+          if (!utr) return;
+
           const submitBtn = document.getElementById("ptSubmit");
           submitBtn.disabled = true;
-          submitBtn.textContent = "Processing…";
+          submitBtn.textContent = "Verifying payment…";
           try {
-            await payBill(activePayBillId, method);
+            await payBill(activePayBillId, utr);
             document.getElementById("ptModal").classList.remove("open");
-            patientToast("Payment completed successfully.");
+            patientToast("Payment verified — bill marked as paid.");
+            activePayBillId = null;
+            // Re-fetch everything fresh (not from any cache) so the
+            // dashboard reflects the just-verified payment immediately.
             const me = await getCurrentUser();
             await loadPatientDashboard(me.data);
           } catch (err) {
-            alert("Payment failed: " + err.message);
+            alert(err.message || "Payment could not be verified. Please try again.");
           } finally {
             submitBtn.disabled = false;
+            submitBtn.textContent = "Confirm";
           }
           return;
         }

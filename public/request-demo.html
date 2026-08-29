@@ -316,11 +316,9 @@
           </div>
 
           <div class="form-group">
-            <label>If we can book you in, how would you like to pay?</label>
-            <select class="form-control" id="demoPayment">
-              <option value="Cash">Pay at the hospital</option>
-              <option value="Online">Pay online now (simulated)</option>
-            </select>
+            <p style="font-size: 13px; color: #64748b; margin: 0;">
+              If we're able to book you in with a doctor, the consultation fee will show up as <b>pending</b> on your patient dashboard — pay it there anytime via UPI/QR before your visit.
+            </p>
           </div>
 
           <button class="demo-btn" id="demoSubmitBtn">Request Demo</button>
@@ -340,7 +338,6 @@
           preferredDate: document.getElementById("demoDate").value || null,
           preferredTime: document.getElementById("demoTime").value || null,
           requirement: document.getElementById("demoRequirement").value.trim(),
-          paymentMethod: document.getElementById("demoPayment").value,
         };
 
         if (!fields.fullName || !fields.email || !fields.requirement) {
@@ -358,9 +355,9 @@
           const timeStr = d.preferredTime || "a time to be confirmed";
 
           if (d.doctor && d.bookedForPatient) {
-            const paymentLine = d.bill && d.bill.paymentStatus === "Paid"
-              ? `Payment of ₹${d.bill.amount} received online.`
-              : `₹${d.bill ? d.bill.amount : ""} due at the hospital during your visit.`;
+            const paymentLine = d.bill
+              ? `₹${d.bill.amount} is pending — pay it via UPI/QR from your patient dashboard before your visit.`
+              : "";
             alert(
               `You're matched with ${d.doctor.name} (${d.matchedDepartment}).\n\n` +
                 `Your appointment is booked for ${dateStr} at ${timeStr}.\n` +

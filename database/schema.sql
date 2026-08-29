@@ -114,6 +114,7 @@ CREATE TABLE billing (
     description      VARCHAR(255) NOT NULL,
     amount           DECIMAL(10,2) NOT NULL,
     payment_method   VARCHAR(50),
+    transaction_ref  VARCHAR(30) NULL,
     payment_status   ENUM('Pending','Paid','Failed') DEFAULT 'Pending',
     billing_date     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_bill_patient FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,

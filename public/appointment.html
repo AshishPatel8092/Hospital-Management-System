@@ -639,6 +639,39 @@
         margin: 8px 0 0;
       }
 
+      .utr-field {
+        margin: 18px auto 0;
+        max-width: 280px;
+        text-align: left;
+      }
+      .utr-field label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 6px;
+      }
+      .utr-field input {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .utr-field input:focus {
+        outline: none;
+        border-color: #005f78;
+      }
+      .utr-field .utr-error {
+        color: #dc2626;
+        font-size: 12.5px;
+        margin-top: 6px;
+        display: none;
+      }
+
       @media (max-width: 700px) {
         .checkout-grid {
           grid-template-columns: 1fr;
@@ -939,7 +972,13 @@
                       <button type="button" class="copy-btn" id="copyUpiIdBtn">Copy</button>
                     </div>
                     <a href="#" id="upiAppLink" class="upi-app-link">Pay via UPI App</a>
-                    <p class="pay-hint">Scan the QR code with any UPI app (Google Pay, PhonePe, Paytm, etc.) or tap "Pay via UPI App" on your phone, then confirm below once you've paid.</p>
+                    <p class="pay-hint">Scan the QR code with any UPI app (Google Pay, PhonePe, Paytm, etc.) or tap "Pay via UPI App" on your phone to pay.</p>
+                    <div class="utr-field">
+                      <label for="utrInput">UPI Transaction ID (UTR) <span style="color:#dc2626">*</span></label>
+                      <input type="text" id="utrInput" inputmode="numeric" maxlength="12" placeholder="e.g. 402812345678" autocomplete="off" />
+                      <div class="utr-error" id="utrError"></div>
+                    </div>
+                    <p class="pay-hint">After paying, open your UPI app's transaction history and enter the <b>12-digit transaction ID (UTR)</b> above — that's what confirms your payment.</p>
                   </div>
                 </div>
               </div>
@@ -1205,6 +1244,21 @@
             });
           });
         }
+
+        // Reset the UTR field each time the payment step is (re)entered,
+        // and only allow digits (a real UTR is numeric).
+        const utrInput = document.getElementById("utrInput");
+        if (utrInput) {
+          utrInput.value = "";
+          document.getElementById("utrError").style.display = "none";
+          if (!utrInput.dataset.wired) {
+            utrInput.dataset.wired = "true";
+            utrInput.addEventListener("input", () => {
+              utrInput.value = utrInput.value.replace(/\D/g, "").slice(0, 12);
+              document.getElementById("utrError").style.display = "none";
+            });
+          }
+        }
       }
 
       // Renders a QR code encoding a real UPI payment string (your UPI ID)
@@ -1334,9 +1388,27 @@
         window.scrollTo(0, 0);
       }
 
-      // Payment is UPI-only now - there's nothing to validate client-side
-      // before proceeding (no card/UPI-ID text fields left to check).
+      // Payment is UPI-only now - the one thing that DOES need validating
+      // is the UPI transaction ID (UTR), which proves a payment actually
+      // happened. Without it, this alerts clearly and blocks the booking -
+      // that's what stops "clicked Paid without paying".
       function validatePaymentMethodInputs() {
+        const utrInput = document.getElementById("utrInput");
+        const errorEl = document.getElementById("utrError");
+        const value = utrInput ? utrInput.value.trim() : "";
+
+        if (!/^[0-9]{12}$/.test(value)) {
+          const message = !value
+            ? "Payment not received. Please complete the payment via the QR code or UPI ID above, then enter the 12-digit UPI transaction ID (UTR) from your UPI app before confirming."
+            : "That doesn't look like a valid UTR — it should be exactly 12 digits, exactly as shown in your UPI app.";
+          if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.style.display = "block";
+          }
+          alert(message);
+          if (utrInput) utrInput.focus();
+          return false;
+        }
         return true;
       }
 
@@ -1356,8 +1428,9 @@
         }
 
         const confirmBtn = document.getElementById("confirmBtn");
+        const utrValue = document.getElementById("utrInput").value.trim();
         confirmBtn.disabled = true;
-        confirmBtn.textContent = "Processing payment…";
+        confirmBtn.textContent = "Verifying payment…";
 
         try {
           const result = await bookAppointment({
@@ -1367,6 +1440,7 @@
             visitType: "In-person",
             reason: null,
             paymentMethod: selectedPayment,
+            transactionRef: utrValue,
           });
 
           const bill = result.data.bill;
@@ -1382,7 +1456,7 @@
           );
           window.location.href = "patient.html";
         } catch (err) {
-          alert("Booking failed: " + err.message);
+          alert(err.message || "Booking failed. Please try again.");
           confirmBtn.disabled = false;
           confirmBtn.textContent = "I've Paid — Confirm Booking";
         }

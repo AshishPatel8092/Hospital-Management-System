@@ -1440,8 +1440,32 @@
           max-width: 460px;
           max-height: 88vh;
           overflow-y: auto;
+          position: relative;
         "
       >
+        <button
+          id="feedbackCloseBtn"
+          aria-label="Close"
+          style="
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #f1f5f5;
+            color: #444;
+            border-radius: 50%;
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          &times;
+        </button>
         <h3 style="margin: 0 0 4px">Tell us what you think</h3>
         <p style="font-size: 13px; color: #777; margin: 0 0 18px">
           10 quick questions, rate each 1 (poor) to 5 (excellent).

@@ -550,13 +550,21 @@
           >
         </div>
         <div class="field" id="forgot-code-field" style="display: none">
-          <label>Reset Code <span class="req">*</span></label>
+          <label>Reset Code (OTP) <span class="req">*</span></label>
           <input
             type="text"
             id="forgot-code"
             maxlength="6"
+            inputmode="numeric"
             placeholder="6-digit code"
           />
+          <span
+            class="err-msg"
+            id="forgot-resend"
+            style="display: block; color: #0f766e; cursor: pointer; text-decoration: underline"
+            onclick="resendCode()"
+            >Resend code</span
+          >
         </div>
         <div class="field" id="forgot-newpw-field" style="display: none">
           <label>New Password <span class="req">*</span></label>
@@ -601,6 +609,7 @@
 
       function openForgot() {
         forgotStep = "request";
+        clearInterval(resendCooldownTimer);
         document.getElementById("forgot-title").textContent = "Reset Password";
         document.getElementById("forgot-desc").textContent =
           "Enter your registered email and we'll send you a reset code.";
@@ -610,12 +619,60 @@
         document.getElementById("forgot-action-btn").textContent =
           "Send Reset Code";
         document.getElementById("forgot-err").style.display = "none";
+        document.getElementById("forgot-code").value = "";
+        document.getElementById("forgot-newpw").value = "";
         document.getElementById("forgot-modal").classList.add("open");
         document.body.style.overflow = "hidden";
       }
       function closeForgot() {
         document.getElementById("forgot-modal").classList.remove("open");
         document.body.style.overflow = "";
+      }
+
+      let resendCooldownTimer = null;
+
+      function startResendCooldown() {
+        const el = document.getElementById("forgot-resend");
+        let seconds = 30;
+        el.style.pointerEvents = "none";
+        el.style.color = "#999";
+        el.style.textDecoration = "none";
+        el.textContent = `Resend code in ${seconds}s`;
+        clearInterval(resendCooldownTimer);
+        resendCooldownTimer = setInterval(() => {
+          seconds -= 1;
+          if (seconds <= 0) {
+            clearInterval(resendCooldownTimer);
+            el.style.pointerEvents = "auto";
+            el.style.color = "#0f766e";
+            el.style.textDecoration = "underline";
+            el.textContent = "Resend code";
+          } else {
+            el.textContent = `Resend code in ${seconds}s`;
+          }
+        }, 1000);
+      }
+
+      async function resendCode() {
+        const email = document.getElementById("forgot-email").value.trim();
+        const errEl = document.getElementById("forgot-err");
+        try {
+          const result = await forgotPassword(email);
+          if (result.devResetCode) {
+            console.log(
+              "%c🔐 Casto Health Care — Password Reset OTP (resent)",
+              "font-size:14px;font-weight:bold;color:#0f766e;"
+            );
+            console.log(
+              `%cYour OTP for ${email} is: ${result.devResetCode}`,
+              "font-size:16px;font-weight:bold;color:#111;"
+            );
+          }
+          startResendCooldown();
+        } catch (err) {
+          errEl.textContent = err.message;
+          errEl.style.display = "block";
+        }
       }
 
       async function sendReset() {
@@ -632,12 +689,26 @@
           try {
             const result = await forgotPassword(email);
             forgotStep = "reset";
-            document.getElementById("forgot-desc").innerHTML = result.devNote
-              ? result.devNote +
-                "<br><b>Demo code: " +
-                result.devResetCode +
-                "</b>"
-              : "Enter the code we sent you, along with a new password.";
+
+            // No real email/SMS provider is configured for this project,
+            // so the OTP is logged to the browser console instead of
+            // being emailed - open DevTools (F12) to see it.
+            if (result.devResetCode) {
+              console.log(
+                "%c🔐 Casto Health Care — Password Reset OTP",
+                "font-size:14px;font-weight:bold;color:#0f766e;"
+              );
+              console.log(
+                `%cYour OTP for ${email} is: ${result.devResetCode}`,
+                "font-size:16px;font-weight:bold;color:#111;"
+              );
+              console.log("%cThis code expires in 10 minutes.", "color:#666;");
+            }
+
+            document.getElementById("forgot-desc").textContent =
+              "We've sent a 6-digit code to " +
+              email +
+              ". Enter it below along with your new password. (No email service is configured for this demo — check your browser console, press F12, for the code.)";
             document.getElementById("forgot-email-field").style.display =
               "none";
             document.getElementById("forgot-code-field").style.display =
@@ -646,6 +717,7 @@
               "block";
             document.getElementById("forgot-action-btn").textContent =
               "Reset Password";
+            startResendCooldown();
           } catch (err) {
             errEl.textContent = err.message;
             errEl.style.display = "block";

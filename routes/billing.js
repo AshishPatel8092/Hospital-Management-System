@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../db');
 const { requireLogin } = require('../middleware/auth');
+const { isValidTransactionRef } = require('../billingHelper');
 
 const router = express.Router();
 router.use(requireLogin);
@@ -12,6 +13,9 @@ const BASE_SELECT = `
 // GET /api/billing            -> ADMIN: all. PATIENT: own only. DOCTOR/NURSE: forbidden.
 // GET /api/billing?id=5       -> single bill, same ownership rule
 router.get('/', async (req, res) => {
+  // Billing data changes the moment a payment is verified, so this must
+  // never be served from a stale browser/proxy cache.
+  res.set('Cache-Control', 'no-store');
   const { role, linkedId } = req.session.user;
   if (role !== 'ADMIN' && role !== 'PATIENT') {
     return res.status(403).json({ success: false, message: 'Not authorized to view billing records.' });
@@ -75,7 +79,7 @@ router.post('/', async (req, res) => {
 //   that aren't theirs.
 router.put('/', async (req, res) => {
   const { role, linkedId } = req.session.user;
-  const { paymentStatus, paymentMethod } = req.body;
+  const { paymentStatus, paymentMethod, transactionRef } = req.body;
 
   if (!req.query.id) return res.status(400).json({ success: false, message: 'id query parameter is required.' });
   if (!paymentStatus) return res.status(400).json({ success: false, message: 'paymentStatus is required.' });
@@ -94,16 +98,48 @@ router.put('/', async (req, res) => {
       if (paymentStatus !== 'Paid') {
         return res.status(403).json({ success: false, message: 'Patients can only mark a bill as paid.' });
       }
-      const [bills] = await pool.execute('SELECT patient_id FROM billing WHERE bill_id = ?', [req.query.id]);
+
+      // Real payment verification: a bill only ever moves to Paid if a
+      // validly-formatted UPI transaction ID (UTR) is supplied. This is
+      // the exact check that turns "click Paid without paying" into a
+      // clear rejection instead of a silent, trust-based success.
+      if (!isValidTransactionRef(transactionRef)) {
+        return res.status(402).json({
+          success: false,
+          message: 'Payment not received. Please complete the payment via the QR code or UPI ID first, then enter the 12-digit UPI transaction ID (UTR) shown in your UPI app.',
+        });
+      }
+
+      const [bills] = await pool.execute('SELECT patient_id, payment_status FROM billing WHERE bill_id = ?', [req.query.id]);
       if (!bills[0]) return res.status(404).json({ success: false, message: 'Bill not found.' });
       if (bills[0].patient_id !== linkedId) {
         return res.status(403).json({ success: false, message: 'Not your bill.' });
       }
-      await pool.execute(
-        'UPDATE billing SET payment_status = ?, payment_method = ? WHERE bill_id = ?',
-        ['Paid', paymentMethod || 'Online', req.query.id]
+      if (bills[0].payment_status === 'Paid') {
+        return res.status(409).json({ success: false, message: 'This bill has already been paid.' });
+      }
+
+      // Guard against the exact same UTR being reused across bills - a
+      // real UPI transaction ID can only ever pay for one thing.
+      const [dupes] = await pool.execute(
+        'SELECT bill_id FROM billing WHERE transaction_ref = ? AND bill_id != ?',
+        [transactionRef.trim(), req.query.id]
       );
-      return res.json({ success: true, message: 'Payment successful.' });
+      if (dupes.length > 0) {
+        return res.status(409).json({
+          success: false,
+          message: 'This UPI transaction ID has already been used for another bill. Please double-check the reference number from your UPI app.',
+        });
+      }
+
+      const [result] = await pool.execute(
+        'UPDATE billing SET payment_status = ?, payment_method = ?, transaction_ref = ? WHERE bill_id = ? AND payment_status != ?',
+        ['Paid', 'UPI', transactionRef.trim(), req.query.id, 'Paid']
+      );
+      if (result.affectedRows === 0) {
+        return res.status(409).json({ success: false, message: 'This bill has already been paid.' });
+      }
+      return res.json({ success: true, message: 'Payment verified and received.' });
     }
 
     return res.status(403).json({ success: false, message: 'Only admin staff can update bills.' });

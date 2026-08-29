@@ -54,7 +54,7 @@ router.get('/', async (req, res) => {
 // Body: { doctorId, appointmentDate, slotTime, visitType, reason, patientId (NURSE/ADMIN only) }
 router.post('/', async (req, res) => {
   const { role, userId, linkedId } = req.session.user;
-  const { doctorId, appointmentDate, slotTime, visitType, reason, paymentMethod } = req.body;
+  const { doctorId, appointmentDate, slotTime, visitType, reason, paymentMethod, transactionRef } = req.body;
 
   if (!doctorId || !appointmentDate) {
     return res.status(400).json({ success: false, message: 'doctorId and appointmentDate are required.' });
@@ -94,7 +94,19 @@ router.post('/', async (req, res) => {
     );
     const appointmentId = result.insertId;
 
-    const bill = await createAppointmentBill({ patientId, doctorId, appointmentId, paymentMethod });
+    let bill;
+    try {
+      bill = await createAppointmentBill({ patientId, doctorId, appointmentId, paymentMethod, transactionRef });
+    } catch (billErr) {
+      if (billErr.status === 400) {
+        // Payment wasn't verified - roll back the appointment we just
+        // created so a failed payment never leaves a "confirmed" booking
+        // behind with nothing actually paid for it.
+        await pool.execute('DELETE FROM appointments WHERE appointment_id = ?', [appointmentId]);
+        return res.status(400).json({ success: false, message: billErr.message });
+      }
+      throw billErr;
+    }
 
     res.status(201).json({
       success: true,
