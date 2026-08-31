@@ -95,6 +95,9 @@ function addPrescription(fields) {
 function submitFeedback(fields) {
   return apiRequest('/feedback', 'POST', fields);
 }
+function submitInsuranceQuery(fields) {
+  return apiRequest('/insurance-queries', 'POST', fields);
+}
 
 // ----- Shared client-side validation helpers -----
 // These mirror the server-side checks so the person gets instant feedback,

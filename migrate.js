@@ -37,6 +37,7 @@ const MIGRATION_FILES = [
   'migration_2026_08_v4.sql',
   'migration_2026_08_feedback.sql',
   'migration_2026_08_v5_payment_verification.sql',
+  'migration_2026_08_v6_insurance.sql',
 ];
 
 function stripDelimiterSyntax(sql) {
