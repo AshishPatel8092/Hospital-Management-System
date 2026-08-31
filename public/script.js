@@ -1280,6 +1280,41 @@ const EMERGENCY_PATTERNS = [
       "Keep the person warm and still until help arrives.",
     ],
   },
+  {
+    keywords: [
+      "appendix",
+      "appendicitis",
+      "lower right abdomen",
+      "right side stomach pain and fever",
+      "pain moved to lower right",
+    ],
+    title: "This could be appendicitis - a surgical emergency",
+    steps: [
+      "Call emergency services (112) or go to the nearest emergency room now - this isn't something to wait out at home.",
+      "Don't eat, drink, take a painkiller, laxative, or antacid - it can hide symptoms and complicate diagnosis.",
+      "Note when the pain started and whether it has moved from around the belly button to the lower right side of the abdomen.",
+      "Mention to the doctor if the pain gets worse when you cough, walk, or press on that area, or if you also have fever or vomiting.",
+      "This usually needs same-day evaluation and often surgery - home remedies or OTC medicine won't treat it.",
+    ],
+  },
+  {
+    keywords: [
+      "blood in vomit",
+      "vomiting blood",
+      "black stool",
+      "blood in stool",
+      "tarry stool",
+      "coughing up blood",
+    ],
+    title: "This could be internal bleeding - seek emergency care now",
+    steps: [
+      "Call emergency services (112) or go to the nearest emergency room immediately.",
+      "Don't eat or drink anything until you've been seen.",
+      "Lie down and stay as still as possible.",
+      "If you feel faint, dizzy, or notice your heart racing, that can mean significant blood loss - tell responders right away.",
+      "Bring a list of any medicines you take, especially blood thinners, aspirin, or NSAIDs like ibuprofen, to show the doctor.",
+    ],
+  },
 ];
 
 const CRISIS_KEYWORDS = [
@@ -1290,6 +1325,304 @@ const CRISIS_KEYWORDS = [
   "self harm",
   "hurt myself",
 ];
+
+// ---------------------------------------------------------------------
+// Rule-based symptom -> condition matching, ordered most-specific-first.
+// Each profile only fires on a distinct combination of symptom keywords,
+// so different descriptions of "stomach pain" land on different, more
+// useful answers instead of one generic result. Medicines are named the
+// way you'd actually find them on an Indian pharmacy shelf or on
+// 1mg/PharmEasy/Netmeds - brand name first, with the generic in
+// brackets. Anything that legally needs a doctor's prescription in
+// India (antibiotics, prescription-strength eye drops, etc.) is called
+// out as such instead of a self-medicating dose.
+// ---------------------------------------------------------------------
+const DISEASE_PROFILES = [
+  // ---------------- Respiratory ----------------
+  {
+    name: "Acute Bronchospasm / Asthma Flare-up",
+    match: (l) =>
+      l.includes("wheeze") ||
+      l.includes("wheezing") ||
+      l.includes("whistling") ||
+      l.includes("chest tight") ||
+      (l.includes("breath") && (l.includes("short") || l.includes("difficult") || l.includes("hard to"))),
+    doctor: "Pulmonologist",
+    urgency: "Moderate - see a doctor within 2-3 days, sooner if it's getting worse",
+    medicines: [
+      { name: "Asthalin Inhaler (Salbutamol/Albuterol) - Cipla", use: "2 puffs via inhaler when breathless, repeat after 4-6 hrs if needed" },
+      { name: "Foracort / Duolin (if already prescribed before)", use: "Only continue if a doctor has prescribed this to you previously" },
+    ],
+    eat: ["Warm fluids like turmeric milk or ginger tea", "Light, easily digestible meals", "Foods rich in Vitamin C (amla, citrus fruits)"],
+    avoid: ["Cold drinks and ice cream", "Dust, smoke, strong perfumes, and other known triggers", "Overexertion until breathing settles"],
+    note: "If lips or fingertips turn bluish, or the inhaler isn't helping, treat this as an emergency and go to a hospital immediately.",
+  },
+  {
+    name: "Migraine with Aura",
+    match: (l) =>
+      l.includes("headache") && (l.includes("light") || l.includes("aura") || l.includes("nausea") || l.includes("vomit") || l.includes("throb")),
+    doctor: "Neurologist",
+    urgency: "Routine - book within a week, sooner if this is your worst-ever headache",
+    medicines: [
+      { name: "Suminat (Sumatriptan) 50mg", use: "One tablet at the very first sign of aura/headache - prescription medicine, needs a doctor to confirm migraine first" },
+      { name: "Naproxen (Naprosyn) or Ibuprofen (Combiflam)", use: "For milder attacks, as directed on the pack" },
+    ],
+    eat: ["Stay hydrated with plain water or ORS", "Small, regular meals - don't skip meals", "Foods rich in magnesium like bananas and nuts"],
+    avoid: ["Bright screens/lights and loud noise during an attack", "Caffeine withdrawal or excess caffeine", "Common triggers: chocolate, aged cheese, alcohol, poor sleep"],
+    note: "A sudden 'worst headache of your life', or a headache with fever and neck stiffness, needs emergency evaluation - don't self-treat that.",
+  },
+  {
+    name: "Tension-type Headache",
+    match: (l) => l.includes("headache") || l.includes("head pain") || l.includes("head ache"),
+    doctor: "General Physician",
+    urgency: "Routine - usually settles with rest and OTC medicine",
+    medicines: [
+      { name: "Dolo 650 / Crocin (Paracetamol 650mg)", use: "One tablet every 6-8 hours as needed, max 3-4 tablets/day" },
+      { name: "Saridon (if Dolo doesn't help)", use: "As per pack instructions, don't combine with other painkillers" },
+    ],
+    eat: ["Plenty of water - dehydration is a common trigger", "Regular meals, don't skip breakfast", "A short nap or good night's sleep"],
+    avoid: ["Excess screen time without breaks", "Skipping meals or poor sleep", "Overusing painkillers more than 2-3 days a week"],
+  },
+  {
+    name: "Viral Fever / Influenza",
+    match: (l) => l.includes("fever") && (l.includes("body ache") || l.includes("cough") || l.includes("chills") || l.includes("fatigue") || l.includes("weak")),
+    doctor: "General Physician",
+    urgency: "Routine home care, see a doctor if it doesn't improve in 3 days",
+    medicines: [
+      { name: "Dolo 650 / Crocin (Paracetamol)", use: "500-650mg every 6-8 hours for fever/body ache" },
+      { name: "Electral / ORS", use: "1 sachet in water through the day to stay hydrated" },
+    ],
+    eat: ["Warm soups, khichdi, and easily digestible food", "Plenty of fluids - water, coconut water, ORS", "Rest as much as possible"],
+    avoid: ["Cold food/drinks", "Skipping fluids", "Going to work/school while contagious"],
+    note: "See a doctor promptly if fever crosses 103°F, lasts beyond 3 days, or you have breathing difficulty, chest pain, or a rash.",
+  },
+  {
+    name: "Common Cold",
+    match: (l) => (l.includes("runny nose") || l.includes("blocked nose") || l.includes("sneez") || l.includes("stuffy nose")) && !l.includes("fever"),
+    doctor: "General Physician (usually self-care)",
+    urgency: "Mild - typically clears in 5-7 days on its own",
+    medicines: [
+      { name: "Cetirizine (Cetzine / Alerid) 10mg", use: "One tablet at night for runny nose/sneezing" },
+      { name: "Vicks Vaporub / Vicks Inhaler", use: "Apply on chest/under nose, or steam inhalation twice a day" },
+    ],
+    eat: ["Warm fluids - ginger tea, soup, turmeric milk", "Vitamin C rich fruits", "Honey with warm water (not for infants)"],
+    avoid: ["Cold drinks, ice cream, and AC drafts directly on you", "Smoking or smoky environments"],
+  },
+  {
+    name: "Sore Throat / Tonsillitis",
+    match: (l) => (l.includes("sore throat") || l.includes("throat pain") || l.includes("difficulty swallowing") || l.includes("scratchy throat")),
+    doctor: "ENT Specialist / General Physician",
+    urgency: "Routine, see a doctor if white patches/pus or high fever appear",
+    medicines: [
+      { name: "Strepsils / Vicks lozenges", use: "Suck one lozenge every 3-4 hours for relief" },
+      { name: "Warm salt-water gargle", use: "3-4 times a day - genuinely effective, not just a home remedy myth" },
+      { name: "Paracetamol (Dolo 650)", use: "For pain/fever, as needed" },
+    ],
+    eat: ["Warm soups and liquids", "Honey in warm water"],
+    avoid: ["Cold or spicy food", "Smoking, shouting, or straining the voice"],
+    note: "White/yellow patches on the tonsils or a fever over 101°F can mean a bacterial infection needing prescription antibiotics (like Augmentin) - that requires a doctor's visit, not self-medication.",
+  },
+  {
+    name: "Sinusitis",
+    match: (l) => l.includes("sinus") || (l.includes("facial pain") || l.includes("face pain")) || (l.includes("nose") && (l.includes("thick") || l.includes("yellow") || l.includes("green"))),
+    doctor: "ENT Specialist",
+    urgency: "Routine - see a doctor if it lasts beyond 10 days",
+    medicines: [
+      { name: "Sinarest / Cheston Cold", use: "As per pack directions for congestion and facial pain" },
+      { name: "Otrivin nasal drops", use: "Only for 3-5 days max - longer use can worsen congestion (rebound effect)" },
+    ],
+    eat: ["Steam inhalation with a few drops of eucalyptus oil, twice daily", "Warm fluids"],
+    avoid: ["Using decongestant nasal drops for more than 5 days straight", "Cold, dusty environments"],
+  },
+
+  // ---------------- Stomach & Digestive (distinct, not one bucket) ----------------
+  {
+    name: "Irritable Bowel Syndrome (IBS)",
+    match: (l) => l.includes("ibs") || (l.includes("stress") && (l.includes("stomach") || l.includes("bowel") || l.includes("gut"))),
+    doctor: "Gastroenterologist",
+    urgency: "Routine - a proper diagnosis needs a doctor visit, symptoms are manageable",
+    medicines: [
+      { name: "Meftal Spas (Mefenamic acid + Dicyclomine)", use: "For cramping pain, as directed - don't use long-term without a doctor's advice" },
+      { name: "Probiotics (Sporlac / VSL#3)", use: "Daily, can help regulate bowel patterns over a few weeks" },
+    ],
+    eat: ["A food diary to identify your personal trigger foods", "Regular meal timings", "Adequate water and gentle physical activity"],
+    avoid: ["Caffeine, alcohol, and very spicy/fried food", "Sudden large meals", "High stress without any outlet - this genuinely worsens IBS"],
+  },
+  {
+    name: "Food Poisoning / Acute Gastroenteritis",
+    match: (l) =>
+      l.includes("food poisoning") ||
+      l.includes("street food") ||
+      l.includes("outside food") ||
+      (l.includes("junk food") && (l.includes("vomit") || l.includes("stomach") || l.includes("nause"))) ||
+      l.includes("loose motion") ||
+      l.includes("diarrhea") ||
+      l.includes("diarrhoea") ||
+      l.includes("vomit") ||
+      l.includes("throwing up"),
+    doctor: "Gastroenterologist / General Physician",
+    urgency: "Moderate - most settle in 24-48 hrs with home care, but dehydration can escalate fast",
+    medicines: [
+      { name: "Electral / ORS-L", use: "Sip through the day to replace lost fluids - the single most important thing to do" },
+      { name: "Domstal (Domperidone 10mg)", use: "For nausea/vomiting, before meals as directed" },
+      { name: "Sporlac / Enterogermina (probiotic)", use: "Helps restore gut bacteria after diarrhea" },
+      { name: "Eldoperm (Loperamide)", use: "Only for diarrhea WITHOUT fever or blood in stool - skip this if either is present" },
+    ],
+    eat: ["BRAT diet: banana, rice (rice water/kanji), applesauce, toast", "Buttermilk (chaas) with a pinch of salt and roasted cumin", "Small, frequent sips of ORS/water"],
+    avoid: ["Dairy (except curd/buttermilk), oily and spicy food", "Outside/street food until fully recovered", "Anti-diarrheal medicine if there's fever or blood in stool"],
+    note: "See a doctor the same day if: fever above 101°F, blood in vomit/stool, signs of dehydration (very little urine, dizziness, dry mouth), or symptoms lasting beyond 2 days.",
+  },
+  {
+    name: "Bloating / Gas / Indigestion",
+    match: (l) =>
+      l.includes("bloat") ||
+      l.includes("balloon") ||
+      /\bgas\b/.test(l) ||
+      l.includes("distend") ||
+      l.includes("belch") ||
+      l.includes("flatulence") ||
+      l.includes("full feeling") ||
+      l.includes("indigestion"),
+    doctor: "General Physician (Gastroenterologist if it keeps recurring)",
+    urgency: "Mild - usually settles within hours with an antacid",
+    medicines: [
+      { name: "Eno / Digene", use: "One sachet/2 tablets in water after meals for quick relief" },
+      { name: "Pudin Hara (peppermint oil capsules)", use: "1-2 capsules after meals for gas and bloating" },
+      { name: "Cyclopam (if crampy pain is present)", use: "One tablet for spasms, as directed" },
+    ],
+    eat: ["Ajwain (carom seeds) with warm water - a genuinely effective home remedy", "Smaller, more frequent meals eaten slowly", "Curd/buttermilk with meals"],
+    avoid: ["Carbonated drinks and chewing gum (both add swallowed air)", "Beans, cabbage, fried and heavy food in large portions", "Eating too fast or lying down right after meals"],
+  },
+  {
+    name: "Acidity / Heartburn (GERD)",
+    match: (l) => l.includes("acid") || l.includes("heartburn") || l.includes("sour") || (l.includes("burning") && (l.includes("chest") || l.includes("stomach") || l.includes("throat"))),
+    doctor: "Gastroenterologist (if it happens more than twice a week)",
+    urgency: "Mild to moderate - manageable with medicine and diet changes",
+    medicines: [
+      { name: "Pan-D / Pantocid (Pantoprazole 40mg)", use: "One tablet in the morning, empty stomach, for 5-7 days" },
+      { name: "Gelusil / Digene antacid gel", use: "1-2 tsp after meals and at bedtime for quick relief" },
+    ],
+    eat: ["Smaller meals, eaten slowly", "Cold milk (not for everyone, but helps many)", "Banana, oatmeal, and non-citrus fruits"],
+    avoid: ["Spicy, oily, and fried food", "Tea/coffee on an empty stomach", "Lying down within 2 hours of eating", "Late-night heavy meals"],
+    note: "Burning pain on an empty stomach that improves after eating, or black/tarry stools, can mean an ulcer - that needs a doctor's evaluation, not just antacids.",
+  },
+  {
+    name: "Constipation",
+    match: (l) => l.includes("constipat") || l.includes("hard stool") || l.includes("can't pass stool") || l.includes("straining") || l.includes("not passing stool"),
+    doctor: "General Physician",
+    urgency: "Mild - usually improves with diet + a mild laxative in a day or two",
+    medicines: [
+      { name: "Isabgol (psyllium husk)", use: "1-2 tsp in a glass of water or milk at night" },
+      { name: "Cremaffin / Duphalac (lactulose) syrup", use: "As per pack dosage, if Isabgol alone isn't enough" },
+    ],
+    eat: ["More fibre - fruits (papaya, guava), vegetables, whole grains", "Plenty of water through the day", "Warm water first thing in the morning"],
+    avoid: ["Excess dairy/cheese and processed food", "Sitting for long hours without any movement/walk"],
+    note: "If constipation comes with blood in stool, severe pain, or unexplained weight loss, see a doctor rather than self-treating.",
+  },
+  {
+    name: "General Stomach Pain",
+    match: (l) => (l.includes("stomach") || l.includes("abdomen") || l.includes("abdominal") || l.includes("belly") || l.includes("tummy")) && (l.includes("pain") || l.includes("ache") || l.includes("hurt") || l.includes("cramp")),
+    doctor: "General Physician",
+    urgency: "Mild - most simple stomach pain is indigestion or gas and settles within a day",
+    medicines: [
+      { name: "Eno / Digene", use: "For pain linked to gas or a heavy meal" },
+      { name: "Cyclopam", use: "For crampy pain, one tablet as directed" },
+    ],
+    eat: ["Light, warm, home-cooked food", "Ajwain water or plain warm water"],
+    avoid: ["Oily, spicy, or heavy food until it settles", "Self-medicating repeatedly without figuring out the cause"],
+    note: "This is a general answer because \"stomach pain\" alone can mean a lot of things. For a sharper match, tell us more: is there vomiting, fever, diarrhea, bloating, or does it come after eating a specific kind of food? Each of those points to a different, more specific cause.",
+  },
+
+  // ---------------- Musculoskeletal ----------------
+  {
+    name: "Muscular Back Pain / Strain",
+    match: (l) => l.includes("back pain") || l.includes("backache") || (l.includes("muscle") && l.includes("pain")) || l.includes("sprain") || l.includes("strain"),
+    doctor: "Orthopedist (if it persists beyond a week)",
+    urgency: "Mild - usually improves with rest and topical relief in a few days",
+    medicines: [
+      { name: "Combiflam (Ibuprofen + Paracetamol)", use: "One tablet after food, twice a day if needed, for 2-3 days max" },
+      { name: "Volini / Moov gel", use: "Apply to the affected area 2-3 times a day" },
+    ],
+    eat: ["Balanced meals with enough protein for muscle repair", "Stay hydrated"],
+    avoid: ["Heavy lifting or sudden twisting movements", "Prolonged bed rest - gentle movement usually helps more"],
+    note: "Back pain with numbness, tingling down a leg, or loss of bladder/bowel control needs urgent medical attention.",
+  },
+
+  // ---------------- Skin ----------------
+  {
+    name: "Fungal Skin Infection (Ringworm)",
+    match: (l) => l.includes("ringworm") || l.includes("fungal") || (l.includes("itchy") && (l.includes("patch") || l.includes("ring") || l.includes("skin"))),
+    doctor: "Dermatologist",
+    urgency: "Mild - usually clears in 2-4 weeks with a topical antifungal",
+    medicines: [
+      { name: "Candid Cream (Clotrimazole) / Cutimol", use: "Apply twice daily on and just around the patch for 2-4 weeks - continue for a week after it looks gone" },
+    ],
+    eat: ["No specific diet, but keeping the area clean and dry helps a lot"],
+    avoid: ["Sharing towels/clothes", "Tight, non-breathable clothing", "Stopping the cream as soon as it looks better - restart properly if it recurs"],
+    note: "See a dermatologist if it's spreading, not improving after 2 weeks of cream, or keeps coming back - it may need an oral antifungal (prescription only).",
+  },
+  {
+    name: "Allergic Rash / Hives",
+    match: (l) => l.includes("rash") || l.includes("hives") || (l.includes("itchy") && (l.includes("bump") || l.includes("skin") || l.includes("allerg"))),
+    doctor: "Dermatologist / Allergist (if recurring)",
+    urgency: "Mild, but seek urgent care if breathing becomes difficult or the face/throat swells",
+    medicines: [
+      { name: "Cetirizine (Cetzine/Alerid) or Levocetirizine (Xyzal)", use: "One tablet at night" },
+      { name: "Calamine lotion", use: "Apply to itchy areas for relief" },
+    ],
+    eat: ["No specific diet, but note down what you ate/touched before it started"],
+    avoid: ["The suspected trigger (food, soap, detergent, jewellery, etc.)", "Scratching, which can break skin and cause infection"],
+    note: "If the rash comes with facial swelling, throat tightness, or difficulty breathing, that's a medical emergency - go to the ER immediately.",
+  },
+
+  // ---------------- Other common single-visit conditions ----------------
+  {
+    name: "Urinary Tract Infection (UTI)",
+    match: (l) => l.includes("uti") || (l.includes("urin") && (l.includes("burn") || l.includes("frequent") || l.includes("pain"))),
+    doctor: "General Physician / Urologist / Gynecologist",
+    urgency: "See a doctor within a day or two - this needs a prescription antibiotic",
+    medicines: [
+      { name: "Prescription antibiotic (e.g., Nitrofurantoin or Ciprofloxacin)", use: "Only after a doctor confirms UTI - don't self-medicate with antibiotics" },
+      { name: "Cranberry juice / plenty of water", use: "Supportive care alongside treatment, not a replacement for it" },
+    ],
+    eat: ["Plenty of water through the day", "Cranberry juice (unsweetened, if available)"],
+    avoid: ["Holding urine for long periods", "Caffeine and alcohol until it clears"],
+    note: "UTIs usually clear up completely after one short course of the right antibiotic from a doctor - this is exactly the kind of thing worth a single quick visit rather than guessing at home.",
+  },
+  {
+    name: "Conjunctivitis (Pink Eye)",
+    match: (l) => l.includes("conjunctivitis") || l.includes("pink eye") || (l.includes("eye") && (l.includes("red") || l.includes("itchy") || l.includes("discharge"))),
+    doctor: "Ophthalmologist",
+    urgency: "See a doctor within a day or two - it's contagious and eye drops need a prescription",
+    medicines: [
+      { name: "Moxicip / Moxifloxacin eye drops", use: "Prescription only - a doctor needs to confirm it's bacterial, not viral or allergic, first" },
+      { name: "Cold compress", use: "Apply a clean, cold cloth over closed eyes for comfort" },
+    ],
+    eat: ["No specific diet"],
+    avoid: ["Touching/rubbing the eyes", "Sharing towels, pillows, or eye makeup", "Wearing contact lenses until it clears"],
+  },
+  {
+    name: "Toothache / Dental Pain",
+    match: (l) => l.includes("tooth") || l.includes("teeth pain") || l.includes("gum pain") || l.includes("gum ache"),
+    doctor: "Dentist",
+    urgency: "See a dentist within a couple of days - usually resolved in a single visit",
+    medicines: [
+      { name: "Combiflam (Ibuprofen + Paracetamol)", use: "One tablet after food for pain relief until you see a dentist" },
+      { name: "Clove oil", use: "Dab a little on the painful tooth/gum for temporary relief - a genuinely useful home remedy" },
+    ],
+    eat: ["Soft, lukewarm food, avoiding the painful side"],
+    avoid: ["Very hot, cold, or sugary food/drinks", "Ignoring it - untreated tooth pain rarely resolves on its own"],
+    note: "Facial swelling along with tooth pain, or fever, means the infection may be spreading - see a dentist urgently, don't wait.",
+  },
+];
+
+function matchDiseaseProfile(input) {
+  const l = input.toLowerCase();
+  for (const profile of DISEASE_PROFILES) {
+    if (profile.match(l)) return profile;
+  }
+  return null;
+}
 
 function checkForEmergency(input) {
   const lower = input.toLowerCase();
@@ -1367,62 +1700,73 @@ function runAiDiagnosis() {
         `;
 
   setTimeout(() => {
-    let diagnosis = "Acute Bronchospasm / Asthma Exacerbation";
-    let medName = "Albuterol HFA Inhaler";
-    let dosage = "2 puffs every 4-6 hours as needed";
-    let doctor = "Pulmonologist";
-    let urgency = "Moderate - Prompt Evaluation within 3 days";
+    const profile = matchDiseaseProfile(input);
 
-    const lower = input.toLowerCase();
-    if (
-      lower.includes("headache") ||
-      lower.includes("nausea") ||
-      lower.includes("light")
-    ) {
-      diagnosis = "Migraine with Aura / Tension Headache";
-      medName = "Sumatriptan (Imitrex) & Naproxen";
-      dosage = "50mg tablet at onset of aura";
-      doctor = "Neurologist";
-      urgency = "Routine / Urgent Neurology Consult";
-    } else if (lower.includes("cough") || lower.includes("fever")) {
-      diagnosis = "Acute Viral Upper Respiratory Infection / Influenza";
-      medName = "Acetaminophen (Tylenol) & Cough Syrup";
-      dosage = "500mg every 6 hours as needed for fever";
-      doctor = "Primary Care Physician / Urgent Care";
-      urgency = "Routine Home Care & Hydration";
+    if (!profile) {
+      // Genuinely unmatched input - be honest about that instead of
+      // guessing a random condition (the old version always fell back
+      // to "Asthma" for anything it didn't recognize, which was
+      // actively misleading).
+      resultBox.innerHTML = `
+        <div class="ai-result-card">
+          <span class="ai-badge" style="background: #64748b;">Couldn't confidently match this</span>
+          <h3>We need a bit more detail</h3>
+          <p>We couldn't match that description to something specific yet. Try adding details like: where exactly it hurts, since when, whether there's fever/vomiting/rash, and anything that makes it better or worse.</p>
+          <div class="ai-section-box">
+            <h4>🩺 In the meantime</h4>
+            <p>For anything that isn't going away or is worrying you, a <strong>General Physician</strong> visit is always a safe starting point - they can point you to a specialist if needed.</p>
+          </div>
+          <p style="font-size: 12px; color: #888;">This is a simple keyword-matching demo tool for this project, not a real medical AI - it's not a diagnosis. Please see a doctor for anything you're actually concerned about.</p>
+          <button class="ai-book-doctor-btn" onclick="alert('Consultation request sent to General Physician!')">Book Consultation</button>
+        </div>
+      `;
+      return;
     }
+
+    const medicinesHtml = profile.medicines
+      .map((m) => `<p style="margin-bottom: 8px;"><strong>${m.name}</strong><br>${m.use}</p>`)
+      .join("");
+    const eatHtml = profile.eat.map((item) => `<li>${item}</li>`).join("");
+    const avoidHtml = profile.avoid.map((item) => `<li>${item}</li>`).join("");
+    const noteHtml = profile.note
+      ? `<div class="ai-section-box" style="border-left-color: #d97706; background: #fffbeb;">
+           <h4 style="color: #b45309;">⚠️ When to Actually See a Doctor</h4>
+           <p>${profile.note}</p>
+         </div>`
+      : "";
 
     resultBox.innerHTML = `
             <div class="ai-result-card">
               <span class="ai-badge">Possible match (not a diagnosis)</span>
-              <h3>${diagnosis}</h3>
-              <p class="ai-urgency"><strong>Urgency:</strong> ${urgency}</p>
-              
+              <h3>${profile.name}</h3>
+              <p class="ai-urgency"><strong>Urgency:</strong> ${profile.urgency}</p>
+
               <div class="ai-section-box">
-                <h4>💊 Medicine Sometimes Used For This</h4>
-                <p><strong>${medName}</strong><br>Typical use: ${dosage} - confirm with a doctor or pharmacist before taking anything.</p>
+                <h4>💊 Medicine Sometimes Used For This (India)</h4>
+                ${medicinesHtml}
+                <p style="font-size: 12px; color: #888; margin-top: 6px;">Available at any Indian pharmacy or on 1mg/PharmEasy/Netmeds - confirm with a doctor or pharmacist before taking anything, especially if you're on other medication or pregnant.</p>
               </div>
 
               <div class="ai-section-box">
                 <h4>🩺 Recommended Doctor Specialty</h4>
-                <p><strong>${doctor}</strong><br>Recommended to book a consultation for physical evaluation.</p>
+                <p><strong>${profile.doctor}</strong><br>Recommended to book a consultation for a proper evaluation.</p>
               </div>
 
               <div class="ai-section-box" style="border-left-color: #16a34a; background: #f0fdf4;">
-                <h4 style="color: #16a34a;">🥗 What to Eat & Do (Precautions)</h4>
-                <p><strong>Do:</strong> Stay well-hydrated with warm fluids, rest in a humidified room, and eat light nutritious broths or fruits.</p>
-                <p><strong>Eat:</strong> Ginger tea, honey, leafy greens, and Vitamin C-rich foods.</p>
+                <h4 style="color: #16a34a;">🥗 What to Eat & Do</h4>
+                <ul style="margin: 6px 0 0; padding-left: 20px; line-height: 1.7;">${eatHtml}</ul>
               </div>
 
               <div class="ai-section-box" style="border-left-color: #dc2626; background: #fef2f2;">
                 <h4 style="color: #dc2626;">🚫 What NOT to Do & Avoid</h4>
-                <p><strong>Avoid:</strong> Cold beverages, processed sugars, dairy if congested, and heavy strenuous physical exertion.</p>
-                <p><strong>Don't:</strong> Self-medicate with high-dose painkillers without checking with your physician.</p>
+                <ul style="margin: 6px 0 0; padding-left: 20px; line-height: 1.7;">${avoidHtml}</ul>
               </div>
+
+              ${noteHtml}
 
               <p style="font-size: 12px; color: #888;">This is a simple keyword-matching demo tool for this project, not a real medical AI - it's not a diagnosis. Please see a doctor for anything you're actually concerned about.</p>
 
-              <button class="ai-book-doctor-btn" onclick="alert('Consultation request sent to ${doctor}!')">Book Consultation</button>
+              <button class="ai-book-doctor-btn" onclick="alert('Consultation request sent to ${profile.doctor}!')">Book Consultation</button>
             </div>
           `;
   }, 700);
