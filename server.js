@@ -12,7 +12,7 @@ process.on('uncaughtException', (err) => {
 });
 
 const app = express();
-app.set('trust proxy', 1); // Railway (and most PaaS hosts) sit behind a reverse proxy
+app.set('trust proxy', 1); // Render, Railway (and most PaaS hosts) sit behind a reverse proxy
 
 app.use(express.json());
 

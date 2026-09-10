@@ -1,8 +1,9 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
-// DB_SSL=true enables SSL - needed for some managed MySQL hosts (Railway's
-// included) that offer TLS with a self-signed certificate. rejectUnauthorized
+// DB_SSL=true enables SSL - needed for most managed MySQL hosts (Aiven,
+// Railway's plugin, PlanetScale, TiDB Cloud) that offer TLS with a
+// self-signed certificate. rejectUnauthorized
 // is set to false because it's self-signed, not because SSL itself is being
 // skipped - the connection is still encrypted, just not chain-verified.
 const useSSL = process.env.DB_SSL === 'true';

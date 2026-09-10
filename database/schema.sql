@@ -3,9 +3,20 @@
 -- MySQL 8.0 Schema
 -- =====================================================================
 
-DROP DATABASE IF EXISTS hms_db;
-CREATE DATABASE hms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE hms_db;
+-- NOTE: managed free MySQL hosts (Aiven, PlanetScale, TiDB Cloud, etc.)
+-- give you one pre-created database and don't allow DROP DATABASE /
+-- CREATE DATABASE from a regular user account. This file used to do
+-- that (dropping + recreating "hms_db"), which works fine on a local
+-- MySQL install but fails with a permissions error on those hosts.
+-- It's been removed - just point DB_NAME in your .env at whichever
+-- database name your host already gave you, and run this file against
+-- it directly (it will create the tables inside that database).
+--
+-- Running locally and want the old drop-and-recreate behavior back?
+-- Run these two lines yourself in your MySQL client first:
+--   DROP DATABASE IF EXISTS hms_db;
+--   CREATE DATABASE hms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- then connect to hms_db before running the rest of this file.
 
 -- ---------------------------------------------------------------------
 -- USERS  (login + role for RBAC)

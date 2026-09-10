@@ -1,0 +1,34 @@
+# Render "Blueprint" file. Optional convenience: if you connect this repo
+# on Render via "New +" -> "Blueprint" instead of "Web Service", Render
+# reads this file and pre-fills most of the setup for you. You still add
+# the real secret values (DB_PASSWORD, SESSION_SECRET, etc.) yourself in
+# the dashboard - nothing secret is stored here.
+#
+# You can skip this entirely and just use "New +" -> "Web Service" with
+# Build Command "npm install" and Start Command "npm start" - render.yaml
+# only saves you a few clicks.
+
+services:
+  - type: web
+    name: hms-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_SSL
+        value: "true"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PORT
+        value: "3000"
