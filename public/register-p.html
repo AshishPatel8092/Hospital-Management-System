@@ -840,7 +840,7 @@
                   </svg>
                 </button>
               </div>
-              <span class="err-msg">Password is required</span>
+              <span class="err-msg" id="si-pw-err">Password is required</span>
             </div>
           </div>
           <div class="forgot-row">
@@ -957,7 +957,12 @@
           <span
             class="err-msg"
             id="forgot-resend"
-            style="display: block; color: #0f766e; cursor: pointer; text-decoration: underline"
+            style="
+              display: block;
+              color: #0f766e;
+              cursor: pointer;
+              text-decoration: underline;
+            "
             onclick="resendCode()"
             >Resend code</span
           >
@@ -981,7 +986,11 @@
           <button class="btn btn-outline" onclick="closeForgot()">
             Cancel
           </button>
-          <button class="btn btn-primary" id="forgot-action-btn" onclick="sendReset()">
+          <button
+            class="btn btn-primary"
+            id="forgot-action-btn"
+            onclick="sendReset()"
+          >
             Send Reset Code
           </button>
         </div>
@@ -1809,11 +1818,11 @@
           if (result.devResetCode) {
             console.log(
               "%c🔐 Casto Health Care — Password Reset OTP (resent)",
-              "font-size:14px;font-weight:bold;color:#0f766e;"
+              "font-size:14px;font-weight:bold;color:#0f766e;",
             );
             console.log(
               `%cYour OTP for ${email} is: ${result.devResetCode}`,
-              "font-size:16px;font-weight:bold;color:#111;"
+              "font-size:16px;font-weight:bold;color:#111;",
             );
           }
           startResendCooldown();
@@ -1845,11 +1854,11 @@
             if (result.devResetCode) {
               console.log(
                 "%c🔐 Casto Health Care — Password Reset OTP",
-                "font-size:14px;font-weight:bold;color:#0f766e;"
+                "font-size:14px;font-weight:bold;color:#0f766e;",
               );
               console.log(
                 `%cYour OTP for ${email} is: ${result.devResetCode}`,
-                "font-size:16px;font-weight:bold;color:#111;"
+                "font-size:16px;font-weight:bold;color:#111;",
               );
               console.log("%cThis code expires in 10 minutes.", "color:#666;");
             }
@@ -1886,7 +1895,9 @@
         try {
           await resetPassword(email, code, newPw);
           closeForgot();
-          alert("Password updated. You can now sign in with your new password.");
+          alert(
+            "Password updated. You can now sign in with your new password.",
+          );
         } catch (err) {
           errEl.textContent = err.message;
           errEl.style.display = "block";
