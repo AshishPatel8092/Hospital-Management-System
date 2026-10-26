@@ -10,7 +10,7 @@
 -- =====================================================================
 
 INSERT IGNORE INTO users (full_name, email, password_hash, role, phone) VALUES
-('Raj Sharma', 'raj.sharma@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500002'),
+('Raj Sharma', 'raj.sharma@medicare.com', '$2a$12$DcR/iCitbcyBK4JxEIPucOPXgvV7BxobQV4e8kwhjERaQ1L/AU78u', 'DOCTOR', '9876500002'),
 ('Priya Singh', 'priya.singh@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500003'),
 ('Amit Kumar', 'amit.kumar@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500004'),
 ('Neha Gupta', 'neha.gupta@medicare.com', '$2b$12$jQnnMvN55lU5ySebWwvPEOAbmJiwhAD.1d1m6JlbBRDPam3oSnCVe', 'DOCTOR', '9876500005'),

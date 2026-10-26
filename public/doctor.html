@@ -108,7 +108,7 @@
       }
 
       /* ── PAGE WRAPPER ── */
-      main {
+      body:not(.dashboard-active) > main {
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -765,7 +765,7 @@
 
       #view-dashboard .db-shell {
         display: grid;
-        grid-template-columns: 284px minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
         min-height: 100vh;
       }
 
@@ -778,6 +778,31 @@
         border: 0;
         position: static;
         backdrop-filter: none;
+      }
+
+      /* Dashboard layout correction: full-width content, no phantom sidebar. */
+      #view-dashboard .db-shell > div {
+        min-width: 0;
+        width: 100%;
+      }
+      #view-dashboard main.db-main {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        padding: 30px clamp(16px, 3vw, 48px) 60px;
+        color: var(--db-ink);
+      }
+      #view-dashboard .db-layout {
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      }
+      #view-dashboard .db-layout > div {
+        min-width: 0;
+      }
+      @media (max-width: 1100px) {
+        #view-dashboard .db-layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
 
       /* Sidebar */
